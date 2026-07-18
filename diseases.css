@@ -1,0 +1,77 @@
+.conditions-header { color: #fff; }
+.conditions-header .nav-current::after { right: 0; }
+.conditions-hero { position: relative; min-height: 900px; height: 100svh; padding: 145px 6vw 75px; display: grid; grid-template-columns: 1.45fr .7fr; gap: 6vw; align-items: center; overflow: hidden; }
+.conditions-hero::before { content: ""; position: absolute; right: -10%; bottom: -45%; width: 850px; height: 850px; border-radius: 50%; background: radial-gradient(circle, rgba(201,196,245,.17), transparent 65%); }
+.conditions-hero-copy { position: relative; z-index: 2; max-width: 920px; }
+.back-link { display: inline-block; margin-bottom: 80px; color: rgba(255,255,255,.47); font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
+.conditions-hero h1 { margin: 0; font-family: var(--serif); font-size: clamp(69px, 7.5vw, 124px); line-height: .86; letter-spacing: -.05em; font-weight: 400; }
+.conditions-hero h1 em { color: var(--coral); font-weight: 400; }
+.conditions-hero-copy > p:last-child { max-width: 680px; margin: 40px 0 0; color: rgba(255,255,255,.62); font-size: 16px; line-height: 1.8; }
+.conditions-number { position: relative; z-index: 2; width: min(100%, 380px); aspect-ratio: 1; margin: 40px auto 0; padding: 48px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; text-align: center; }
+.conditions-number::before, .conditions-number::after { content: ""; position: absolute; inset: -24px; border: 1px dashed rgba(255,255,255,.09); border-radius: 50%; animation: spin 28s linear infinite; }
+.conditions-number::after { inset: 25px; border-color: rgba(255,107,87,.28); animation-direction: reverse; }
+.conditions-number span { color: var(--coral); font-family: var(--serif); font-size: 120px; line-height: .6; }
+.conditions-number i { margin: 18px 0 8px; color: rgba(255,255,255,.4); font-family: var(--serif); font-size: 21px; }
+.conditions-number strong { font-family: var(--serif); font-size: 57px; line-height: .8; font-weight: 400; }
+.conditions-number small { max-width: 180px; margin-top: 19px; color: rgba(255,255,255,.42); font-family: var(--mono); font-size: 8px; line-height: 1.5; text-transform: uppercase; }
+.conditions-scroll { position: absolute; left: 6vw; bottom: 35px; color: rgba(255,255,255,.4); font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
+.conditions-scroll span { margin-left: 15px; }
+.condition-strands { position: absolute; inset: 0; opacity: .12; transform: rotate(-16deg) scale(1.2); }
+.condition-strands i { position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, white 45%, transparent); }
+.condition-strands i:nth-child(1){top:8%}.condition-strands i:nth-child(2){top:15%}.condition-strands i:nth-child(3){top:23%}.condition-strands i:nth-child(4){top:30%}.condition-strands i:nth-child(5){top:38%}.condition-strands i:nth-child(6){top:45%}.condition-strands i:nth-child(7){top:53%}.condition-strands i:nth-child(8){top:60%}.condition-strands i:nth-child(9){top:68%}.condition-strands i:nth-child(10){top:75%}.condition-strands i:nth-child(11){top:83%}.condition-strands i:nth-child(12){top:90%}
+
+.conditions-intro { padding: 135px 6vw 90px; display: grid; grid-template-columns: .5fr 2fr; gap: 5vw; }
+.conditions-intro-label { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
+.conditions-intro-copy h2 { margin: 0 0 35px; font-family: var(--serif); font-size: clamp(53px, 6vw, 94px); line-height: .95; font-weight: 400; letter-spacing: -.035em; }
+.conditions-intro-copy h2 em { color: var(--coral-deep); font-weight: 400; }
+.conditions-intro-copy p { max-width: 710px; margin-left: auto; color: var(--muted); font-size: 14px; line-height: 1.9; }
+.legend { grid-column: 2; margin-top: 40px; padding: 23px 0; display: flex; gap: 38px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 8px; text-transform: uppercase; }
+.legend span { display: flex; align-items: center; gap: 9px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; }.legend-ar { background: var(--green); }.legend-ad { background: var(--lilac); }.legend-xl { background: var(--coral); }
+
+.disease-directory { padding: 30px 6vw 150px; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+.disease-card { position: relative; min-height: 710px; padding: 38px 4.2vw 38px 0; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
+.disease-card:nth-child(even) { padding-left: 4.2vw; padding-right: 0; border-left: 1px solid var(--line); }
+.disease-card::before { content: ""; position: absolute; left: 0; top: 0; width: 0; height: 5px; background: var(--accent); transition: width .6s ease; }
+.disease-card:hover::before { width: 100%; }
+.disease-card-top { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 9px; }
+.inheritance-tag { padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; text-transform: uppercase; }
+.gene-mark { width: 95px; height: 95px; margin: 75px 0 32px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); font-family: var(--mono); font-size: 14px; font-weight: 500; }
+.disease-card h2 { margin: 0 0 20px; font-family: var(--serif); font-size: clamp(43px, 4.5vw, 70px); line-height: .95; font-weight: 400; letter-spacing: -.035em; }
+.disease-card > p { max-width: 580px; margin: 0 0 34px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.disease-card dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.disease-card dl div { padding: 15px 15px 15px 0; display: flex; flex-direction: column; }.disease-card dl div + div { padding-left: 15px; border-left: 1px solid var(--line); }
+.disease-card dt { color: var(--muted); font-family: var(--mono); font-size: 7px; text-transform: uppercase; letter-spacing: .1em; }.disease-card dd { margin: 5px 0 0; font-size: 10px; font-weight: 600; }
+.card-outcome { margin-top: 25px; display: flex; align-items: center; gap: 12px; font-size: 10px; font-weight: 600; }.card-outcome i { width: 8px; height: 8px; flex: 0 0 auto; border-radius: 50%; background: var(--accent); }
+.disease-card > a { margin-top: auto; padding-top: 18px; display: flex; justify-content: space-between; border-top: 1px solid var(--line); font-size: 11px; font-weight: 700; }.disease-card > a span { font-size: 17px; }
+
+.conditions-perspective { padding: 120px 6vw; display: grid; grid-template-columns: .8fr 1.25fr; gap: 9vw; align-items: center; }
+.perspective-number { width: min(100%, 470px); aspect-ratio: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid rgba(16,27,45,.35); border-radius: 50%; text-align: center; }
+.perspective-number strong { font-family: var(--serif); font-size: clamp(75px, 9vw, 145px); line-height: .8; font-weight: 400; }.perspective-number span { max-width: 240px; margin-top: 30px; font-family: var(--mono); font-size: 9px; line-height: 1.6; text-transform: uppercase; }
+.perspective-copy h2 { margin: 0 0 30px; font-family: var(--serif); font-size: clamp(53px, 5.7vw, 90px); line-height: .95; font-weight: 400; }.perspective-copy > p:not(.eyebrow) { max-width: 650px; font-size: 13px; line-height: 1.8; }.perspective-copy a { margin-top: 45px; padding: 20px 0; display: flex; justify-content: space-between; border-top: 1px solid rgba(16,27,45,.35); border-bottom: 1px solid rgba(16,27,45,.35); font-size: 11px; font-weight: 700; }
+
+.conditions-note { padding: 105px 6vw; display: grid; grid-template-columns: .4fr 1.6fr; gap: 5vw; }
+.note-symbol { color: var(--coral); font-family: var(--serif); font-size: 150px; line-height: .5; }
+.conditions-note h2 { margin: 0 0 25px; font-family: var(--serif); font-size: 48px; font-weight: 400; }.conditions-note p { max-width: 780px; color: var(--muted); font-size: 13px; line-height: 1.9; }
+
+.conditions-closing { position: relative; min-height: 820px; display: flex; align-items: center; overflow: hidden; }
+.conditions-closing > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 36%; filter: saturate(.72) sepia(.08); }
+.conditions-closing-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(16,27,45,.88), rgba(16,27,45,.1) 70%); }
+.conditions-closing-copy { position: relative; z-index: 2; width: 100%; padding: 0 6vw; color: white; }
+.conditions-closing h2 { max-width: 850px; margin: 0 0 50px; font-family: var(--serif); font-size: clamp(67px, 8vw, 128px); line-height: .87; font-weight: 400; letter-spacing: -.04em; }.conditions-closing h2 em { color: var(--coral); font-weight: 400; }
+.conditions-closing > small { position: absolute; z-index: 2; right: 25px; bottom: 20px; color: rgba(255,255,255,.5); font-family: var(--mono); font-size: 7px; text-transform: uppercase; }
+
+@media (max-width: 900px) {
+  .conditions-hero { min-height: 1100px; height: auto; grid-template-columns: 1fr; align-content: center; }.conditions-number { width: 330px; }.back-link { margin-bottom: 50px; }
+  .conditions-intro { grid-template-columns: 1fr; }.conditions-intro-copy, .legend { grid-column: 1; }.conditions-intro-copy p { margin-left: 0; }
+  .conditions-perspective { grid-template-columns: 1fr; }.perspective-number { width: 380px; }
+}
+
+@media (max-width: 700px) {
+  .conditions-hero { min-height: 980px; padding: 115px 22px 70px; }.conditions-hero h1 { font-size: 61px; }.conditions-hero-copy > p:last-child { font-size: 14px; }.conditions-number { width: 260px; padding: 35px; }.conditions-number span { font-size: 89px; }.conditions-number strong { font-size: 46px; }.conditions-number small { font-size: 7px; }.conditions-scroll { left: 22px; }
+  .conditions-intro, .conditions-perspective, .conditions-note { padding: 90px 22px; }.conditions-intro-copy h2 { font-size: 49px; }.legend { flex-direction: column; gap: 15px; }
+  .disease-directory { padding: 0 22px 90px; grid-template-columns: 1fr; }.disease-card, .disease-card:nth-child(even) { min-height: 640px; padding: 35px 0; border-left: 0; }.gene-mark { margin-top: 55px; }.disease-card h2 { font-size: 48px; }.disease-card dl { grid-template-columns: 1fr; }.disease-card dl div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  .perspective-number { width: 270px; padding: 35px; }.perspective-number strong { font-size: 83px; }.perspective-copy h2 { font-size: 50px; }
+  .conditions-note { grid-template-columns: 1fr; }.note-symbol { font-size: 100px; }.conditions-note h2 { font-size: 41px; }
+  .conditions-closing { min-height: 720px; }.conditions-closing > img { object-position: 62% center; }.conditions-closing-overlay { background: linear-gradient(90deg, rgba(16,27,45,.86), rgba(16,27,45,.25)); }.conditions-closing-copy { padding: 0 22px; }.conditions-closing h2 { font-size: 64px; }
+}
