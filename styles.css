@@ -1,3 +1,11 @@
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("assets/fonts/InstrumentSerif-Italic.ttf") format("truetype"); font-style: italic; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-SemiBold.ttf") format("truetype"); font-style: normal; font-weight: 600; font-display: swap; }
+@font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-Bold.ttf") format("truetype"); font-style: normal; font-weight: 700; font-display: swap; }
+@font-face { font-family: "DM Mono"; src: url("assets/fonts/DMMono-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "DM Mono"; src: url("assets/fonts/DMMono-Medium.ttf") format("truetype"); font-style: normal; font-weight: 500; font-display: swap; }
+
 :root {
   --midnight: #101b2d;
   --midnight-soft: #18263a;
@@ -70,6 +78,13 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--coral); outline
 .desktop-nav a:hover::after { right: 0; }
 .header-cta { justify-self: end; padding: 12px 19px; border: 1px solid currentColor; border-radius: 999px; font-size: 12px; font-weight: 700; transition: background .25s, color .25s; }
 .header-cta:hover { background: var(--coral); border-color: var(--coral); color: #fff; }
+.header-actions { justify-self: end; display: flex; align-items: center; gap: 17px; }
+.language-switcher { display: inline-flex; align-items: center; padding: 4px; border: 1px solid currentColor; border-radius: 999px; font-family: var(--mono); font-size: 8px; line-height: 1; }
+.language-switcher a { min-width: 27px; padding: 7px 6px; border-radius: 999px; text-align: center; opacity: .52; transition: opacity .2s, color .2s, background .2s; }
+.language-switcher a:hover { opacity: 1; }
+.language-switcher a.is-active { color: var(--midnight); background: var(--coral); opacity: 1; }
+.site-header.is-scrolled .language-switcher a.is-active, .site-header.menu-open .language-switcher a.is-active { color: white; background: var(--midnight); }
+.mobile-language-switcher { align-self: flex-start; margin-bottom: 22px; font-family: var(--mono); font-size: 10px; }
 .menu-button, .mobile-nav { display: none; }
 
 .section-dark { background: var(--midnight); color: white; }
@@ -305,7 +320,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--coral); outline
 @keyframes floatTwo { 50% { transform: translate(-12px,10px); } }
 
 @media (max-width: 1050px) {
-  .desktop-nav, .header-cta { display: none; }
+  .desktop-nav, .header-actions { display: none; }
   .site-header { grid-template-columns: 1fr auto; }
   .menu-button { display: block; position: relative; width: 42px; height: 42px; padding: 0; border: 1px solid currentColor; border-radius: 50%; background: transparent; color: inherit; }
   .menu-button span { position: absolute; left: 12px; right: 12px; height: 1px; background: currentColor; transition: transform .25s, top .25s; }.menu-button span:first-child { top: 16px; }.menu-button span:last-child { top: 23px; }.menu-button[aria-expanded="true"] span:first-child { top: 20px; transform: rotate(45deg); }.menu-button[aria-expanded="true"] span:last-child { top: 20px; transform: rotate(-45deg); }
@@ -321,7 +336,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--coral); outline
 
 @media (max-width: 760px) {
   .site-header { height: 70px; padding: 0 20px; }
-  .hero { min-height: 930px; padding: 125px 22px 70px; align-content: start; }
+  .hero { min-height: 930px; grid-template-columns: minmax(0, 1fr); padding: 125px 22px 70px; align-content: start; }
   .hero-copy { min-width: 0; }.hero h1 { font-size: clamp(46px, 12vw, 68px); line-height: .9; }
   .hero-intro { font-size: 16px; }.hero-actions { align-items: flex-start; flex-direction: column; gap: 24px; }
   .genome-stage { width: 118vw; margin-left: -14vw; margin-top: -10px; }.genome-label { display: none; }.genome-caption { bottom: 3%; }
