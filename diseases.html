@@ -9,16 +9,10 @@
     />
     <title>10 of 6,000+ inherited conditions — Jouvence</title>
     <script>document.documentElement.classList.add("js");</script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700&amp;display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="diseases.css" />
   </head>
-  <body class="disease-page">
+  <body class="disease-page" data-page="diseases">
     <div class="page-grain" aria-hidden="true"></div>
 
     <header class="site-header conditions-header" data-header>
@@ -36,21 +30,30 @@
         <a class="nav-current" href="#conditions">Conditions</a>
         <a href="assets/whitepaper/jouvence-whitepaper.pdf" target="_blank" rel="noopener">Whitepaper</a>
         <a href="index.html#journey">How it works</a>
-        <a href="index.html#control">Your data</a>
+        <a href="index.html#team">Team</a>
       </nav>
-      <a class="header-cta" href="index.html#join">Join the first families</a>
+      <div class="header-actions">
+        <div class="language-switcher" aria-label="Language">
+          <a href="?lang=en" data-lang-option="en">EN</a><a href="?lang=fr" data-lang-option="fr">FR</a><a href="?lang=es" data-lang-option="es">ES</a>
+        </div>
+        <a class="header-cta" href="preorder.html">Pre-order your test</a>
+      </div>
       <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button>
         <span></span><span></span>
       </button>
     </header>
 
     <nav class="mobile-nav" aria-label="Mobile navigation" aria-hidden="true" inert data-mobile-nav>
+      <div class="mobile-language-switcher language-switcher" aria-label="Language">
+        <a href="?lang=en" data-lang-option="en">EN</a><a href="?lang=fr" data-lang-option="fr">FR</a><a href="?lang=es" data-lang-option="es">ES</a>
+      </div>
       <a href="index.html#science">Science</a>
       <a href="#conditions">Conditions</a>
       <a href="assets/whitepaper/jouvence-whitepaper.pdf" target="_blank" rel="noopener">Whitepaper</a>
       <a href="index.html#journey">How it works</a>
       <a href="index.html#control">Your data</a>
-      <a href="index.html#join">Join the first families</a>
+      <a href="index.html#team">Team</a>
+      <a href="preorder.html">Pre-order your test</a>
     </nav>
 
     <main id="conditions">
@@ -226,8 +229,8 @@
         <div class="conditions-closing-overlay"></div>
         <div class="conditions-closing-copy reveal">
           <p class="eyebrow eyebrow-light">One family at a time</p>
-          <h2>Know the risk.<br /><em>Choose the future.</em></h2>
-          <a class="button button-primary" href="index.html#join">Join the first families <span>↗</span></a>
+          <h2>Know the risk.<br /><em>Choose your future.</em></h2>
+          <a class="button button-primary" href="preorder.html">Pre-order your test <span>↗</span></a>
         </div>
         <small>Photography by Kimy Moto · Pexels</small>
       </section>
@@ -239,9 +242,10 @@
         <span>Jouvence</span>
       </a>
       <p>For healthier families, freer choices and participant-controlled medicine.</p>
-      <div class="footer-links"><a href="index.html">Home</a><a href="#conditions">Conditions</a><a href="assets/whitepaper/jouvence-whitepaper.pdf" target="_blank" rel="noopener">Whitepaper</a><a href="mailto:jkobject@gmail.com">Contact</a></div>
+      <div class="footer-links"><a href="index.html">Home</a><a href="#conditions">Conditions</a><a href="index.html#team">Team</a><a href="assets/whitepaper/jouvence-whitepaper.pdf" target="_blank" rel="noopener">Open whitepaper</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="legal.html">Legal</a><a href="mailto:jkobject@gmail.com">Contact</a></div>
       <p class="copyright">© <span data-year></span> Jouvence. Built for generations.</p>
     </footer>
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

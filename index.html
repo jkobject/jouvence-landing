@@ -9,15 +9,9 @@
     />
     <title>Jouvence — Know before you pass it on</title>
     <script>document.documentElement.classList.add("js");</script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Instrument+Serif:ital@0;1&amp;family=Manrope:wght@400;500;600;700&amp;display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-page="home">
     <div class="page-grain" aria-hidden="true"></div>
 
     <header class="site-header" data-header>
@@ -36,23 +30,31 @@
         <a href="diseases.html">Conditions</a>
         <a href="assets/whitepaper/jouvence-whitepaper.pdf" target="_blank" rel="noopener">Whitepaper</a>
         <a href="#journey">How it works</a>
-        <a href="#control">Your data</a>
+        <a href="#team">Team</a>
       </nav>
 
-      <a class="header-cta" href="#join">Join the first families</a>
+      <div class="header-actions">
+        <div class="language-switcher" aria-label="Language">
+          <a href="?lang=en" data-lang-option="en">EN</a><a href="?lang=fr" data-lang-option="fr">FR</a><a href="?lang=es" data-lang-option="es">ES</a>
+        </div>
+        <a class="header-cta" href="preorder.html">Pre-order your test</a>
+      </div>
       <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-button>
         <span></span><span></span>
       </button>
     </header>
 
     <nav class="mobile-nav" aria-label="Mobile navigation" aria-hidden="true" inert data-mobile-nav>
+      <div class="mobile-language-switcher language-switcher" aria-label="Language">
+        <a href="?lang=en" data-lang-option="en">EN</a><a href="?lang=fr" data-lang-option="fr">FR</a><a href="?lang=es" data-lang-option="es">ES</a>
+      </div>
       <a href="#science">Science</a>
       <a href="diseases.html">Conditions</a>
       <a href="assets/whitepaper/jouvence-whitepaper.pdf" target="_blank" rel="noopener">Whitepaper</a>
       <a href="#journey">How it works</a>
       <a href="#control">Your data</a>
-      <a href="#vision">Our vision</a>
-      <a href="#join">Join the first families</a>
+      <a href="#team">Team</a>
+      <a href="preorder.html">Pre-order your test</a>
     </nav>
 
     <main id="top">
@@ -74,8 +76,8 @@
             control of your genomic data.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#join">
-              Join the first families
+            <a class="button button-primary" href="preorder.html">
+              Pre-order your test
               <span aria-hidden="true">↗</span>
             </a>
             <a class="text-link text-link-light" href="#journey">
@@ -425,6 +427,43 @@
         </div>
       </section>
 
+      <section class="team section-dark" id="team">
+        <div class="team-heading reveal">
+          <p class="eyebrow eyebrow-light">The team</p>
+          <h2>Built at the intersection of <em>genomics, AI and human health.</em></h2>
+        </div>
+        <article class="founder-card reveal">
+          <figure class="founder-portrait">
+            <img
+              src="assets/photos/jeremie-kalfon.png"
+              alt="Jérémie Kalfon, founder of Jouvence"
+              width="1386"
+              height="1385"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="founder-copy">
+            <div class="founder-title"><span>01</span><small>Founder</small></div>
+            <h3>Jérémie Kalfon</h3>
+            <p class="founder-role">Computational biologist · researcher · engineer · entrepreneur</p>
+            <p>
+              PhD in AI from Institut Pasteur and ENS, formerly at the Broad Institute of MIT and Harvard,
+              and former team lead at Whitelab Genomics. Jérémie has built open-source genomics and AI systems
+              designed to turn complex biological data into useful, accountable tools.
+            </p>
+            <div class="founder-links" aria-label="Jérémie Kalfon profiles">
+              <a href="https://www.jkobject.com/about/" target="_blank" rel="noopener">Profile ↗</a>
+              <a href="https://www.linkedin.com/in/jkobject/" target="_blank" rel="noopener">LinkedIn ↗</a>
+              <a href="https://github.com/jkobject" target="_blank" rel="noopener">GitHub ↗</a>
+              <a href="https://scholar.google.com/citations?user=zyXiydsAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar ↗</a>
+              <a href="https://orcid.org/0000-0002-2818-9728" target="_blank" rel="noopener">ORCID ↗</a>
+              <a href="https://www.jkobject.com/assets/documents/CV-JEREMIE.pdf" target="_blank" rel="noopener">CV ↗</a>
+            </div>
+          </div>
+        </article>
+      </section>
+
       <section class="join section-light" id="join">
         <div class="join-heading reveal">
           <p class="eyebrow">Start something generational</p>
@@ -434,8 +473,8 @@
           <article class="join-card join-family reveal">
             <div class="join-card-top"><span>01</span><small>For families</small></div>
             <h3>Understand your inherited risks before pregnancy.</h3>
-            <p>Be among the first families to hear about Jouvence and help shape the experience.</p>
-            <a href="mailto:jkobject@gmail.com?subject=Joining%20the%20first%20Jouvence%20families">Join the first families <span>↗</span></a>
+            <p>Reserve two whole-genome sequencing kits — one for each prospective parent. No payment today.</p>
+            <a href="preorder.html">Pre-order your test <span>↗</span></a>
           </article>
           <article class="join-card join-builder reveal reveal-delay-short">
             <div class="join-card-top"><span>02</span><small>For builders</small></div>
@@ -456,7 +495,7 @@
         <div class="closing-orbit" aria-hidden="true"></div>
         <p class="eyebrow eyebrow-light reveal">This is Jouvence</p>
         <h2 class="reveal">Prevent disease before transmission.<br /><em>Return genomic power to people.</em></h2>
-        <a class="button button-primary reveal" href="#join">Shape the future with us <span>↗</span></a>
+        <a class="button button-primary reveal" href="preorder.html">Pre-order your test <span>↗</span></a>
       </section>
     </main>
 
@@ -469,10 +508,11 @@
         <span>Jouvence</span>
       </a>
       <p>For healthier families, freer choices and participant-controlled medicine.</p>
-      <div class="footer-links"><a href="diseases.html">Conditions</a><a href="assets/whitepaper/jouvence-whitepaper.pdf" target="_blank" rel="noopener">Whitepaper</a><a href="#top">Privacy</a><a href="#top">Legal</a><a href="mailto:jkobject@gmail.com">Contact</a></div>
+      <div class="footer-links"><a href="diseases.html">Conditions</a><a href="#team">Team</a><a href="assets/whitepaper/jouvence-whitepaper.pdf" target="_blank" rel="noopener">Open whitepaper</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="legal.html">Legal</a><a href="mailto:jkobject@gmail.com">Contact</a></div>
       <p class="copyright">© <span data-year></span> Jouvence. Built for generations.</p>
     </footer>
 
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
