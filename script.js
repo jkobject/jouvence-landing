@@ -5,11 +5,10 @@ const revealElements = document.querySelectorAll(".reveal");
 const permissionToggles = document.querySelectorAll(".toggle");
 
 function updateHeader() {
-  header?.classList.toggle("is-scrolled", window.scrollY > 40);
+  header.classList.toggle("is-scrolled", window.scrollY > 40);
 }
 
 function closeMobileMenu() {
-  if (!menuButton || !mobileNavigation || !header) return;
   menuButton.setAttribute("aria-expanded", "false");
   mobileNavigation.setAttribute("aria-hidden", "true");
   mobileNavigation.inert = true;
@@ -19,7 +18,6 @@ function closeMobileMenu() {
 }
 
 function toggleMobileMenu() {
-  if (!menuButton || !mobileNavigation || !header) return;
   const isOpen = menuButton.getAttribute("aria-expanded") === "true";
   menuButton.setAttribute("aria-expanded", String(!isOpen));
   mobileNavigation.setAttribute("aria-hidden", String(isOpen));
@@ -36,16 +34,6 @@ function togglePermission(event) {
   toggle.classList.toggle("is-on", !isEnabled);
 }
 
-function revealHashTarget() {
-  if (!window.location.hash) return;
-
-  const target = document.getElementById(window.location.hash.slice(1));
-  if (!target) return;
-
-  target.classList.add("is-visible");
-  target.querySelectorAll(".reveal").forEach((element) => element.classList.add("is-visible"));
-}
-
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -59,22 +47,18 @@ const revealObserver = new IntersectionObserver(
 );
 
 revealElements.forEach((element) => revealObserver.observe(element));
-revealHashTarget();
 permissionToggles.forEach((toggle) => toggle.addEventListener("click", togglePermission));
-menuButton?.addEventListener("click", toggleMobileMenu);
-mobileNavigation?.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMobileMenu));
+menuButton.addEventListener("click", toggleMobileMenu);
+mobileNavigation.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMobileMenu));
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && menuButton?.getAttribute("aria-expanded") === "true") {
+  if (event.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true") {
     closeMobileMenu();
     menuButton.focus();
   }
 });
 window.addEventListener("resize", () => {
-  if (window.innerWidth > 1050 && menuButton?.getAttribute("aria-expanded") === "true") closeMobileMenu();
+  if (window.innerWidth > 1050 && menuButton.getAttribute("aria-expanded") === "true") closeMobileMenu();
 });
 window.addEventListener("scroll", updateHeader, { passive: true });
-window.addEventListener("hashchange", revealHashTarget);
-document.querySelectorAll("[data-year]").forEach((element) => {
-  element.textContent = new Date().getFullYear();
-});
+document.querySelector("[data-year]").textContent = new Date().getFullYear();
 updateHeader();
