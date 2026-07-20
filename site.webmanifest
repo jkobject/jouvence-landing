@@ -1,0 +1,13 @@
+{
+  "name": "Jouvence",
+  "short_name": "Jouvence",
+  "description": "Know before you pass it on.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f2e9",
+  "theme_color": "#101b2d",
+  "icons": [
+    { "src": "/assets/brand/jouvence-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/brand/jouvence-icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -3,3 +3,6 @@ output/
 tmp/
 __pycache__/
 *.pyc
+data/private/
+data/reference/
+analysis/
