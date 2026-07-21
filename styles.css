@@ -193,6 +193,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--coral); outline
 .disease-page-link span { font-size: 13px; font-weight: 700; }
 .disease-page-link strong { display: flex; align-items: center; gap: 30px; font-family: var(--serif); font-size: 32px; font-weight: 400; }
 .disease-page-link i { font-family: var(--sans); font-size: 18px; font-style: normal; }
+.graph-page-link { margin-top: -1px; border-top: 0; }
 
 .coverage { padding: 135px 6vw 115px; }
 .coverage-heading { display: grid; grid-template-columns: 1.45fr .55fr; gap: 8vw; align-items: end; }
@@ -369,7 +370,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--coral); outline
   .site-header { grid-template-columns: 1fr auto; }
   .menu-button { display: block; position: relative; width: 42px; height: 42px; padding: 0; border: 1px solid currentColor; border-radius: 50%; background: transparent; color: inherit; }
   .menu-button span { position: absolute; left: 12px; right: 12px; height: 1px; background: currentColor; transition: transform .25s, top .25s; }.menu-button span:first-child { top: 16px; }.menu-button span:last-child { top: 23px; }.menu-button[aria-expanded="true"] span:first-child { top: 20px; transform: rotate(45deg); }.menu-button[aria-expanded="true"] span:last-child { top: 20px; transform: rotate(-45deg); }
-  .mobile-nav { position: fixed; z-index: 45; inset: 0; padding: 120px 6vw 45px; display: flex; flex-direction: column; gap: 25px; background: var(--ivory); color: var(--ink); font-family: var(--serif); font-size: 37px; visibility: hidden; transform: translateY(-100%); transition: transform .45s cubic-bezier(.76,0,.24,1), visibility 0s .45s; }.mobile-nav.is-open { visibility: visible; transform: translateY(0); transition-delay: 0s; }
+  .mobile-nav { position: fixed; z-index: 45; inset: 0; padding: 120px 6vw max(45px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: clamp(18px, 3vh, 25px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; background: var(--ivory); color: var(--ink); font-family: var(--serif); font-size: 37px; visibility: hidden; transform: translateY(-100%); transition: transform .45s cubic-bezier(.76,0,.24,1), visibility 0s .45s; }.mobile-nav.is-open { visibility: visible; transform: translateY(0); transition-delay: 0s; }
   .hero { min-height: 1000px; height: auto; grid-template-columns: 1fr; padding-top: 155px; }
   .hero-copy { max-width: 800px; }.genome-stage { width: min(680px, 85vw); margin-top: -10px; }
   .manifesto { grid-template-columns: 100px 1fr; }.manifesto-aside { grid-column: 2; max-width: 550px; }
