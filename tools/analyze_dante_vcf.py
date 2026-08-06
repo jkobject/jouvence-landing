@@ -20,13 +20,25 @@ from jouvence_genomics.catalogs import (
     load_structural_clinvar,
 )
 from jouvence_genomics.reporting import build_results
+from jouvence_genomics.novel import (
+    assess_phase_with_known_variants,
+    attach_population_frequencies,
+    find_coding_candidates,
+    load_clinvar_novel_evidence,
+    load_primary_transcripts,
+    prioritize_recessive_candidates,
+)
 from jouvence_genomics.vcf import read_depth_summary, summarize_small_variant_vcf
 
 
-def analyze(args: argparse.Namespace) -> dict[str, object]:
-    """Run all local analyses and write JSON plus Markdown results."""
+def analyze_without_bam(args: argparse.Namespace) -> dict[str, object]:
+    """Run the reusable VCF-only analysis and write JSON plus Markdown results.
 
-    print("1/5 Quality-checking SNP and indel VCFs")
+    No negative call is inferred from an absent VCF record. A future BAM-aware
+    function can reuse these annotations and add read-level confirmation.
+    """
+
+    print("1/6 Quality-checking SNP and indel VCFs")
     qc = [
         summarize_small_variant_vcf(args.snp_vcf),
         summarize_small_variant_vcf(args.indel_vcf),
@@ -35,7 +47,7 @@ def analyze(args: argparse.Namespace) -> dict[str, object]:
     if depth_summary:
         qc[0]["dante_depth_summary"] = depth_summary
 
-    print("2/5 Loading ClinVar and GenCC")
+    print("2/6 Loading ClinVar and GenCC")
     clinvar = load_small_variant_clinvar(args.clinvar_small)
     gencc_by_identifier, gencc_by_gene = load_gencc(args.gencc)
     findings = match_small_variants(
@@ -45,7 +57,37 @@ def analyze(args: argparse.Namespace) -> dict[str, object]:
         gencc_by_gene,
     )
 
-    print("3/5 Annotating CNV and SV calls")
+    print("3/6 Annotating novel coding and splice candidates")
+    ar_evidence = {
+        gene: [
+            item
+            for item in evidence
+            if "Autosomal recessive" in item["inheritance"]
+        ]
+        for gene, evidence in gencc_by_gene.items()
+    }
+    ar_evidence = {gene: evidence for gene, evidence in ar_evidence.items() if evidence}
+    transcripts = load_primary_transcripts(
+        args.gencode, args.transcript_fasta, set(ar_evidence)
+    )
+    lof_mechanisms, clinvar_context = load_clinvar_novel_evidence(
+        args.clinvar_small
+    )
+    coding_candidates = find_coding_candidates(
+        [args.snp_vcf, args.indel_vcf],
+        transcripts,
+        ar_evidence,
+        lof_mechanisms,
+        set(clinvar),
+        clinvar_context,
+    )
+    attach_population_frequencies(coding_candidates, args.gnomad_frequency_dir)
+    novel_analysis = prioritize_recessive_candidates(coding_candidates)
+    novel_analysis["recessive_phase_assessments"] = assess_phase_with_known_variants(
+        novel_analysis, findings
+    )
+
+    print("4/6 Annotating CNV and SV calls")
     gene_regions = load_gene_regions(args.gencode, set(gencc_by_gene))
     structural_calls = [
         *load_structural_calls(args.cnv_vcf, "cnv"),
@@ -61,7 +103,7 @@ def analyze(args: argparse.Namespace) -> dict[str, object]:
         structural_clinvar,
     )
 
-    print("4/5 Assessing inheritance and phase")
+    print("5/6 Assessing inheritance and phase")
     inheritance = classify_inheritance(findings, structural_candidates)
     carrier_frequencies = load_carrier_frequencies(args.carrier_frequencies)
     repeat_analysis = {
@@ -81,15 +123,22 @@ def analyze(args: argparse.Namespace) -> dict[str, object]:
         structural_summary,
         structural_candidates,
         repeat_analysis,
+        novel_analysis,
     )
 
-    print("5/5 Writing private outputs")
+    print("6/6 Writing private outputs")
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / "results.json").write_text(
         json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8"
     )
     (args.output / "report.md").write_text(report, encoding="utf-8")
     return result
+
+
+def analyze(args: argparse.Namespace) -> dict[str, object]:
+    """Backward-compatible alias for the explicit no-BAM workflow."""
+
+    return analyze_without_bam(args)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -106,6 +155,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--clinvar-structural", type=Path, required=True)
     parser.add_argument("--gencc", type=Path, required=True)
     parser.add_argument("--gencode", type=Path, required=True)
+    parser.add_argument("--transcript-fasta", type=Path, required=True)
+    parser.add_argument("--gnomad-frequency-dir", type=Path, required=True)
     parser.add_argument("--carrier-frequencies", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("analysis/dante"))
     return parser
