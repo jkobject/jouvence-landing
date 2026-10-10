@@ -6,3 +6,4 @@ __pycache__/
 data/private/
 data/reference/
 analysis/
+.playwright-cli/

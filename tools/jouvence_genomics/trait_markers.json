@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "assembly": "GRCh37",
+  "strand": "+",
+  "coordinates": "VCF, 1-based; GRCh37.p13 placements verified with NCBI dbSNP SPDI. MT sites require NC_012920.1.",
+  "verified_at": "2026-10-10",
+  "profiles": {
+    "cyp2c19": {
+      "category": "pharmacogenomique",
+      "gene": "CYP2C19",
+      "explanation_fr": "CYP2C19 transforme notamment le clopidogrel en métabolite actif et participe à l'élimination de certains inhibiteurs de la pompe à protons et psychotropes. *2 et *3 diminuent fortement la fonction; *17 est associé à une fonction augmentée. La présence de ces marqueurs ne suffit pas à établir tout le diplotype.",
+      "next_steps_fr": "Avant une prescription concernée, faire confirmer le génotype dans un laboratoire de pharmacogénétique, reconstruire les allèles et discuter du choix du médicament avec le prescripteur selon la recommandation propre au médicament. Ne pas modifier seul un traitement.",
+      "sources": ["https://cpicpgx.org/guidelines/guideline-for-clopidogrel-and-cyp2c19/", "https://www.pharmvar.org/gene/CYP2C19"]
+    },
+    "warfarin": {
+      "category": "pharmacogenomique",
+      "gene": "CYP2C9 / VKORC1",
+      "explanation_fr": "CYP2C9 *2 et *3 diminuent le métabolisme de la warfarine; le marqueur VKORC1 est associé à sa sensibilité. CYP2C9 influence aussi d'autres médicaments, dont certains anti-inflammatoires et la phénytoïne. Les deux marqueurs CYP2C9 ne couvrent pas tous les allèles, notamment ceux plus fréquents dans d'autres ascendances.",
+      "next_steps_fr": "Si un médicament concerné est envisagé, confirmer le panel complet approprié et intégrer les autres facteurs cliniques, interactions et contrôles biologiques; pour la warfarine, la surveillance de l'INR reste indispensable. Ce rapport ne calcule aucune dose.",
+      "sources": ["https://cpicpgx.org/guidelines/guideline-for-warfarin-and-cyp2c9-and-vkorc1/", "https://www.pharmvar.org/gene/CYP2C9"]
+    },
+    "slco1b1": {
+      "category": "pharmacogenomique",
+      "gene": "SLCO1B1",
+      "explanation_fr": "Le variant c.521T>C peut réduire le transport hépatique de certaines statines et augmenter le risque de symptômes musculaires, avec un effet dépendant de la statine et de la dose. Un marqueur ne reconstitue pas tous les haplotypes SLCO1B1.",
+      "next_steps_fr": "Avant ou pendant une statine, communiquer un résultat confirmé au prescripteur; discuter de la molécule, des interactions et des symptômes musculaires selon les recommandations CPIC. Ne pas interrompre seul une statine.",
+      "sources": ["https://cpicpgx.org/guidelines/cpic-guideline-for-statins/"]
+    },
+    "dpyd": {
+      "category": "pharmacogenomique",
+      "gene": "DPYD",
+      "explanation_fr": "La DPD élimine les fluoropyrimidines, dont 5-fluorouracile et capécitabine. Certains variants diminuent son activité et peuvent favoriser une toxicité sévère: diarrhée, mucite, chute des cellules sanguines et complications potentiellement graves. Un panel négatif ne garantit pas une activité DPD normale.",
+      "next_steps_fr": "Avant une fluoropyrimidine, réaliser le dépistage clinique DPD prévu localement et faire confirmer tout variant signalé; un oncologue ou pharmacologue décide de la stratégie thérapeutique. La mesure phénotypique et le génotype peuvent être complémentaires.",
+      "sources": ["https://cpicpgx.org/guidelines/guideline-for-fluoropyrimidines-and-dpyd/", "https://pmc.ncbi.nlm.nih.gov/articles/PMC10777430/"]
+    },
+    "thiopurines": {
+      "category": "pharmacogenomique",
+      "gene": "TPMT / NUDT15",
+      "explanation_fr": "Des variants TPMT et NUDT15 réduisent la tolérance aux thiopurines, dont azathioprine et mercaptopurine, et peuvent favoriser une myélosuppression sévère. Pour TPMT, deux variants dans un même chromosome peuvent former *3A; sans phase, on ne les additionne pas comme deux allèles inactivés.",
+      "next_steps_fr": "Avant une thiopurine, confirmer le génotype et la phase si nécessaire, puis suivre la recommandation clinique actualisée. La surveillance de la numération sanguine et hépatique reste nécessaire. Aucune dose n'est déduite de ce panel partiel.",
+      "sources": ["https://cpicpgx.org/guidelines/guideline-for-thiopurines-and-tpmt/"]
+    },
+    "cyp3a5": {
+      "category": "pharmacogenomique",
+      "gene": "CYP3A5",
+      "explanation_fr": "Le marqueur d'épissage *3 est associé à une fonction diminuée de CYP3A5 et peut influencer l'exposition au tacrolimus. Particularité: l'allèle *3 correspond ici à la base de référence GRCh37 C; un site absent ne signifie donc pas *1.",
+      "next_steps_fr": "Si un tacrolimus est prescrit, confirmer les allèles CYP3A5 et suivre les concentrations sanguines; le prescripteur intègre le génotype au contexte clinique. D'autres allèles et interactions restent à considérer.",
+      "sources": ["https://cpicpgx.org/guidelines/guideline-for-tacrolimus-and-cyp3a5/", "https://www.pharmvar.org/gene/CYP3A5"]
+    },
+    "mt_rnr1": {
+      "category": "pharmacogenomique",
+      "gene": "MT-RNR1",
+      "explanation_fr": "Les variants mitochondriaux m.1555A>G et m.1494C>T peuvent augmenter fortement le risque de surdité après des aminosides. Le pourcentage d'hétéroplasmie et la référence mitochondriale doivent être validés; un GT diploïde seul est insuffisant.",
+      "next_steps_fr": "Si un allèle ciblé est observé sur une référence mitochondriale compatible, demander une confirmation mitochondriale et prévenir le prescripteur avant un aminoside. L'alternative antibiotique dépend de l'infection et du contexte clinique.",
+      "sources": ["https://cpicpgx.org/guidelines/cpic-guideline-for-aminoglycosides-and-mt-rnr1/"]
+    },
+    "lactase": {
+      "category": "nutrition",
+      "gene": "MCM6 / LCT",
+      "explanation_fr": "Ces marqueurs régulateurs sont associés à la persistance de la lactase chez l'adulte, principalement dans les populations où ils ont été validés. La digestion du lactose dépend aussi de la quantité consommée et de maladies digestives; elle se distingue de l'allergie au lait. rs182549 est un marqueur lié, pas une seconde maladie.",
+      "next_steps_fr": "Comparer au ressenti après ingestion. En cas de douleurs, ballonnements ou diarrhée, discuter d'un test respiratoire à l'hydrogène et des autres causes digestives. Adapter la quantité de lactose selon la tolérance, en maintenant les apports nutritionnels.",
+      "sources": ["https://medlineplus.gov/genetics/condition/lactose-intolerance/", "https://medlineplus.gov/lab-tests/lactose-tolerance-tests/"]
+    },
+    "hfe": {
+      "category": "nutrition",
+      "gene": "HFE",
+      "explanation_fr": "C282Y est le principal variant de l'hémochromatose HFE, maladie de surcharge en fer à pénétrance incomplète. Deux copies C282Y augmentent le risque mais ne suffisent pas à diagnostiquer une surcharge. H63D, seul, est beaucoup moins prédictif. Deux variants hétérozygotes nécessitent une étude de phase avant de conclure à un génotype composite.",
+      "next_steps_fr": "Si le génotype et le contexte justifient une évaluation, contrôler ferritine et saturation de la transferrine avec un médecin, puis rechercher les causes de surcharge. Les saignées sont un traitement d'une surcharge documentée; aucun régime restrictif ni supplément n'est recommandé sur le génotype seul.",
+      "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK1440/"]
+    },
+    "aldh2": {
+      "category": "nutrition",
+      "gene": "ALDH2",
+      "explanation_fr": "L'allèle *2 diminue l'élimination de l'acétaldéhyde après consommation d'alcool. Il peut entraîner rougeur du visage, nausée, palpitations et une exposition accrue à un composé cancérogène si la personne boit. Il ne mesure pas à lui seul un risque individuel de cancer.",
+      "next_steps_fr": "En cas de variant confirmé ou de rougeur liée à l'alcool, éviter ou limiter l'alcool; ne pas masquer la rougeur avec des antihistaminiques pour pouvoir boire. Consulter si les réactions sont importantes ou inhabituelles.",
+      "sources": ["https://www.niaaa.nih.gov/publications/alcohol-flush-reaction-does-drinking-alcohol-make-your-face-red"]
+    },
+    "apoe": {
+      "category": "predisposition",
+      "gene": "APOE",
+      "explanation_fr": "APOE participe au transport des lipides. Les isoformes usuelles résultent de la combinaison de rs429358 et rs7412 sur chaque chromosome. Elles modulent certaines prédispositions et n'établissent pas un diagnostic. Ce module affiche les deux sites mais n'attribue pas de diplotype ni de risque chiffré sans couverture et phase suffisantes.",
+      "next_steps_fr": "Pour un objectif lipidique, partir d'un bilan lipidique et de l'histoire personnelle et familiale. Si une interprétation APOE est souhaitée, confirmer les deux sites et leur combinaison avec un professionnel; ne pas déduire une maladie future d'un site isolé.",
+      "sources": ["https://medlineplus.gov/genetics/gene/apoe/"]
+    },
+    "abo": {
+      "category": "coherence",
+      "gene": "ABO",
+      "explanation_fr": "Ces sites distinguent certains allèles ABO courants. GRCh37 porte la délétion O courante comme référence à rs8176719; l'insertion C rétablit la base. Des allèles rares, la phase et FUT1 peuvent modifier l'interprétation. Trois marqueurs ne suffisent pas à certifier un groupe sanguin.",
+      "next_steps_fr": "Comparer les marqueurs à un groupe ABO obtenu par sérologie. Pour une transfusion ou une grossesse, utiliser exclusivement le groupage et les examens immunohématologiques du laboratoire. Un désaccord demande une vérification d'identité et une étude spécialisée.",
+      "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK2267/", "https://www.isbtweb.org/isbt-working-parties/rcibgt.html"]
+    },
+    "fut2": {
+      "category": "coherence",
+      "gene": "FUT2",
+      "explanation_fr": "rs601338 est un variant stop associé au statut non-sécréteur lorsqu'il inactive les deux copies; FUT2 influence la présence d'antigènes dans les sécrétions. Ce statut ne détermine pas le groupe ABO des globules rouges et aucun régime personnalisé validé n'en découle ici.",
+      "next_steps_fr": "Ce marqueur sert à une vérification descriptive. Une caractérisation clinique du statut sécréteur, si nécessaire, demande des méthodes et un panel adaptés; aucun traitement n'est indiqué sur ce signal seul.",
+      "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK2267/"]
+    },
+    "herc2": {
+      "category": "coherence",
+      "gene": "HERC2 / OCA2",
+      "explanation_fr": "rs12913832 est un marqueur régulateur associé à la pigmentation de l'iris. L'allèle G est souvent associé à des yeux plus clairs, mais plusieurs gènes interviennent et ce marqueur n'est ni un test d'identité ni une prédiction certaine.",
+      "next_steps_fr": "Comparer prudemment au phénotype observé. Une différence isolée n'invalide pas le séquençage; une vérification d'identité robuste nécessite des empreintes génétiques et des contrôles du laboratoire.",
+      "sources": ["https://medlineplus.gov/genetics/understanding/traits/eyecolor/"]
+    },
+    "mc1r": {
+      "category": "coherence",
+      "gene": "MC1R",
+      "explanation_fr": "Ces variants contribuent à des cheveux roux ou une pigmentation plus claire, avec une expression variable et l'effet d'autres gènes. Un seul marqueur ne prédit pas fidèlement la couleur des cheveux ou un risque cutané individuel.",
+      "next_steps_fr": "Utiliser la pigmentation observée et les antécédents pour discuter de la photoprotection ou d'un suivi dermatologique. Ces marqueurs descriptifs ne valident pas l'identité de l'échantillon.",
+      "sources": ["https://medlineplus.gov/genetics/gene/mc1r/"]
+    }
+  },
+  "markers": [
+    {"rsid": "rs4244285", "profile": "cyp2c19", "gene": "CYP2C19", "label": "marqueur *2", "chrom": "10", "pos": 96541616, "ref": "G", "alt": "A", "effect_allele": "A"},
+    {"rsid": "rs4986893", "profile": "cyp2c19", "gene": "CYP2C19", "label": "marqueur *3", "chrom": "10", "pos": 96540410, "ref": "G", "alt": "A", "effect_allele": "A"},
+    {"rsid": "rs12248560", "profile": "cyp2c19", "gene": "CYP2C19", "label": "marqueur *17", "chrom": "10", "pos": 96521657, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs1799853", "profile": "warfarin", "gene": "CYP2C9", "label": "marqueur *2", "chrom": "10", "pos": 96702047, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs1057910", "profile": "warfarin", "gene": "CYP2C9", "label": "marqueur *3", "chrom": "10", "pos": 96741053, "ref": "A", "alt": "C", "effect_allele": "C"},
+    {"rsid": "rs9923231", "profile": "warfarin", "gene": "VKORC1", "label": "c.-1639G>A, brin génomique C>T", "chrom": "16", "pos": 31107689, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs4149056", "profile": "slco1b1", "gene": "SLCO1B1", "label": "c.521T>C", "chrom": "12", "pos": 21331549, "ref": "T", "alt": "C", "effect_allele": "C"},
+    {"rsid": "rs3918290", "profile": "dpyd", "gene": "DPYD", "label": "*2A, c.1905+1G>A", "chrom": "1", "pos": 97915614, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs55886062", "profile": "dpyd", "gene": "DPYD", "label": "*13, p.Ile560Ser", "chrom": "1", "pos": 97981343, "ref": "A", "alt": "C", "effect_allele": "C"},
+    {"rsid": "rs67376798", "profile": "dpyd", "gene": "DPYD", "label": "p.Asp949Val", "chrom": "1", "pos": 97547947, "ref": "T", "alt": "A", "effect_allele": "A"},
+    {"rsid": "rs75017182", "profile": "dpyd", "gene": "DPYD", "label": "HapB3: variant causal d'épissage c.1129-5923C>G", "chrom": "1", "pos": 98045449, "ref": "G", "alt": "C", "effect_allele": "C"},
+    {"rsid": "rs56038477", "profile": "dpyd", "gene": "DPYD", "label": "c.1236G>A: proxy HapB3, pas variant causal", "chrom": "1", "pos": 98039419, "ref": "C", "alt": "T", "effect_allele": "T", "proxy": true, "marker_caveat_fr": "Ce variant synonyme sert de proxy, avec une liaison imparfaite: vérifier directement rs75017182 avant toute conclusion fonctionnelle."},
+    {"rsid": "rs1800462", "profile": "thiopurines", "gene": "TPMT", "label": "marqueur *2", "chrom": "6", "pos": 18143955, "ref": "C", "alt": "G", "effect_allele": "G"},
+    {"rsid": "rs1800460", "profile": "thiopurines", "gene": "TPMT", "label": "marqueur *3B ou *3A selon phase", "chrom": "6", "pos": 18139228, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs1142345", "profile": "thiopurines", "gene": "TPMT", "label": "marqueur *3C ou *3A selon phase", "chrom": "6", "pos": 18130918, "ref": "T", "alt": "C", "effect_allele": "C"},
+    {"rsid": "rs116855232", "profile": "thiopurines", "gene": "NUDT15", "label": "p.Arg139Cys", "chrom": "13", "pos": 48619855, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs776746", "profile": "cyp3a5", "gene": "CYP3A5", "label": "marqueur *3, allèle cible de référence C", "chrom": "7", "pos": 99270539, "ref": "C", "alt": "T", "effect_allele": "C"},
+    {"rsid": "rs267606617", "profile": "mt_rnr1", "gene": "MT-RNR1", "label": "m.1555A>G", "chrom": "MT", "pos": 1555, "ref": "A", "alt": "G", "effect_allele": "G", "required_reference": "NC_012920.1"},
+    {"rsid": "rs267606619", "profile": "mt_rnr1", "gene": "MT-RNR1", "label": "m.1494C>T", "chrom": "MT", "pos": 1494, "ref": "C", "alt": "T", "effect_allele": "T", "required_reference": "NC_012920.1"},
+    {"rsid": "rs4988235", "profile": "lactase", "gene": "MCM6 / LCT", "label": "-13910 C>T, brin génomique G>A", "chrom": "2", "pos": 136608646, "ref": "G", "alt": "A", "effect_allele": "A"},
+    {"rsid": "rs182549", "profile": "lactase", "gene": "MCM6 / LCT", "label": "marqueur lié à la persistance de lactase", "chrom": "2", "pos": 136616754, "ref": "C", "alt": "T", "effect_allele": "T", "proxy": true},
+    {"rsid": "rs1800562", "profile": "hfe", "gene": "HFE", "label": "p.Cys282Tyr (C282Y)", "chrom": "6", "pos": 26093141, "ref": "G", "alt": "A", "effect_allele": "A"},
+    {"rsid": "rs1799945", "profile": "hfe", "gene": "HFE", "label": "p.His63Asp (H63D)", "chrom": "6", "pos": 26091179, "ref": "C", "alt": "G", "effect_allele": "G"},
+    {"rsid": "rs671", "profile": "aldh2", "gene": "ALDH2", "label": "*2, p.Glu504Lys", "chrom": "12", "pos": 112241766, "ref": "G", "alt": "A", "effect_allele": "A"},
+    {"rsid": "rs429358", "profile": "apoe", "gene": "APOE", "label": "premier site définissant les isoformes usuelles", "chrom": "19", "pos": 45411941, "ref": "T", "alt": "C", "effect_allele": "C"},
+    {"rsid": "rs7412", "profile": "apoe", "gene": "APOE", "label": "second site définissant les isoformes usuelles", "chrom": "19", "pos": 45412079, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs8176719", "profile": "abo", "gene": "ABO", "label": "site O courant: référence T, insertion TC", "chrom": "9", "pos": 136132908, "ref": "T", "alt": "TC", "effect_allele": "T", "marker_caveat_fr": "Le signal O est ici l'allèle de référence; son absence dans un VCF de variants ne prouve pas un groupe non-O. Une autre représentation de l'indel nécessite une normalisation avec référence."},
+    {"rsid": "rs8176746", "profile": "abo", "gene": "ABO", "label": "un site discriminant A/B, c.796C>A", "chrom": "9", "pos": 136131322, "ref": "G", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs8176747", "profile": "abo", "gene": "ABO", "label": "un site discriminant A/B, c.803G>C", "chrom": "9", "pos": 136131315, "ref": "C", "alt": "G", "effect_allele": "G"},
+    {"rsid": "rs601338", "profile": "fut2", "gene": "FUT2", "label": "p.Trp143Ter", "chrom": "19", "pos": 49206674, "ref": "G", "alt": "A", "effect_allele": "A"},
+    {"rsid": "rs12913832", "profile": "herc2", "gene": "HERC2", "label": "régulation de pigmentation de l'iris", "chrom": "15", "pos": 28365618, "ref": "A", "alt": "G", "effect_allele": "G"},
+    {"rsid": "rs1805007", "profile": "mc1r", "gene": "MC1R", "label": "p.Arg151Cys", "chrom": "16", "pos": 89986117, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs1805008", "profile": "mc1r", "gene": "MC1R", "label": "p.Arg160Trp", "chrom": "16", "pos": 89986144, "ref": "C", "alt": "T", "effect_allele": "T"}
+  ]
+}

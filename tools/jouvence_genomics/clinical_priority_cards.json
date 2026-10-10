@@ -1,0 +1,169 @@
+{
+  "MVK": {
+    "conditions": [
+      {"name": "Déficit en mévalonate kinase : fièvre périodique associée à MVK, anciennement syndrome hyper-IgD", "inheritance": "Autosomique récessive ; deux variants pathogènes en trans sont habituellement nécessaires."},
+      {"name": "Acidurie mévalonique, forme sévère du déficit en mévalonate kinase", "inheritance": "Autosomique récessive."},
+      {"name": "Porokératose liée à MVK", "inheritance": "Prédisposition familiale souvent autosomique dominante avec second événement somatique dans la peau ; pertinence à vérifier pour le variant exact."}
+    ],
+    "phenotype": [
+      "Le déficit MK est une maladie auto-inflammatoire. Les premières crises surviennent souvent pendant la petite enfance : fièvre récurrente, douleurs abdominales, diarrhée ou vomissements, ganglions douloureux, aphtes, éruption et douleurs articulaires. Les infections, vaccinations ou le stress peuvent précipiter des crises ; la fréquence et la sévérité varient.",
+      "La forme sévère peut associer retard de croissance ou de développement, hypotonie, ataxie, atteinte neurologique, troubles visuels et inflammation persistante. Une maladie confirmée nécessite un suivi de l'inflammation et des complications, notamment rénales.",
+      "La porokératose donne des lésions cutanées annulaire(s), bordées d'un relief kératosique, parfois prurigineuses, localisées ou multiples. Une biopsie peut montrer une lamelle cornoïde. Dans certains cas liés à MVK, chaque lésion résulte d'un second événement acquis dans les kératinocytes ; le VCF sanguin ne montre pas ce second événement."
+    ],
+    "interpretation": "Un seul variant MVK pathogène confirmé suggère un portage du déficit MK récessif et ne suffit pas à diagnostiquer la maladie. La liste de maladies d'une fiche ClinVar agrégée ne démontre pas que ce variant cause chacune d'elles. La porokératose exige une interprétation propre au variant et au contexte dermatologique.",
+    "diagnostic_steps": [
+      "Confirmer le variant exact avec son transcript, sa classification par maladie et les preuves de chaque soumission ClinVar. Vérifier profondeur, équilibre allélique et alignement ; confirmer dans un laboratoire clinique avant une décision reproductive.",
+      "Pour le couple, étudier MVK chez l'autre partenaire avec une méthode couvrant les petites variations et les délétions/duplications ; un VCF ne contenant que les variants ne garantit pas que toutes les bases absentes aient été correctement lues.",
+      "Si des crises compatibles existent, discuter une consultation spécialisée en maladies auto-inflammatoires : histoire des crises, marqueurs inflammatoires et acide mévalonique urinaire pendant une crise. Une IgD normale ne permet pas d'exclure MKD ; des examens enzymatiques ou génétiques complémentaires peuvent être utiles.",
+      "En présence de lésions cutanées compatibles, demander un avis dermatologique ; examen, éventuellement biopsie et analyse d'une lésion selon le contexte. Une seconde mutation sanguine n'est pas nécessaire au mécanisme somatique cutané."
+    ],
+    "management": [
+      "Pour une maladie MKD diagnostiquée, une équipe spécialisée peut utiliser une inhibition de l'IL-1, notamment canakinumab ou anakinra, et adapter la prise en charge des crises. L'essai CLUSTER a démontré un bénéfice du canakinumab chez des patients avec maladie génétiquement confirmée ; cela ne constitue pas une indication chez un porteur asymptomatique.",
+      "Le suivi d'une maladie confirmée comprend le contrôle de l'inflammation, la croissance et la recherche de complications. Les recommandations SHARE actualisées déconseillent les statines comme traitement de MKD ; l'appartenance à la voie du cholestérol ne justifie donc pas un régime ou un médicament personnalisé à partir du seul génotype.",
+      "Pour une porokératose diagnostiquée, la prise en charge dermatologique dépend des lésions. La littérature mécanistique sur MVK ne suffit pas à choisir un traitement chez une personne sans lésions ni diagnostic."
+    ],
+    "variant_specific_notes": [
+      "NM_000431.4:c.644G>A (p.Arg215Gln), ClinVar VCV000097608 : les argumentaires examinés documentent principalement des patients avec déficit MK autosomique récessif, souvent en trans avec un autre variant.",
+      "La soumission Labcorp inclut porokératose dans une liste groupée de maladies, mais son argumentaire détaillé cite des observations MKD récessives. La soumission VCGS mentionne une porokératose pour p.Arg215Gly, un changement différent de p.Arg215Gln. Ne pas convertir cette mention en diagnostic dominant pour Arg215Gln sans preuve spécifique supplémentaire."
+    ],
+    "sources": [
+      {"title": "ClinVar — MVK p.Arg215Gln, soumissions détaillées et maladies agrégées", "url": "https://www.ncbi.nlm.nih.gov/clinvar/variation/97608/"},
+      {"title": "Recommandations SHARE actualisées pour MKD, 2024", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11590122/"},
+      {"title": "De Benedetti et al. — essai randomisé CLUSTER, 2018", "url": "https://pubmed.ncbi.nlm.nih.gov/29768139/"},
+      {"title": "Zhang et al. — variants de la voie du mévalonate et porokératose, 2015", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4511816/"},
+      {"title": "Kubo et al. — second hit somatique cutané dans MVK/MVD, 2019", "url": "https://pubmed.ncbi.nlm.nih.gov/31207227/"}
+    ]
+  },
+  "RAPSN": {
+    "conditions": [
+      {"name": "Syndrome myasthénique congénital dû au déficit en rapsyne", "inheritance": "Autosomique récessive."},
+      {"name": "Formes sévères avec akinésie fœtale ou arthrogrypose", "inheritance": "Autosomique récessive ; expression variable selon les variants."}
+    ],
+    "phenotype": [
+      "La rapsyne participe à l'organisation des récepteurs à l'acétylcholine à la jonction neuromusculaire. La maladie cause une faiblesse fatigable, souvent dès la naissance ou les premières années : hypotonie, paupières tombantes, faiblesse des membres et difficultés pour avaler ou respirer.",
+      "Des épisodes d'apnée ou de décompensation respiratoire peuvent survenir pendant une infection, même lorsque les symptômes sont modestes entre les crises. Les formes sévères peuvent commencer avant la naissance avec réduction des mouvements fœtaux et contractures ; des formes plus tardives existent."
+    ],
+    "interpretation": "Un variant pathogène hétérozygote confirmé correspond généralement à un portage sain. Il ne démontre pas un syndrome myasthénique chez la personne. Pour une maladie récessive, deux variants pathogènes doivent toucher les deux copies du gène ; deux variants non phasés ne démontrent pas cette situation.",
+    "diagnostic_steps": [
+      "Confirmer l'appel et sa classification actuelle. Évaluer RAPSN chez l'autre partenaire, y compris les régions mal couvertes et les délétions/duplications si la méthode le permet.",
+      "Si une faiblesse fatigable, des difficultés de déglutition ou des épisodes respiratoires sont présents, consulter en neurologie neuromusculaire : examen, électromyographie avec stimulation répétitive et recherche d'autres causes, selon le tableau clinique.",
+      "Si un second variant est découvert chez une même personne, établir la phase par données de lectures informatives, test familial ou autre méthode validée. L'hétérozygotie composite en trans est distincte de l'homozygotie."
+    ],
+    "management": [
+      "Pour un syndrome RAPSN confirmé, la pyridostigmine peut améliorer la transmission neuromusculaire ; d'autres traitements et un soutien respiratoire sont adaptés par un spécialiste. Un cas clinique documente une amélioration après traitement, mais la réponse dépend du sous-type et du patient.",
+      "Le choix du traitement dépend du diagnostic moléculaire précis : des médicaments utiles pour RAPSN peuvent être inefficaces ou nocifs dans d'autres syndromes myasthéniques. Un portage isolé ou un VUS n'indique aucun traitement."
+    ],
+    "sources": [
+      {"title": "GeneReviews — syndromes myasthéniques congénitaux", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1168/"},
+      {"title": "Étude clinique — diagnostic RAPSN et réponse à la pyridostigmine, 2014", "url": "https://pubmed.ncbi.nlm.nih.gov/25194721/"},
+      {"title": "Engel et al. — mécanismes et traitements des syndromes myasthéniques, 2015", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4520251/"}
+    ]
+  },
+  "STRC": {
+    "conditions": [
+      {"name": "Surdité neurosensorielle liée à STRC, DFNB16", "inheritance": "Autosomique récessive."},
+      {"name": "Syndrome de surdité et infertilité masculine associé à une délétion contiguë STRC–CATSPER2", "inheritance": "Autosomique récessive ; dépend de l'étendue des délétions et de leur présence sur les deux copies."}
+    ],
+    "phenotype": [
+      "La surdité STRC est généralement bilatérale, symétrique, congénitale, légère à modérée. Elle peut être manquée par un dépistage néonatal et affecter la compréhension de la parole. Une faible progression peut exister.",
+      "Une diminution de fertilité masculine est surtout liée à des délétions bialléliques incluant le gène voisin CATSPER2. Un simple variant ponctuel STRC ne suffit pas à prédire une infertilité."
+    ],
+    "interpretation": "Un seul variant pathogène STRC confirmé n'entraîne habituellement pas la surdité récessive. Une classification conflictuelle ne doit pas être transformée en portage pathogène établi. STRC ressemble fortement à son pseudogène STRCP1 : un bon score de génotype ne garantit pas à lui seul que le signal vient du bon locus.",
+    "diagnostic_steps": [
+      "Revoir les soumissions ClinVar par variant et maladie. Ne pas retenir une classification majoritaire sans expliquer les désaccords et leurs preuves.",
+      "Faire confirmer un variant STRC avec une technique distinguant le gène de STRCP1, par exemple PCR longue spécifique suivie de séquençage. Des lectures courtes ambiguës, même avec BAM, peuvent nécessiter cette confirmation indépendante.",
+      "Compléter la recherche de délétions/duplications, par exemple MLPA ou méthode clinique validée ; déterminer si CATSPER2 est inclus lorsque des délétions existent.",
+      "En cas de difficulté auditive, discuter un audiogramme et un avis ORL. Une mesure clinique peut documenter l'audition indépendamment de la classification du variant."
+    ],
+    "management": [
+      "Pour une surdité diagnostiquée, la prise en charge repose sur l'audiologie, les aides auditives adaptées et, chez l'enfant, le soutien à la communication. Les besoins dépendent de l'audition mesurée.",
+      "Un variant incertain ou un portage isolé n'indique aucun traitement. La question reproductive nécessite la confirmation du variant et l'évaluation fiable de l'autre partenaire."
+    ],
+    "sources": [
+      {"title": "GeneReviews — surdité récessive liée à STRC", "url": "https://www.ncbi.nlm.nih.gov/books/NBK598310/"},
+      {"title": "Étude originale — confirmation STRC par PCR spécifique et MLPA, 2023", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10668944/"},
+      {"title": "ClinVar — principes des classifications par variant et maladie", "url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/details/"}
+    ]
+  },
+  "TTN": {
+    "conditions": [
+      {"name": "Cardiomyopathie dilatée liée à certaines troncations TTN", "inheritance": "Souvent autosomique dominante avec pénétrance incomplète ; interprétation dépendante de l'exon et du transcript cardiaque."},
+      {"name": "Titinopathies musculaires congénitales ou précoces", "inheritance": "Souvent autosomique récessive pour les formes bialléliques ; d'autres titinopathies ont des mécanismes dominants spécifiques."}
+    ],
+    "phenotype": [
+      "La cardiomyopathie dilatée associe dilatation du ventricule et diminution de la contraction. Elle peut se manifester par essoufflement, fatigue, œdèmes ou troubles du rythme, parfois seulement à l'âge adulte. La pénétrance dépend du contexte familial, de l'âge et d'autres facteurs ; un chiffre issu de familles malades ne s'applique pas directement à une découverte fortuite.",
+      "Les titinopathies récessives couvrent un spectre large : diminution des mouvements fœtaux, hypotonie ou faiblesse dès la naissance, retard moteur, contractures et scoliose, avec atteinte respiratoire et/ou cardiaque variable. Certaines formes commencent plus tard."
+    ],
+    "interpretation": "TTN est un très grand gène : des variants rares, surtout faux-sens, sont fréquents et beaucoup restent sans signification clinique démontrée. Trouver un variant TTN incertain chez chaque partenaire est un recouvrement de recherche. Cela n'établit ni portage pathogène commun, ni atteinte biallélique, ni risque mendélien calculable pour un enfant.",
+    "diagnostic_steps": [
+      "Identifier pour chaque variant le transcript, l'exon, la conséquence exacte et les preuves indépendantes. Pour une troncation, vérifier son effet sur les isoformes pertinentes et le pourcentage d'inclusion de l'exon dans le cœur ou le muscle, appelé PSI. Une annotation sur un seul transcript ne suffit pas.",
+      "Confirmer les appels complexes avec les lectures et, si nécessaire, une méthode clinique indépendante. Pour plusieurs variants dans une personne, distinguer cis et trans ; la phase inconnue ne doit jamais être présentée comme une hétérozygotie composite démontrée.",
+      "En présence d'antécédents personnels ou familiaux cardiaques, discuter une évaluation cardiologique : ECG, échocardiographie et examens complémentaires selon le médecin. Pour une faiblesse musculaire inexpliquée, demander un avis neuromusculaire.",
+      "Une conclusion reproductive récessive nécessite deux variants causaux pertinents pour la même maladie, leur validation et un modèle de transmission établi. Ne pas utiliser automatiquement un taux de 25 % pour une paire de VUS."
+    ],
+    "management": [
+      "Une cardiomyopathie diagnostiquée se prend en charge selon le phénotype et les recommandations cardiologiques ; le génotype peut contribuer au conseil familial et à la surveillance. Une titinopathie musculaire confirmée nécessite une prise en charge neuromusculaire, respiratoire, orthopédique et cardiaque adaptée.",
+      "Aucun médicament, supplément ou traitement préventif spécifique n'est indiqué à partir d'un VUS TTN isolé. La priorité est l'interprétation du variant et la confrontation aux symptômes ou à l'histoire familiale."
+    ],
+    "sources": [
+      {"title": "Herman et al. — TTN et cardiomyopathie dilatée, étude familiale originale, 2012", "url": "https://pubmed.ncbi.nlm.nih.gov/22335739/"},
+      {"title": "Étude originale — troncations TTN et inclusion cardiaque des exons, 2025", "url": "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1011727"},
+      {"title": "Étude originale — titinopathies congénitales récessives, 2018", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6105519/"},
+      {"title": "Étude originale — myopathies avec atteinte cardiaque dues à TTN biallélique, 2014", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3954110/"},
+      {"title": "GeneReviews — cardiomyopathie dilatée", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1309/"}
+    ]
+  },
+  "SYNE1": {
+    "conditions": [
+      {"name": "Ataxie cérébelleuse récessive liée à SYNE1, ARCA1/ataxie de Beauce", "inheritance": "Autosomique récessive."},
+      {"name": "Formes multisystémiques ou arthrogrypose myogène liées au déficit SYNE1", "inheritance": "Autosomique récessive ; dépend de la combinaison de variants et des isoformes."}
+    ],
+    "phenotype": [
+      "L'ataxie SYNE1 cause une démarche instable, maladresse des mains, difficulté à articuler et anomalies des mouvements oculaires. Le début va de l'enfance à l'âge adulte ; la progression est souvent lente.",
+      "Des formes complexes associent spasticité, réflexes anormaux, fonte musculaire, fasciculations ou troubles cognitifs. Les formes infantiles peuvent comporter faiblesse et insuffisance respiratoire. Les formes congénitales peuvent présenter diminution des mouvements fœtaux, hypotonie et contractures articulaires."
+    ],
+    "interpretation": "Un seul variant pathogène SYNE1 confirmé correspond en général à un portage asymptomatique du déficit récessif. Une insertion prédite délétère demeure un candidat tant que l'appel, l'effet sur le transcript et la classification ne sont pas validés. Un VUS voisin ne démontre pas un second allèle causal.",
+    "diagnostic_steps": [
+      "Vérifier l'insertion dans les lectures, sa représentation normalisée et son effet sur les isoformes SYNE1 pertinentes ; utiliser une confirmation clinique indépendante si nécessaire.",
+      "Pour le couple, analyser l'autre partenaire avec une méthode adaptée aux petites variations et aux CNV ; la présence de régions non évaluables doit figurer explicitement dans le rapport.",
+      "En cas de symptômes compatibles, discuter une consultation neurologique, un examen de l'équilibre et des réflexes, et des examens complémentaires orientés. La démarche diagnostique peut préférer un panel d'ataxies ou une analyse génomique élargie car d'autres maladies produisent les mêmes symptômes.",
+      "Si plusieurs variants SYNE1 sont trouvés, établir leur phase et leur pertinence pour la même maladie avant une conclusion biallélique."
+    ],
+    "management": [
+      "Pour une maladie SYNE1 diagnostiquée, la prise en charge vise les fonctions motrices, la parole, la déglutition, les complications orthopédiques et la respiration selon le tableau. Il n'existe pas de traitement spécifique curatif établi dans GeneReviews.",
+      "Un portage isolé ou un candidat pLoF ne justifie pas ce parcours thérapeutique en l'absence de maladie ; la première étape reste la confirmation et le conseil génétique."
+    ],
+    "sources": [
+      {"title": "GeneReviews — déficit SYNE1, diagnostic et prise en charge", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1379/"},
+      {"title": "Synofzik et al. — spectre cérébelleux et multisystémique SYNE1, étude multicentrique, 2016", "url": "https://pubmed.ncbi.nlm.nih.gov/27086870/"},
+      {"title": "MedlinePlus Genetics — mécanismes des variants SYNE1", "url": "https://medlineplus.gov/genetics/gene/syne1/"},
+      {"title": "ACMG/AMP — interprétation clinique et usage des variants incertains", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4544753/"}
+    ]
+  },
+  "RNF213": {
+    "conditions": [
+      {"name": "Angiopathie de moyamoya et susceptibilité associée à RNF213", "inheritance": "Mécanismes variant-spécifiques, pénétrance souvent faible ; ni un modèle récessif simple ni toute perte de fonction ne peuvent être généralisés."},
+      {"name": "Syndromes vasculaires ou neurologiques sévères liés à certains variants RNF213 de novo", "inheritance": "Autosomique dominante pour certains variants faux-sens précis, notamment proches du domaine RING."}
+    ],
+    "phenotype": [
+      "Le moyamoya correspond à un rétrécissement progressif de certaines artères cérébrales et au développement de vaisseaux collatéraux. Il peut provoquer épisodes neurologiques transitoires, AVC ischémique ou hémorragique, crises épileptiques ou troubles cognitifs, dans l'enfance ou à l'âge adulte.",
+      "Le variant fondateur p.Arg4810Lys est fortement associé au moyamoya en Asie de l'Est, mais des porteurs restent indemnes. Certains variants faux-sens de novo dans ou près du domaine RING ont été décrits dans des tableaux pédiatriques sévères, avec AVC précoce ou syndrome de type Leigh. Ces observations ne caractérisent pas toutes les insertions ou troncations du gène."
+    ],
+    "interpretation": "La signification d'un variant RNF213 dépend du variant exact et du mécanisme de maladie. Une insertion affectant potentiellement l'épissage reste un signal à vérifier ; le nombre de variants LoF classés ailleurs dans le gène ne valide pas son mécanisme à ce site. Un variant incertain ne doit pas être appelé portage récessif établi et ne permet pas de calculer un risque de moyamoya pour les enfants.",
+    "diagnostic_steps": [
+      "Confirmer l'appel complexe, le transcript et l'effet réel sur l'épissage ; vérifier la région, la classification du variant exact et le mécanisme maladie associé. Un test ARN peut être discuté par le laboratoire lorsque techniquement pertinent.",
+      "Documenter l'histoire neurologique et familiale, puis demander une revue en génétique clinique si le variant persiste après validation. L'orientation en neurovasculaire et l'imagerie dépendent du contexte clinique ; une IRM/angiographie ne doit pas être prescrite automatiquement pour un simple VUS fortuit.",
+      "Les recommandations ESO soulignent l'incertitude sur l'utilité du dépistage RNF213 systématique, même chez des patients atteints d'angiopathie de moyamoya. Les données variant-spécifiques et les symptômes priment donc sur une règle fondée uniquement sur le gène."
+    ],
+    "management": [
+      "Une angiopathie moyamoya diagnostiquée se prend en charge dans une équipe neurovasculaire ; une revascularisation et certains traitements peuvent être discutés selon les symptômes et l'hémodynamique cérébrale. Le bénéfice et les limites sont évalués au cas par cas.",
+      "Un candidat RNF213 incertain n'indique ni antiagrégant, ni chirurgie, ni traitement préventif fondé sur le génotype seul. Aucun taux de risque mendélien ne doit être attribué à un variant dont le mécanisme n'est pas établi."
+    ],
+    "sources": [
+      {"title": "Liu et al. — RNF213 comme gène de susceptibilité au moyamoya, 2011", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3140517/"},
+      {"title": "Étude originale — variants rares RNF213 proches du domaine RING chez des patients européens, 2017", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5567158/"},
+      {"title": "Étude originale — variants RNF213 de novo et spectre neurologique, 2024", "url": "https://www.sciencedirect.com/science/article/pii/S1098360023010298"},
+      {"title": "ESO/VASCERN — recommandations pour l'angiopathie de moyamoya, 2023", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10069176/"}
+    ]
+  }
+}

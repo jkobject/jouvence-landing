@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Produire un rapport génomique de qualité</title><style>:root{--ink:#172e38;--muted:#5b6b71;--accent:#087e8b;--paper:#fffefa;--line:#dce4e3;--wash:#f0f5f3;--orange:#bf6937;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper);font-size:16px;line-height:1.65}
+*{box-sizing:border-box}body{margin:0}a{color:var(--accent);text-underline-offset:3px}button,select{font:inherit;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:7px 13px;cursor:pointer}button:hover,select:hover{border-color:var(--accent)}:focus-visible{outline:3px solid #d48435;outline-offset:3px}[hidden]{display:none!important}.toolbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:14px 4vw;background:var(--paper);border-bottom:1px solid var(--line);gap:15px}.brand{font-size:23px;font-weight:700;text-decoration:none;color:var(--ink);letter-spacing:-1px}.brand span{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-left:15px;color:var(--muted)}.toolbar-actions{display:flex;align-items:center;gap:10px}#fullscreen{font-size:13px;padding:6px 13px}#fullscreen[aria-pressed=true]{background:var(--ink);color:white}[data-slide-only]{display:none!important}.presentation [data-slide-only]{display:revert!important}.presentation [data-slide-only][hidden]{display:none!important}#progress{position:fixed;left:0;bottom:0;height:3px;background:var(--accent);z-index:21;transition:width .2s ease}.mode-switch{display:flex;background:var(--wash);border:1px solid var(--line);border-radius:7px;padding:3px}.mode-switch button{border:0;background:transparent;font-size:13px;padding:6px 13px}.mode-switch button[aria-pressed=true]{background:var(--ink);color:white}.page{display:grid;grid-template-columns:210px minmax(0,930px);gap:65px;max-width:1330px;margin:0 auto;padding:55px 38px 110px}aside{position:sticky;top:100px;align-self:start;font-size:13px;max-height:calc(100vh - 125px);overflow:auto}#toc a{display:block;text-decoration:none;color:var(--muted);padding:6px 0 6px 12px;border-left:2px solid var(--line);line-height:1.45}#toc a:hover,#toc a[aria-current=true]{color:var(--accent);border-left-color:var(--accent)}.eyebrow{text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:700;color:var(--accent)}.aside-note{font-size:11px;color:var(--muted);margin-top:30px}.title-block{padding:0 0 30px;border-bottom:1px solid var(--ink);margin-bottom:38px}h1{font-family:Georgia,serif;font-size:clamp(34px,4vw,53px);line-height:1.12;font-weight:400;letter-spacing:-.025em;margin:15px 0 23px;max-width:800px}.subtitle{font-size:20px;line-height:1.5;max-width:700px}.byline{font-size:12px;color:var(--muted)}h2{font-family:Georgia,serif;font-weight:400;font-size:30px;line-height:1.25;margin:0 0 20px}h3{font-size:18px;line-height:1.4;margin:25px 0 10px}section{scroll-margin-top:95px;padding:26px 0 38px;border-bottom:1px solid var(--line)}p{margin:12px 0}.prose{max-width:76ch;color:#344850}.takeaway{font-size:21px;line-height:1.5;color:var(--ink);margin:16px 0 25px}.caveat{border-left:3px solid var(--orange);background:#fcf5ec;padding:10px 15px;font-size:14px;line-height:1.5;margin:20px 0}.citation{font-size:.75em;vertical-align:super;font-family:ui-sans-serif,sans-serif;white-space:nowrap}.plot-shell{border:1px solid var(--line);border-radius:8px;background:white;margin:24px 0;overflow:hidden}.plot-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line);font-size:13px}.plot-tools label{font-weight:600}.plot-canvas{height:440px;min-width:0}.plot-canvas>img{display:block;width:100%;height:100%;object-fit:contain}.plot-caption{font-size:13px;line-height:1.5;color:var(--muted);padding:0 20px 16px;margin:0}.plot-shell details{padding:10px 20px;border-top:1px solid var(--line);font-size:13px}.plot-shell details>a{display:inline-block;margin:10px 0}summary{cursor:pointer;font-weight:600}details.explanation{background:var(--wash);padding:16px 20px;border-radius:5px;margin:18px 0}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px;margin:15px 0;line-height:1.5}th{text-align:left;border-bottom:2px solid var(--ink);font-weight:600}td,th{padding:10px 9px;vertical-align:top}td{border-bottom:1px solid var(--line)}tbody tr:hover{background:var(--wash)}code{font-size:.85em;background:var(--wash);padding:2px 4px;overflow-wrap:anywhere}pre{overflow:auto;background:var(--wash);padding:16px}.formula{padding:17px;background:var(--wash);font-family:Georgia,serif;font-size:19px;overflow:auto}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:25px 0}.card{padding:18px;border:1px solid var(--line);border-radius:5px}.card strong{display:block;font-family:Georgia,serif;font-size:32px;font-weight:400}.card span{font-size:13px;line-height:1.4;display:block}#bibliography li{padding:8px 0;font-size:14px;overflow-wrap:anywhere}.skip-link{position:fixed;top:-60px;left:10px;background:white;z-index:30}.skip-link:focus{top:10px}.presentation .page{display:block;max-width:1190px;padding:30px 45px 100px}.presentation aside,.presentation .title-block,.presentation .prose,.presentation [data-document-only],.presentation .doc-only{display:none!important}.presentation section{border:0;padding:10px 0}.presentation h2{font-size:clamp(28px,3.3vw,43px)}.presentation .takeaway{font-size:clamp(19px,2.1vw,25px);max-width:1000px}.presentation .plot-canvas{height:clamp(270px,49vh,510px)}.presentation .plot-shell{margin:16px 0}.presentation .caveat{margin:12px 0}.presentation .plot-tools{padding:8px 15px}.presentation .plot-caption{padding-bottom:10px}#slide-controls{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;background:var(--paper);border-top:1px solid var(--line);padding:10px 4vw;z-index:20;font-size:13px}#slide-status{padding:0 10px;text-align:center}button:disabled{opacity:.4;cursor:default}
+@media(max-width:850px){.page{grid-template-columns:minmax(0,1fr);padding:25px 22px 90px;gap:20px}aside{position:static;max-height:none}#toc{display:flex;overflow:auto;gap:15px;padding-bottom:10px}#toc a{min-width:130px;padding:5px;border-left:0;border-bottom:2px solid var(--line)}.aside-note{display:none}.toolbar{padding:12px 20px}.brand span{display:none}.cards{gap:8px}.card{padding:12px}.card strong{font-size:25px}.presentation .page{padding:24px 18px 90px}.plot-tools select{max-width:100%;font-size:12px}.plot-canvas{height:380px}table{font-size:12px}.takeaway{font-size:19px}h1{font-size:36px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}#progress{transition:none}}
+@media print{.toolbar,aside,#slide-controls,#progress,.plot-tools,.skip-link{display:none!important}.page,.presentation .page{display:block;padding:0;max-width:none}section{break-inside:auto}.plot-shell{break-inside:avoid}.plot-canvas{height:360px}a{color:inherit}.presentation section[hidden]{display:block!important}.presentation #bibliography[hidden]{display:none!important}}
+/* Fit desktop slides to the viewport while allowing natural scroll on phones. */
+@media(min-width:851px){.presentation .page{padding:22px 40px 80px}.presentation section:not([hidden]){display:flex;flex-direction:column;height:calc(100dvh - 170px);min-height:480px;padding:0}.presentation h2{font-size:34px;margin:0 0 12px}.presentation .takeaway{font-size:21px;line-height:1.4;margin:0 0 12px}.presentation .plot-shell{display:flex;flex-direction:column;flex:1;min-height:230px;margin:3px 0 8px}.presentation .plot-canvas{flex:1;height:0;min-height:160px}.presentation .plot-tools{padding:5px 14px}.presentation .plot-caption{font-size:12px;padding:5px 16px 8px;line-height:1.35}.presentation .caveat{font-size:12px;margin:3px 0;padding:7px 12px;line-height:1.4}.presentation table{font-size:18px}.presentation td,.presentation th{padding:13px 10px}.presentation #bibliography li{font-size:18px;padding:15px 0}.presentation #next-steps ol{font-size:23px;line-height:1.7}.presentation #next-steps li{margin-bottom:18px}}
+
+/* Extensions to the shared HTML-report runtime; no external resources. */
+:root{--ink:#162737;--muted:#596878;--accent:#287a76;--paper:#faf8f2;--wash:#f0f3ee;--orange:#ae663c}
+.brand{letter-spacing:-.05em}.brand span{letter-spacing:.1em}.page{grid-template-columns:225px minmax(0,930px);gap:42px}.toolbar{background:rgba(250,248,242,.98)}
+.takeaway{max-width:65ch}.card{background:#fff;border-radius:12px}.card strong{font-family:inherit;font-weight:650}.caveat{border-radius:0 8px 8px 0}.status{display:inline-block;font-size:12px;font-weight:650;border:1px solid #becbc9;border-radius:20px;padding:3px 10px;background:#eff5f1}.status-uncertain{background:#fbf1df;border-color:#d5b986}.status-technical{background:#f1eef8;border-color:#c3b5d9}.status-unassessed{background:#eceff2;border-color:#c3ccd4}
+.filter-tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:18px 0;padding:15px;border:1px solid var(--line);border-radius:10px;background:#fff}.filter-tools label{font-size:13px;font-weight:600}.filter-tools input{font:inherit;padding:9px 12px;border:1px solid var(--line);border-radius:6px;max-width:100%;min-width:160px}.filter-tools select{max-width:100%}.filter-count{font-size:13px;color:var(--muted)}
+.gene-card{margin:16px 0;border:1px solid var(--line);border-radius:12px;background:#fff;padding:18px 22px}.gene-card>summary{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:18px}.gene-card h3{font-family:Georgia,serif;font-size:22px}.gene-card .clinical-context{border-top:1px solid var(--line);margin-top:20px;padding-top:8px}.gene-card li{margin:7px 0}.variant-row{padding:14px 0;border-bottom:1px solid var(--line)}.variant-row:last-child{border-bottom:0}.variant-row code{display:inline;word-break:break-word;overflow-wrap:anywhere}.sequence-details{margin:8px 0}.sequence-details code{display:block;font-size:12px}.fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:13px;color:var(--muted);margin:8px 0}.sources-list{font-size:13px}.sources-list li{margin:5px 0}.marker-card{padding:14px 0;border-bottom:1px solid var(--line)}.marker-card>summary{font-size:16px}.inline-note{font-size:13px;color:var(--muted)}.important-note{padding:16px 20px;background:#eef5f1;border:1px solid #b7d0c5;border-radius:10px;margin:18px 0}.table-wrap table{min-width:550px}.table-wrap{max-width:100%}.download-row{display:flex;gap:15px;flex-wrap:wrap}.presentation .gene-card,.presentation .filter-tools{display:none}.presentation .cards{margin:15px 0}.presentation .card strong{font-size:30px}
+@media(max-width:850px){.page{grid-template-columns:minmax(0,1fr);gap:20px}.toolbar{gap:8px}.brand{font-size:20px}.mode-switch button{padding:5px 8px}.gene-card{padding:16px 14px}.fact-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr 1fr}.filter-tools{align-items:stretch}.filter-tools input{min-width:0;width:100%}.filter-tools label{width:100%}.table-wrap table{min-width:500px}}
+@media print{details.gene-card,details.marker-card{break-inside:auto}.filter-tools{display:none}.gene-card{border-color:#bbb}body{background:white}.cards{grid-template-columns:repeat(3,1fr)}.gene-card[hidden]{display:block!important}}
+</style><link rel="icon" type="image/png" href="data:image/png;base64,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"></head><body><a class="skip-link" href="#report">Aller au rapport</a>
+<header class="toolbar"><a class="brand" href="#objectif">Jouvence <span>Génomique / Rapport</span></a>
+<div class="toolbar-actions"><button id="fullscreen" aria-pressed="false" hidden>Plein écran</button><div class="mode-switch" role="group" aria-label="Mode de lecture"><button id="document-mode" aria-pressed="true">Document</button><button id="presentation-mode" aria-pressed="false">Présentation</button></div></div></header>
+<div class="page"><aside><p class="eyebrow">Sommaire</p><nav id="toc" aria-label="Sommaire"></nav><p class="aside-note">v1<br>2026-10-10</p></aside><main id="report">
+<div class="title-block"><p class="eyebrow">Rapport documenté · v1</p><h1>Produire un rapport génomique de qualité</h1><p class="subtitle">Une méthode française, traçable et prudente pour les rapports individuels et de couple.</p><p class="byline">Jouvence · 2026-10-10</p></div>
+<noscript><p>Activer JavaScript pour les filtres et la présentation. Le texte et les téléchargements intégrés restent disponibles.</p></noscript>
+<section id="objectif">
+<h2>Ce qu'un rapport génomique de qualité doit permettre</h2>
+<p class="takeaway">Comprendre un résultat, juger sa solidité et savoir quelle étape vient ensuite.</p>
+<p>Le rapport doit comporter une synthèse courte, une lecture détaillée par personne,
+une comparaison de couple et une annexe technique inspectable. Chaque observation
+intéressante doit mener à une fiche explicative : maladie associée, manifestations,
+transmission, niveau de preuve, qualité de l'appel, limites et suites possibles.
+Le français est la langue de lecture ; les symboles de gènes et noms internationaux
+des variants restent inchangés pour pouvoir retrouver les sources.</p>
+<p>La première page répond à quatre questions : quels résultats sont suffisamment
+documentés pour être discutés en génétique clinique ; quels signaux demandent une
+validation ; quel risque de couple est établi ou reste indéterminé ; quelles données
+manquent pour aller plus loin. Une absence de résultat est accompagnée du périmètre
+réellement testé, jamais présentée comme une garantie de santé.</p>
+<p class="caveat">La prédiction d'un effet moléculaire, la classification d'un variant et le diagnostic d'une personne sont trois conclusions différentes.</p>
+</section>
+<section data-document-only="data-document-only" id="vocabulaire">
+<h2>Des mots qui empêchent les mauvaises interprétations</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Terme</th>
+<th>Signification dans le rapport</th>
+<th>Ce qu'il ne permet pas de conclure seul</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Variant observé</td>
+<td>Allèle explicitement appelé dans le VCF</td>
+<td>Appel vrai, maladie ou caractère causal</td>
+</tr>
+<tr>
+<td>Hétérozygote</td>
+<td>Deux allèles différents à un site diploïde</td>
+<td>Deux copies du gène atteintes</td>
+</tr>
+<tr>
+<td>Homozygote</td>
+<td>Même allèle appelé sur les deux copies au même site</td>
+<td>Pathogénicité du variant</td>
+</tr>
+<tr>
+<td>Deux variants dans un gène</td>
+<td>Deux changements distincts ont été observés</td>
+<td>Présence sur les deux copies du gène</td>
+</tr>
+<tr>
+<td>En cis</td>
+<td>Les variants sont sur une même copie</td>
+<td>Atteinte de la seconde copie</td>
+</tr>
+<tr>
+<td>En trans</td>
+<td>Les variants sont sur des copies différentes</td>
+<td>Deux variants causaux pour une même maladie</td>
+</tr>
+<tr>
+<td>Hétérozygotie composite</td>
+<td>Deux variants différents en trans</td>
+<td>Diagnostic sans pertinence clinique des deux variants</td>
+</tr>
+<tr>
+<td>P/LP</td>
+<td>Variant pathogène ou probablement pathogène dans une interprétation donnée</td>
+<td>Pénétrance complète ou maladie chez tout porteur</td>
+</tr>
+<tr>
+<td>VUS</td>
+<td>Signification clinique incertaine</td>
+<td>Indication de traitement ou de PGT</td>
+</tr>
+<tr>
+<td>Candidat pLoF</td>
+<td>Perte de fonction prédite à vérifier</td>
+<td>Classification P/LP ou mécanisme approprié à toute maladie du gène</td>
+</tr>
+<tr>
+<td>Région non évaluable</td>
+<td>Données insuffisantes pour un appel fiable</td>
+<td>Génotype de référence</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les recommandations ACMG/AMP précisent qu'un VUS ne doit pas servir de base à une
+décision clinique. Un candidat est donc décrit comme un élément à interpréter,
+sans le transformer en maladie, portage causal ou indication de FIV. <a aria-label="Référence 1" class="citation" data-cite="acmg" href="#ref-acmg">[1]</a></p>
+</section>
+<section data-document-only="data-document-only" id="fiche">
+<h2>La fiche obligatoire de chaque variant intéressant</h2>
+<p>La fiche commence par le résultat <strong>chez cette personne</strong> : allèle appelé,
+génotype, zygosité et statut de validation. Elle explique ensuite les maladies
+pertinentes pour le <strong>variant exact</strong>, en distinguant les associations générales
+du gène. Une page ClinVar agrégeant plusieurs maladies ne prouve pas que son
+variant cause toutes ces maladies selon tous les modes de transmission.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Bloc</th>
+<th>Contenu minimal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identité</td>
+<td>Assemblage, chromosome, position, REF/ALT, transcript et version, nomenclature HGVS si validée</td>
+</tr>
+<tr>
+<td>Appel</td>
+<td>Génotype, profondeur DP, qualité GQ, équilibre allélique AD, FILTER, métriques complémentaires, fichiers utilisés</td>
+</tr>
+<tr>
+<td>Effet prédit</td>
+<td>Faux-sens, décalage du cadre, codon stop, épissage, indel complexe ; transcript pertinent et limites</td>
+</tr>
+<tr>
+<td>Preuve</td>
+<td>ClinVar par variant/maladie, statut de revue, désaccords, date, fréquence populationnelle et association gène-maladie</td>
+</tr>
+<tr>
+<td>Maladie</td>
+<td>Nom compréhensible, mécanisme, transmission, âge habituel, organes touchés, manifestations et variabilité</td>
+</tr>
+<tr>
+<td>Chez un porteur</td>
+<td>Effets attendus d'un seul allèle, pénétrance lorsqu'elle est connue, absence de conclusion lorsqu'elle ne l'est pas</td>
+</tr>
+<tr>
+<td>Pour le couple</td>
+<td>Variant(s) de chaque parent, maladie commune réellement pertinente, phase et calcul autorisé ou non</td>
+</tr>
+<tr>
+<td>Suite immédiate</td>
+<td>Revue de l'appel, confirmation clinique, complément de couverture, relecture de la classification</td>
+</tr>
+<tr>
+<td>Diagnostic orienté</td>
+<td>Consultation et examens seulement si le génotype validé, les symptômes ou l'histoire familiale le justifient</td>
+</tr>
+<tr>
+<td>Prise en charge</td>
+<td>Traitement établi, mesures de suivi ou absence de traitement spécifique, conditionnés au diagnostic</td>
+</tr>
+<tr>
+<td>Sources</td>
+<td>Liens directs vers GeneReviews, Orphanet, ClinVar, recommandations et publications originales</td>
+</tr>
+</tbody>
+</table></div>
+<p>Les symptômes sont décrits en phrases concrètes, avec leurs manifestations
+légères et sévères. Le rapport doit aussi dire qu'une personne ne présente pas
+nécessairement ces symptômes parce qu'un variant incertain a été trouvé.</p>
+</section>
+<section id="preuves">
+<h2>Classer les preuves avant d'afficher les maladies</h2>
+<p>Une conséquence informatique délétère demande une revue du mécanisme : perte de
+fonction effectivement causale pour cette maladie, transcript exprimé dans le
+tissu pertinent, exon important, effet réel sur l'épissage et possibilité de
+dégradation de l'ARN. Les variantes en fin de gène, les isoformes alternatives,
+les indels voisins et les régions paralogues peuvent modifier l'interprétation.
+La règle « plusieurs pertes de fonction pathogènes existent ailleurs dans ce
+gène » est un filtre de recherche, pas une classification clinique. <a aria-label="Référence 2" class="citation" data-cite="pvs1" href="#ref-pvs1">[2]</a></p>
+<p>Le rapport sépare cinq niveaux : résultat P/LP appelé avec une qualité suffisante
+à confirmer cliniquement ; candidat moléculaire plausible ; VUS ; appel complexe
+ou techniquement douteux ; résultat non évalué. Les résultats exclus restent
+inspectables avec leur motif, mais ne sont pas additionnés aux portages établis.</p>
+<p>Une fréquence absente d'une table est notée <strong>non renseignée</strong>. Elle n'est pas
+remplacée par zéro. Une fréquence dans une population ne suffit pas à prédire
+l'effet chez une personne. Les seuils employés et leurs unités — fréquence
+d'allèle, fréquence de portage ou risque par grossesse — sont explicités.</p>
+<p class="caveat">Une association gène-maladie peut être dominée par un mécanisme précis : gain de fonction, effet dominant négatif, susceptibilité ou combinaison particulière de variants. Le nom du gène ne détermine pas à lui seul le modèle de risque.</p>
+</section>
+<section id="couple">
+<h2>Écrire une comparaison de couple sans ambiguïté</h2>
+<p>La synthèse affiche séparément le <strong>nombre de gènes partagés avec des variants
+à revoir</strong> et le <strong>nombre de maladies récessives pour lesquelles un portage
+causal compatible est identifié chez les deux parents</strong>. Les mutations peuvent
+être différentes dans le même gène. Inversement, partager un gène avec des VUS
+ne démontre pas un risque récessif établi.</p>
+<p>Pour chaque gène commun, une table montre les variants d'un parent puis ceux de
+l'autre, leur classement, leur génotype et leur phase. Les observations à
+l'intérieur d'une personne ne sont pas confondues avec la transmission de cette
+personne à son enfant. Deux génotypes <code>0/1</code> ne démontrent ni cis ni trans.</p>
+<details class="explanation prose">
+<summary>Exemple pédagogique : un recouvrement TTN</summary>
+<p>Un parent peut avoir un variant faux-sens incertain ; l'autre, un autre faux-sens
+et une insertion complexe. Cela donne un gène commun et trois observations au
+total, <strong>pas une double atteinte récessive démontrée chez chaque parent</strong>. La
+phase des deux observations du second parent peut être inconnue. L'insertion
+doit être validée ; son effet dépend aussi du transcript et de l'exon. La
+classification des faux-sens reste incertaine. Le rapport explique ces points
+avant toute discussion de risque, et n'affiche pas « 25 % de maladie ».</p>
+</details>
+<p>Une probabilité de transmission biallélique est calculée seulement lorsque les
+allèles pertinents et les haplotypes transmissibles sont établis. Pour deux
+porteurs hétérozygotes d'une même maladie récessive, le modèle classique donne
+une transmission biallélique de 25 % par grossesse ; l'expression clinique
+demande encore d'examiner pénétrance, sévérité et compatibilité de la combinaison
+d'allèles. Les VUS ne sont pas injectés dans ce calcul.</p>
+<p>Les risques liés à l'X ou dominants peuvent exister sans variante commune chez
+l'autre parent et ont leur propre section. Les chiffres populationnels obtenus
+avant le test du partenaire restent des scénarios historiques : ils ne sont pas
+le risque mesuré du couple après ses deux tests.</p>
+</section>
+<section id="diagnostic">
+<h2>Donner des suites concrètes sans prescrire à partir d'une incertitude</h2>
+<p>Chaque résultat suit un parcours lisible : vérifier l'appel et la classification ;
+le faire confirmer avec une méthode adaptée ; confronter le résultat aux symptômes
+et à l'histoire familiale ; discuter, si pertinent, des examens orientés ; décrire
+la prise en charge d'une maladie <strong>si elle est diagnostiquée</strong>.</p>
+<p>La confirmation peut nécessiter un examen du BAM, un séquençage indépendant,
+une méthode distinguant un pseudogène, une analyse de délétions/duplications ou
+une étude familiale de la phase. Le BAM seul ne résout pas nécessairement les
+régions très homologues. Une étude ARN peut être envisagée par le laboratoire
+pour un mécanisme d'épissage, lorsqu'un tissu et une méthode pertinents existent.</p>
+<p>Une fiche de traitement distingue recommandations établies, prise en charge
+symptomatique, essais cliniques et hypothèses. Elle ne transforme pas une voie
+métabolique en conseil alimentaire ni un VUS en indication de médicament.
+Les posologies, arrêts de traitements et décisions reproductives nécessitent
+une interprétation clinique propre à la personne.</p>
+</section>
+<section id="pharmacogenomique">
+<h2>Pharmacogénomique : relier un résultat valide à un médicament pertinent</h2>
+<p>Le rapport indique les marqueurs recherchés, les allèles explicitement observés,
+la couverture du test, les médicaments concernés et la source des recommandations.
+Il distingue marqueur isolé, haplotype, diplotype et phénotype métaboliseur. Une
+conclusion de métaboliseur « normal » n'est pas produite si des allèles requis
+sont absents d'un VCF ne contenant que les variants.</p>
+<p>Les recommandations CPIC sont des aides à l'interprétation d'un résultat
+pharmacogénétique disponible ; elles ne constituent pas un choix autonome de
+traitement. Une fiche précise ce qu'il faudrait confirmer avant une prescription,
+et rappelle les autres facteurs pertinents : médicament actuel, indication,
+co-prescriptions, fonction rénale/hépatique et contexte clinique. <a aria-label="Référence 3" class="citation" data-cite="cpic" href="#ref-cpic">[3]</a></p>
+<p>Les gènes complexes tels que CYP2D6, les allèles HLA et certaines variations
+structurales exigent des méthodes adaptées. Un proxy de haplotype est identifié
+comme tel. Les variants mitochondriaux sont vérifiés sur la référence adéquate
+avec leur hétéroplasmie lorsque les données la permettent. Les informations sont
+priorisées si un médicament concerné est réellement utilisé ou envisagé.</p>
+</section>
+<section id="nutrition">
+<h2>Nutrition : distinguer un effet interprétable d'un conseil commercial</h2>
+<p>Les résultats peuvent documenter une composante génétique de la persistance de
+la lactase, certains troubles du métabolisme du fer ou de l'alcool. Chaque fiche
+doit préciser ce que le marqueur indique dans les populations où il a été validé
+et ce qu'il ne prédit pas : symptômes digestifs, carence, intoxication, régime
+idéal ou dose de supplément.</p>
+<p>La tolérance au lactose se confronte aux symptômes et, si nécessaire, à un examen
+adapté. Un variant HFE se confronte au génotype complet et aux marqueurs du fer,
+pas à une prescription automatique de saignées ou de restrictions alimentaires.
+Un risque lié à l'alcool ne signifie pas que la consommation est médicalement
+recommandée chez d'autres génotypes.</p>
+<p>Les scores de régimes, performances sportives et associations faibles ne sont
+pas mélangés aux résultats validés. Une information éducative peut être incluse
+avec sa limite ; elle ne devient pas une recommandation personnalisée en
+l'absence de bénéfice démontré et de contexte clinique.</p>
+</section>
+<section data-document-only="data-document-only" id="qualite">
+<h2>Qualité et concordance : des contrôles indépendants, pas des garanties</h2>
+<p>Les premiers contrôles portent sur l'identité des fichiers, l'échantillon unique,
+la référence génomique, les sommes de contrôle, le nombre de variants, DP/GQ,
+l'équilibre allélique, les filtres et la disponibilité de la phase. Les
+profondeurs calculées aux sites variantés ne sont pas une couverture de tout le
+génome. Une référence absente du VCF ne prouve pas qu'elle a été correctement
+séquencée. <a aria-label="Référence 4" class="citation" data-cite="gatk" href="#ref-gatk">[4]</a></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Contrôle complémentaire</th>
+<th>Utilité</th>
+<th>Conditions et limites</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ABO</td>
+<td>Concordance avec un groupe sanguin connu</td>
+<td>Haplotype, allèles rares et FUT1/FUT2 ; confirmer par sérologie</td>
+</tr>
+<tr>
+<td>RhD</td>
+<td>Concordance immunohématologique</td>
+<td>RHD comporte des délétions et allèles hybrides ; VCF SNP seul souvent insuffisant</td>
+</tr>
+<tr>
+<td>Chromosomes sexuels</td>
+<td>Cohérence du contenu chromosomique et de la ploïdie</td>
+<td>Pas une détermination de genre ; karyotype/mosaïcisme demandent des données adaptées</td>
+</tr>
+<tr>
+<td>Pigmentation</td>
+<td>Information de concordance indicative</td>
+<td>Caractère polygénique ; un SNP ne vérifie pas l'identité</td>
+</tr>
+<tr>
+<td>Empreinte génétique</td>
+<td>Échantillons dupliqués ou inversés</td>
+<td>Panel validé, taux d'appels et métriques calibrées</td>
+</tr>
+<tr>
+<td>Parenté génétique</td>
+<td>Vérifier relations annoncées</td>
+<td>IBD/kinship sur marqueurs indépendants ; la simple intersection de variants ne suffit pas</td>
+</tr>
+<tr>
+<td>Contamination</td>
+<td>Détecter mélange d'échantillons</td>
+<td>Méthodes dédiées, souvent lectures ou fréquences de génotypes calibrées</td>
+</tr>
+</tbody>
+</table></div>
+<p>Une discordance est investiguée ; elle n'est ni cachée ni attribuée d'emblée à
+une maladie. Les réponses connues — groupe sanguin, histoire familiale,
+traitements — sont datées et leur source déclarée. Elles restent facultatives.</p>
+</section>
+<section id="ascendance">
+<h2>Ascendance génétique et références populationnelles</h2>
+<p>L'ethnicité est une identité et un contexte social ; elle ne se déduit pas d'une
+poignée de SNP. Une estimation d'ascendance génétique demande un panel de
+référence documenté, des marqueurs indépendants, une méthode calibrée et une
+incertitude explicite. Elle n'est pas une attribution de nationalité. Sans ce
+panel et ces contrôles, le résultat est <strong>non calculé</strong>, et non « français » ou
+« européen » présumé. <a aria-label="Référence 5" class="citation" data-cite="ancestry" href="#ref-ancestry">[5]</a></p>
+<p>L'utilisation de gnomAD NFE dans une estimation de risque est un choix de
+référence, pas une estimation d'ascendance de la personne. Les fréquences
+globales, les fréquences par population et les bornes entre populations ont
+des dénominateurs différents. Une comparaison française doit distinguer une
+cohorte française spécifique d'un proxy européen non finlandais.</p>
+</section>
+<section id="html">
+<h2>Présentation HTML et accès à l'information</h2>
+<p>L'HTML doit fonctionner hors ligne, sans envoyer de génotypes à un serveur.
+La synthèse et les limites importantes restent visibles. Des filtres par
+catégorie et une recherche par gène aident à parcourir les fiches ; masquer une
+fiche par un filtre ne change pas les calculs. Les longues séquences d'indels
+doivent se replier sans casser la mise en page.</p>
+<p>La vue document contient les tableaux exhaustifs, la provenance et les sources.
+Une vue de présentation peut résumer les mêmes conclusions sans les modifier.
+La page doit rester utilisable au clavier, sur mobile et à l'impression.
+Les codes couleur ont aussi des libellés textuels. Les liens médicaux sont
+spécifiques au contenu et distinguent source originale et ressource grand public.</p>
+</section>
+<section data-document-only="data-document-only" id="validation">
+<h2>Vérifications avant de remettre le rapport</h2>
+<p>La génération utilise les résultats structurés et leurs fichiers source. Les
+chiffres affichés sont recalculés : variants, gènes distincts et individus ont
+leurs propres compteurs. Une table de contrôle relie chaque chiffre à son
+expression et à la révision d'analyse. Les variantes du même site multi-gène
+ne sont pas comptées plusieurs fois comme observations indépendantes.</p>
+<p>La relecture vérifie les affirmations cliniques, les coordonnées, les transcripts,
+les références, la conservation de l'incertitude, les compteurs et les scénarios
+de transmission. Les liens internes, filtres, détails dépliables, modes de
+lecture, navigation clavier, mobile et absence d'appels réseau sont testés.</p>
+<p>Un historique enregistre les reclassifications, nouvelles données et corrections
+d'interprétation. Le guide et les fonctions peuvent être partagés ; les génomes
+et rapports nominaux suivent une gestion privée distincte. Toute version du
+rapport indique la date des données, la date de l'interprétation et les éléments
+non analysés.</p>
+</section><section id="bibliography"><h2>Sources et lectures utiles</h2><ol><li data-reference="acmg" id="ref-acmg" value="1"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4544753/">ACMG/AMP : interprétation des variants, 2015</a></li><li data-reference="pvs1" id="ref-pvs1" value="2"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6185798/">ClinGen : interprétation des pertes de fonction PVS1</a></li><li data-reference="cpic" id="ref-cpic" value="3"><a href="https://cpicpgx.org/guidelines/">CPIC : recommandations pharmacogénétiques</a></li><li data-reference="gatk" id="ref-gatk" value="4"><a href="https://gatk.broadinstitute.org/hc/en-us/articles/360035890471-Hard-filtering-germline-short-variants">Broad GATK : qualité et filtrage des variants germinaux</a></li><li data-reference="ancestry" id="ref-ancestry" value="5"><a href="https://www.genome.gov/about-genomics/policy-issues/population-descriptors-in-genomics">NHGRI : descripteurs populationnels, ascendance et ethnicité</a></li></ol></section></main></div><footer id="slide-controls" hidden><button id="previous" aria-label="Diapositive précédente">← Précédent</button><span id="slide-status" role="status" aria-live="polite"></span><button id="next" aria-label="Diapositive suivante">Suivant →</button></footer><div id="progress" hidden></div>
+<script id="plot-data" type="application/json">{}</script><script id="report-metadata" type="application/json">{"metadata": {"title": "Produire un rapport génomique de qualité", "subtitle": "Une méthode française, traçable et prudente pour les rapports individuels et de couple.", "author": "Jouvence", "date": "2026-10-10", "version": "v1", "references": {"acmg": {"label": "ACMG/AMP : interprétation des variants, 2015", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4544753/"}, "pvs1": {"label": "ClinGen : interprétation des pertes de fonction PVS1", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6185798/"}, "cpic": {"label": "CPIC : recommandations pharmacogénétiques", "url": "https://cpicpgx.org/guidelines/"}, "gatk": {"label": "Broad GATK : qualité et filtrage des variants germinaux", "url": "https://gatk.broadinstitute.org/hc/en-us/articles/360035890471-Hard-filtering-germline-short-variants"}, "ancestry": {"label": "NHGRI : descripteurs populationnels, ascendance et ethnicité", "url": "https://www.genome.gov/about-genomics/policy-issues/population-descriptors-in-genomics"}}, "build_dependency_versions": {"Markdown": "3.8.2", "beautifulsoup4": "4.13.4"}, "presentation_build_utc": "2026-10-10T14:34:07.658769+00:00"}, "plotly_mode": "auto", "plotly_build": "absent", "sha256": {"report.md": "33e06d8071d3b30c7e9682af837e0ff1861d5fd2d3ae6a7c6df9614314ce63fa", "report.css": "2b1e30593f8251c4af4b6ccd89cb5b84453fa9212f493fd50c03f0d52b104c16", "report.js": "0666c690391c98085388ef99c811e95a58b0080097588334e6c533cccd3b1094", "renderer": "9254062f2dac57ce6e8d80c80b85e4f43723cee99edb143ed1ec68cd5d975e66", "shell": "b024074994d477ce02e5b70d16d1e99ba223d2f28da3076e82daec48f116f813", "plots": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"}, "attachments_sha256": {}}</script>
+<script id="source-markdown" type="application/json">"\u003csection id=\"objectif\" markdown=\"1\">\n\n## Ce qu'un rapport génomique de qualité doit permettre\n\n\u003cp class=\"takeaway\">Comprendre un résultat, juger sa solidité et savoir quelle étape vient ensuite.\u003c/p>\n\nLe rapport doit comporter une synthèse courte, une lecture détaillée par personne,\nune comparaison de couple et une annexe technique inspectable. Chaque observation\nintéressante doit mener à une fiche explicative : maladie associée, manifestations,\ntransmission, niveau de preuve, qualité de l'appel, limites et suites possibles.\nLe français est la langue de lecture ; les symboles de gènes et noms internationaux\ndes variants restent inchangés pour pouvoir retrouver les sources.\n\nLa première page répond à quatre questions : quels résultats sont suffisamment\ndocumentés pour être discutés en génétique clinique ; quels signaux demandent une\nvalidation ; quel risque de couple est établi ou reste indéterminé ; quelles données\nmanquent pour aller plus loin. Une absence de résultat est accompagnée du périmètre\nréellement testé, jamais présentée comme une garantie de santé.\n\n\u003cp class=\"caveat\">La prédiction d'un effet moléculaire, la classification d'un variant et le diagnostic d'une personne sont trois conclusions différentes.\u003c/p>\n\n\u003c/section>\n\n\u003csection id=\"vocabulaire\" data-document-only markdown=\"1\">\n\n## Des mots qui empêchent les mauvaises interprétations\n\n| Terme | Signification dans le rapport | Ce qu'il ne permet pas de conclure seul |\n|---|---|---|\n| Variant observé | Allèle explicitement appelé dans le VCF | Appel vrai, maladie ou caractère causal |\n| Hétérozygote | Deux allèles différents à un site diploïde | Deux copies du gène atteintes |\n| Homozygote | Même allèle appelé sur les deux copies au même site | Pathogénicité du variant |\n| Deux variants dans un gène | Deux changements distincts ont été observés | Présence sur les deux copies du gène |\n| En cis | Les variants sont sur une même copie | Atteinte de la seconde copie |\n| En trans | Les variants sont sur des copies différentes | Deux variants causaux pour une même maladie |\n| Hétérozygotie composite | Deux variants différents en trans | Diagnostic sans pertinence clinique des deux variants |\n| P/LP | Variant pathogène ou probablement pathogène dans une interprétation donnée | Pénétrance complète ou maladie chez tout porteur |\n| VUS | Signification clinique incertaine | Indication de traitement ou de PGT |\n| Candidat pLoF | Perte de fonction prédite à vérifier | Classification P/LP ou mécanisme approprié à toute maladie du gène |\n| Région non évaluable | Données insuffisantes pour un appel fiable | Génotype de référence |\n\nLes recommandations ACMG/AMP précisent qu'un VUS ne doit pas servir de base à une\ndécision clinique. Un candidat est donc décrit comme un élément à interpréter,\nsans le transformer en maladie, portage causal ou indication de FIV. \u003ca data-cite=\"acmg\">\u003c/a>\n\n\u003c/section>\n\n\u003csection id=\"fiche\" data-document-only markdown=\"1\">\n\n## La fiche obligatoire de chaque variant intéressant\n\nLa fiche commence par le résultat **chez cette personne** : allèle appelé,\ngénotype, zygosité et statut de validation. Elle explique ensuite les maladies\npertinentes pour le **variant exact**, en distinguant les associations générales\ndu gène. Une page ClinVar agrégeant plusieurs maladies ne prouve pas que son\nvariant cause toutes ces maladies selon tous les modes de transmission.\n\n| Bloc | Contenu minimal |\n|---|---|\n| Identité | Assemblage, chromosome, position, REF/ALT, transcript et version, nomenclature HGVS si validée |\n| Appel | Génotype, profondeur DP, qualité GQ, équilibre allélique AD, FILTER, métriques complémentaires, fichiers utilisés |\n| Effet prédit | Faux-sens, décalage du cadre, codon stop, épissage, indel complexe ; transcript pertinent et limites |\n| Preuve | ClinVar par variant/maladie, statut de revue, désaccords, date, fréquence populationnelle et association gène-maladie |\n| Maladie | Nom compréhensible, mécanisme, transmission, âge habituel, organes touchés, manifestations et variabilité |\n| Chez un porteur | Effets attendus d'un seul allèle, pénétrance lorsqu'elle est connue, absence de conclusion lorsqu'elle ne l'est pas |\n| Pour le couple | Variant(s) de chaque parent, maladie commune réellement pertinente, phase et calcul autorisé ou non |\n| Suite immédiate | Revue de l'appel, confirmation clinique, complément de couverture, relecture de la classification |\n| Diagnostic orienté | Consultation et examens seulement si le génotype validé, les symptômes ou l'histoire familiale le justifient |\n| Prise en charge | Traitement établi, mesures de suivi ou absence de traitement spécifique, conditionnés au diagnostic |\n| Sources | Liens directs vers GeneReviews, Orphanet, ClinVar, recommandations et publications originales |\n\nLes symptômes sont décrits en phrases concrètes, avec leurs manifestations\nlégères et sévères. Le rapport doit aussi dire qu'une personne ne présente pas\nnécessairement ces symptômes parce qu'un variant incertain a été trouvé.\n\n\u003c/section>\n\n\u003csection id=\"preuves\" markdown=\"1\">\n\n## Classer les preuves avant d'afficher les maladies\n\nUne conséquence informatique délétère demande une revue du mécanisme : perte de\nfonction effectivement causale pour cette maladie, transcript exprimé dans le\ntissu pertinent, exon important, effet réel sur l'épissage et possibilité de\ndégradation de l'ARN. Les variantes en fin de gène, les isoformes alternatives,\nles indels voisins et les régions paralogues peuvent modifier l'interprétation.\nLa règle « plusieurs pertes de fonction pathogènes existent ailleurs dans ce\ngène » est un filtre de recherche, pas une classification clinique. \u003ca data-cite=\"pvs1\">\u003c/a>\n\nLe rapport sépare cinq niveaux : résultat P/LP appelé avec une qualité suffisante\nà confirmer cliniquement ; candidat moléculaire plausible ; VUS ; appel complexe\nou techniquement douteux ; résultat non évalué. Les résultats exclus restent\ninspectables avec leur motif, mais ne sont pas additionnés aux portages établis.\n\nUne fréquence absente d'une table est notée **non renseignée**. Elle n'est pas\nremplacée par zéro. Une fréquence dans une population ne suffit pas à prédire\nl'effet chez une personne. Les seuils employés et leurs unités — fréquence\nd'allèle, fréquence de portage ou risque par grossesse — sont explicités.\n\n\u003cp class=\"caveat\">Une association gène-maladie peut être dominée par un mécanisme précis : gain de fonction, effet dominant négatif, susceptibilité ou combinaison particulière de variants. Le nom du gène ne détermine pas à lui seul le modèle de risque.\u003c/p>\n\n\u003c/section>\n\n\u003csection id=\"couple\" markdown=\"1\">\n\n## Écrire une comparaison de couple sans ambiguïté\n\nLa synthèse affiche séparément le **nombre de gènes partagés avec des variants\nà revoir** et le **nombre de maladies récessives pour lesquelles un portage\ncausal compatible est identifié chez les deux parents**. Les mutations peuvent\nêtre différentes dans le même gène. Inversement, partager un gène avec des VUS\nne démontre pas un risque récessif établi.\n\nPour chaque gène commun, une table montre les variants d'un parent puis ceux de\nl'autre, leur classement, leur génotype et leur phase. Les observations à\nl'intérieur d'une personne ne sont pas confondues avec la transmission de cette\npersonne à son enfant. Deux génotypes `0/1` ne démontrent ni cis ni trans.\n\n\u003cdetails class=\"explanation prose\" markdown=\"1\">\u003csummary>Exemple pédagogique : un recouvrement TTN\u003c/summary>\n\nUn parent peut avoir un variant faux-sens incertain ; l'autre, un autre faux-sens\net une insertion complexe. Cela donne un gène commun et trois observations au\ntotal, **pas une double atteinte récessive démontrée chez chaque parent**. La\nphase des deux observations du second parent peut être inconnue. L'insertion\ndoit être validée ; son effet dépend aussi du transcript et de l'exon. La\nclassification des faux-sens reste incertaine. Le rapport explique ces points\navant toute discussion de risque, et n'affiche pas « 25 % de maladie ».\n\n\u003c/details>\n\nUne probabilité de transmission biallélique est calculée seulement lorsque les\nallèles pertinents et les haplotypes transmissibles sont établis. Pour deux\nporteurs hétérozygotes d'une même maladie récessive, le modèle classique donne\nune transmission biallélique de 25 % par grossesse ; l'expression clinique\ndemande encore d'examiner pénétrance, sévérité et compatibilité de la combinaison\nd'allèles. Les VUS ne sont pas injectés dans ce calcul.\n\nLes risques liés à l'X ou dominants peuvent exister sans variante commune chez\nl'autre parent et ont leur propre section. Les chiffres populationnels obtenus\navant le test du partenaire restent des scénarios historiques : ils ne sont pas\nle risque mesuré du couple après ses deux tests.\n\n\u003c/section>\n\n\u003csection id=\"diagnostic\" markdown=\"1\">\n\n## Donner des suites concrètes sans prescrire à partir d'une incertitude\n\nChaque résultat suit un parcours lisible : vérifier l'appel et la classification ;\nle faire confirmer avec une méthode adaptée ; confronter le résultat aux symptômes\net à l'histoire familiale ; discuter, si pertinent, des examens orientés ; décrire\nla prise en charge d'une maladie **si elle est diagnostiquée**.\n\nLa confirmation peut nécessiter un examen du BAM, un séquençage indépendant,\nune méthode distinguant un pseudogène, une analyse de délétions/duplications ou\nune étude familiale de la phase. Le BAM seul ne résout pas nécessairement les\nrégions très homologues. Une étude ARN peut être envisagée par le laboratoire\npour un mécanisme d'épissage, lorsqu'un tissu et une méthode pertinents existent.\n\nUne fiche de traitement distingue recommandations établies, prise en charge\nsymptomatique, essais cliniques et hypothèses. Elle ne transforme pas une voie\nmétabolique en conseil alimentaire ni un VUS en indication de médicament.\nLes posologies, arrêts de traitements et décisions reproductives nécessitent\nune interprétation clinique propre à la personne.\n\n\u003c/section>\n\n\u003csection id=\"pharmacogenomique\" markdown=\"1\">\n\n## Pharmacogénomique : relier un résultat valide à un médicament pertinent\n\nLe rapport indique les marqueurs recherchés, les allèles explicitement observés,\nla couverture du test, les médicaments concernés et la source des recommandations.\nIl distingue marqueur isolé, haplotype, diplotype et phénotype métaboliseur. Une\nconclusion de métaboliseur « normal » n'est pas produite si des allèles requis\nsont absents d'un VCF ne contenant que les variants.\n\nLes recommandations CPIC sont des aides à l'interprétation d'un résultat\npharmacogénétique disponible ; elles ne constituent pas un choix autonome de\ntraitement. Une fiche précise ce qu'il faudrait confirmer avant une prescription,\net rappelle les autres facteurs pertinents : médicament actuel, indication,\nco-prescriptions, fonction rénale/hépatique et contexte clinique. \u003ca data-cite=\"cpic\">\u003c/a>\n\nLes gènes complexes tels que CYP2D6, les allèles HLA et certaines variations\nstructurales exigent des méthodes adaptées. Un proxy de haplotype est identifié\ncomme tel. Les variants mitochondriaux sont vérifiés sur la référence adéquate\navec leur hétéroplasmie lorsque les données la permettent. Les informations sont\npriorisées si un médicament concerné est réellement utilisé ou envisagé.\n\n\u003c/section>\n\n\u003csection id=\"nutrition\" markdown=\"1\">\n\n## Nutrition : distinguer un effet interprétable d'un conseil commercial\n\nLes résultats peuvent documenter une composante génétique de la persistance de\nla lactase, certains troubles du métabolisme du fer ou de l'alcool. Chaque fiche\ndoit préciser ce que le marqueur indique dans les populations où il a été validé\net ce qu'il ne prédit pas : symptômes digestifs, carence, intoxication, régime\nidéal ou dose de supplément.\n\nLa tolérance au lactose se confronte aux symptômes et, si nécessaire, à un examen\nadapté. Un variant HFE se confronte au génotype complet et aux marqueurs du fer,\npas à une prescription automatique de saignées ou de restrictions alimentaires.\nUn risque lié à l'alcool ne signifie pas que la consommation est médicalement\nrecommandée chez d'autres génotypes.\n\nLes scores de régimes, performances sportives et associations faibles ne sont\npas mélangés aux résultats validés. Une information éducative peut être incluse\navec sa limite ; elle ne devient pas une recommandation personnalisée en\nl'absence de bénéfice démontré et de contexte clinique.\n\n\u003c/section>\n\n\u003csection id=\"qualite\" data-document-only markdown=\"1\">\n\n## Qualité et concordance : des contrôles indépendants, pas des garanties\n\nLes premiers contrôles portent sur l'identité des fichiers, l'échantillon unique,\nla référence génomique, les sommes de contrôle, le nombre de variants, DP/GQ,\nl'équilibre allélique, les filtres et la disponibilité de la phase. Les\nprofondeurs calculées aux sites variantés ne sont pas une couverture de tout le\ngénome. Une référence absente du VCF ne prouve pas qu'elle a été correctement\nséquencée. \u003ca data-cite=\"gatk\">\u003c/a>\n\n| Contrôle complémentaire | Utilité | Conditions et limites |\n|---|---|---|\n| ABO | Concordance avec un groupe sanguin connu | Haplotype, allèles rares et FUT1/FUT2 ; confirmer par sérologie |\n| RhD | Concordance immunohématologique | RHD comporte des délétions et allèles hybrides ; VCF SNP seul souvent insuffisant |\n| Chromosomes sexuels | Cohérence du contenu chromosomique et de la ploïdie | Pas une détermination de genre ; karyotype/mosaïcisme demandent des données adaptées |\n| Pigmentation | Information de concordance indicative | Caractère polygénique ; un SNP ne vérifie pas l'identité |\n| Empreinte génétique | Échantillons dupliqués ou inversés | Panel validé, taux d'appels et métriques calibrées |\n| Parenté génétique | Vérifier relations annoncées | IBD/kinship sur marqueurs indépendants ; la simple intersection de variants ne suffit pas |\n| Contamination | Détecter mélange d'échantillons | Méthodes dédiées, souvent lectures ou fréquences de génotypes calibrées |\n\nUne discordance est investiguée ; elle n'est ni cachée ni attribuée d'emblée à\nune maladie. Les réponses connues — groupe sanguin, histoire familiale,\ntraitements — sont datées et leur source déclarée. Elles restent facultatives.\n\n\u003c/section>\n\n\u003csection id=\"ascendance\" markdown=\"1\">\n\n## Ascendance génétique et références populationnelles\n\nL'ethnicité est une identité et un contexte social ; elle ne se déduit pas d'une\npoignée de SNP. Une estimation d'ascendance génétique demande un panel de\nréférence documenté, des marqueurs indépendants, une méthode calibrée et une\nincertitude explicite. Elle n'est pas une attribution de nationalité. Sans ce\npanel et ces contrôles, le résultat est **non calculé**, et non « français » ou\n« européen » présumé. \u003ca data-cite=\"ancestry\">\u003c/a>\n\nL'utilisation de gnomAD NFE dans une estimation de risque est un choix de\nréférence, pas une estimation d'ascendance de la personne. Les fréquences\nglobales, les fréquences par population et les bornes entre populations ont\ndes dénominateurs différents. Une comparaison française doit distinguer une\ncohorte française spécifique d'un proxy européen non finlandais.\n\n\u003c/section>\n\n\u003csection id=\"html\" markdown=\"1\">\n\n## Présentation HTML et accès à l'information\n\nL'HTML doit fonctionner hors ligne, sans envoyer de génotypes à un serveur.\nLa synthèse et les limites importantes restent visibles. Des filtres par\ncatégorie et une recherche par gène aident à parcourir les fiches ; masquer une\nfiche par un filtre ne change pas les calculs. Les longues séquences d'indels\ndoivent se replier sans casser la mise en page.\n\nLa vue document contient les tableaux exhaustifs, la provenance et les sources.\nUne vue de présentation peut résumer les mêmes conclusions sans les modifier.\nLa page doit rester utilisable au clavier, sur mobile et à l'impression.\nLes codes couleur ont aussi des libellés textuels. Les liens médicaux sont\nspécifiques au contenu et distinguent source originale et ressource grand public.\n\n\u003c/section>\n\n\u003csection id=\"validation\" data-document-only markdown=\"1\">\n\n## Vérifications avant de remettre le rapport\n\nLa génération utilise les résultats structurés et leurs fichiers source. Les\nchiffres affichés sont recalculés : variants, gènes distincts et individus ont\nleurs propres compteurs. Une table de contrôle relie chaque chiffre à son\nexpression et à la révision d'analyse. Les variantes du même site multi-gène\nne sont pas comptées plusieurs fois comme observations indépendantes.\n\nLa relecture vérifie les affirmations cliniques, les coordonnées, les transcripts,\nles références, la conservation de l'incertitude, les compteurs et les scénarios\nde transmission. Les liens internes, filtres, détails dépliables, modes de\nlecture, navigation clavier, mobile et absence d'appels réseau sont testés.\n\nUn historique enregistre les reclassifications, nouvelles données et corrections\nd'interprétation. Le guide et les fonctions peuvent être partagés ; les génomes\net rapports nominaux suivent une gestion privée distincte. Toute version du\nrapport indique la date des données, la date de l'interprétation et les éléments\nnon analysés.\n\n\u003c/section>\n"</script><script>'use strict';
+const plotSpecs = JSON.parse(document.getElementById('plot-data')?.textContent || '{}');
+const sections = [...document.querySelectorAll('main > section')];
+const toc = document.getElementById('toc');
+const progress = document.getElementById('progress');
+const fullscreen = document.getElementById('fullscreen');
+let presentation = new URLSearchParams(location.search).get('view') === 'presentation';
+let current = 0;
+let slides = [];
+
+// Reports built with plotly="none" carry a pre-rendered PNG per variant instead of a plotting library.
+function renderStaticImage(canvas, variant) {
+  if(!/^data:image\/(png|jpeg|webp);base64,/.test(variant.image || '')) throw new Error('Plot view has no embedded image: '+variant.label);
+  const image = document.createElement('img');
+  image.src = variant.image;
+  image.alt = variant.caption || variant.label;
+  canvas.replaceChildren(image);
+}
+
+function renderPlot(host, variant) {
+  const canvas = host.querySelector('.plot-canvas');
+  // Python copies of this base layout: report_shell.PLOT_LAYOUT and presentation import_html.BASE_LAYOUT.
+  const layout = {paper_bgcolor:'white', plot_bgcolor:'white', font:{family:'Arial, sans-serif',size:14,color:'#172e38'}, margin:{l:72,r:28,t:35,b:65}, autosize:true, hovermode:'closest', ...variant.layout};
+  if('image' in variant) renderStaticImage(canvas, variant);
+  else Plotly.react(canvas, variant.data, layout, {responsive:true,displaylogo:false,scrollZoom:false,modeBarButtonsToRemove:['lasso2d','select2d','toImage']});
+  host.querySelector('.plot-caption').textContent = variant.caption;
+  const rows = [['Series',variant.layout.xaxis?.title?.text || 'Category',variant.layout.yaxis?.title?.text || 'Value','Context']];
+  variant.data.filter(trace => !trace.meta?.excludeTable).forEach(trace => {
+    (trace.x || []).forEach((x,i) => rows.push([trace.name || '',x,trace.y?.[i] ?? '',trace.hovertext?.[i] ?? '']));
+  });
+  const table = host.querySelector('table');
+  table.replaceChildren();
+  const head = document.createElement('thead'), body = document.createElement('tbody');
+  rows.forEach((row,i) => {const tr=document.createElement('tr'); row.forEach(value=>{const cell=document.createElement(i===0?'th':'td');cell.textContent=String(value);if(i===0)cell.scope='col';tr.append(cell)});(i===0?head:body).append(tr)});
+  table.append(head,body);
+  const download=host.querySelector('[download]');
+  if(download.dataset.blob)URL.revokeObjectURL(download.dataset.blob);
+  const csv=rows.map(row=>row.map(value=>'"'+String(value).replaceAll('"','""')+'"').join(',')).join('\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  download.href=url;download.dataset.blob=url;
+}
+
+document.querySelectorAll('[data-plot]').forEach(host => {
+  const variants=plotSpecs[host.dataset.plot], keys=Object.keys(variants);
+  if(!keys.length)throw new Error('Empty figure: '+host.dataset.plot);
+  host.classList.add('plot-shell');
+  const tools=document.createElement('div');tools.className='plot-tools';
+  const label=document.createElement('label');label.textContent='View';label.htmlFor='select-'+host.dataset.plot;
+  const select=document.createElement('select');select.id=label.htmlFor;
+  keys.forEach(key=>{const option=document.createElement('option');option.value=key;option.textContent=variants[key].label;select.append(option)});
+  tools.append(label,select);if(keys.length===1)tools.hidden=true;
+  const canvas=document.createElement('div');canvas.className='plot-canvas';canvas.setAttribute('role','img');canvas.setAttribute('aria-label',variants[keys[0]].label+'; exact values in the data table below');
+  const caption=document.createElement('p');caption.className='plot-caption';caption.setAttribute('aria-live','polite');
+  const details=document.createElement('details');details.className='doc-only';
+  const summary=document.createElement('summary');summary.textContent='View data and download CSV';
+  const download=document.createElement('a');download.download=host.dataset.plot+'.csv';download.textContent='Download displayed data';
+  const wrap=document.createElement('div');wrap.className='table-wrap';const table=document.createElement('table');wrap.append(table);details.append(summary,download,wrap);
+  host.append(tools,canvas,caption,details);
+  select.addEventListener('change',()=>{canvas.setAttribute('aria-label',variants[select.value].label+'; exact values in the data table below');renderPlot(host,variants[select.value])});
+  renderPlot(host,variants[keys[0]]);
+});
+
+function applyMode(anchor) {
+  document.body.classList.toggle('presentation',presentation);
+  document.getElementById('document-mode').setAttribute('aria-pressed',String(!presentation));
+  document.getElementById('presentation-mode').setAttribute('aria-pressed',String(presentation));
+  document.getElementById('slide-controls').hidden=!presentation;
+  progress.hidden=!presentation;
+  fullscreen.hidden=!presentation;
+  const cited=new Set([...document.querySelectorAll('[data-cite]')].filter(el=>presentation ? !el.closest('.prose,.doc-only,[data-document-only]') : !el.closest('[data-slide-only]')).map(el=>el.dataset.cite));
+  document.querySelectorAll('[data-reference]').forEach(el=>el.hidden=!cited.has(el.dataset.reference));
+  slides=sections.filter(section=>!presentation || (!section.matches('.prose,.doc-only,[data-document-only]') && (section.id!=='bibliography'||cited.size>0)));
+  const selected=slides.findIndex(section=>section.id===anchor);
+  current=selected>=0?selected:Math.min(current,slides.length-1);
+  toc.replaceChildren();
+  slides.forEach(section=>{const link=document.createElement('a');link.href='#'+section.id;link.textContent=section.querySelector('h2').textContent;toc.append(link)});
+  showSlide(false);
+  if(!presentation)spy();
+}
+
+function markToc(id) {
+  toc.querySelectorAll('a').forEach(link=>link.setAttribute('aria-current',String(link.getAttribute('href')==='#'+id)));
+}
+
+function spy() {
+  // At the page bottom, short trailing sections can never reach the top; mark the last.
+  const bottom=innerHeight+scrollY>=document.documentElement.scrollHeight-2;
+  const last=bottom?sections.at(-1):sections.filter(section=>section.getBoundingClientRect().top<=120).at(-1);
+  markToc((last||sections[0]).id);
+}
+
+function showSlide(scroll=true) {
+  sections.forEach(section=>section.hidden=presentation && section!==slides[current]);
+  if(presentation && slides[current]){
+    document.getElementById('slide-status').textContent=`${current+1} / ${slides.length} · ${slides[current].querySelector('h2').textContent}`;
+    if(location.protocol!=='file:')history.replaceState(null,'',`?view=presentation#${slides[current].id}`);
+    progress.style.width=`${(current+1)/slides.length*100}%`;
+    markToc(slides[current].id);
+  }
+  document.getElementById('previous').disabled=current===0;
+  document.getElementById('next').disabled=current===slides.length-1;
+  requestAnimationFrame(()=>document.querySelectorAll('.plot-canvas').forEach(el=>{if(el.getClientRects().length&&typeof Plotly!=='undefined')Plotly.Plots.resize(el)}));
+  if(scroll)window.scrollTo({top:0,behavior:'instant'});
+}
+
+function enterPresentation() {
+  const visible=sections.filter(section=>section.getBoundingClientRect().bottom>120).sort((a,b)=>Math.abs(a.getBoundingClientRect().top-100)-Math.abs(b.getBoundingClientRect().top-100))[0];
+  presentation=true;applyMode(visible?.id);window.scrollTo(0,0);
+}
+function leavePresentation() {
+  if(document.fullscreenElement)document.exitFullscreen();
+  const anchor=slides[current]?.id;presentation=false;applyMode(anchor);if(location.protocol!=='file:')history.replaceState(null,'',location.pathname+'#'+anchor);document.getElementById(anchor)?.scrollIntoView();
+}
+function toggleFullscreen() {
+  // Embedded views (iframes, previews) often block fullscreen; say so instead of doing nothing.
+  const blocked=()=>{document.getElementById('slide-status').textContent='Le plein écran est bloqué ici. Ouvrir le fichier dans un onglet dédié puis appuyer sur F.'};
+  if(document.fullscreenElement)document.exitFullscreen();
+  else if(document.fullscreenEnabled)document.documentElement.requestFullscreen().catch(blocked);
+  else blocked();
+}
+function step(delta) {
+  current=Math.max(0,Math.min(slides.length-1,current+delta));showSlide();
+}
+
+document.getElementById('presentation-mode').addEventListener('click',enterPresentation);
+document.getElementById('document-mode').addEventListener('click',()=>{if(presentation)leavePresentation()});
+document.getElementById('previous').addEventListener('click',()=>step(-1));
+document.getElementById('next').addEventListener('click',()=>step(1));
+fullscreen.addEventListener('click',toggleFullscreen);
+document.addEventListener('fullscreenchange',()=>fullscreen.setAttribute('aria-pressed',String(!!document.fullscreenElement)));
+addEventListener('scroll',()=>{if(!presentation)spy()},{passive:true});
+document.addEventListener('keydown',event=>{
+  if(event.altKey||event.ctrlKey||event.metaKey||event.target.closest('input,select,textarea,[contenteditable]'))return;
+  const key=event.key.length===1?event.key.toLowerCase():event.key;
+  if(key==='p'){event.preventDefault();presentation?leavePresentation():enterPresentation();return}
+  if(!presentation)return;
+  if(key==='Escape'){leavePresentation();return}
+  if(key==='f'){event.preventDefault();toggleFullscreen();return}
+  if(event.target.closest('button,a,summary'))return;
+  const moves={ArrowRight:1,PageDown:1,' ':event.shiftKey?-1:1,ArrowLeft:-1,PageUp:-1,Home:-Infinity,End:Infinity};
+  if(key in moves){event.preventDefault();step(moves[key])}
+});
+document.addEventListener('click',event=>{
+  const link=event.target.closest('a[href^="#"]');if(!link)return;
+  const target=document.getElementById(link.getAttribute('href').slice(1));if(!target)return;
+  if(presentation){const index=slides.indexOf(target.closest('section'));if(index>=0){event.preventDefault();current=index;showSlide();target.scrollIntoView({block:'start'})}}
+});
+// Click-to-advance, except on controls, figures, tables and while text is selected.
+document.addEventListener('click',event=>{
+  if(!presentation||event.defaultPrevented||!event.target.closest('main')||event.target.closest('a,button,input,select,textarea,label,summary,details,img,figure,table,.plot-shell,.table-wrap')||String(getSelection()))return;
+  step(1);
+});
+applyMode(location.hash.slice(1));
+
+/* Small accessible filters; they change visibility, never medical conclusions. */
+document.documentElement.lang='fr';
+const frenchLabels={
+  'document-mode':'Document','presentation-mode':'Présentation','fullscreen':'Plein écran',
+  'previous':'← Précédent','next':'Suivant →'
+};
+Object.entries(frenchLabels).forEach(([id,label])=>{const el=document.getElementById(id);if(el)el.textContent=label});
+document.querySelectorAll('[data-filter-scope]').forEach(scope=>{
+  const input=scope.querySelector('[data-gene-search]');
+  const select=scope.querySelector('[data-tier-select]');
+  const cards=[...scope.querySelectorAll('[data-gene-card]')];
+  const count=scope.querySelector('[data-filter-count]');
+  const normalize=text=>text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const update=()=>{
+    const query=normalize(input?.value||'');const tier=select?.value||'all';
+    let visible=0;
+    cards.forEach(card=>{
+      const matches=normalize(card.dataset.search||card.textContent).includes(query)&&
+        (tier==='all'||(card.dataset.tiers||'').split(' ').includes(tier));
+      card.hidden=!matches;visible+=matches?1:0;
+    });
+    if(count)count.textContent=`${visible} fiche(s) affichée(s) sur ${cards.length}`;
+  };
+  input?.addEventListener('input',update);select?.addEventListener('change',update);
+  scope.querySelector('[data-reset-filters]')?.addEventListener('click',()=>{
+    if(input)input.value='';if(select)select.value='all';update();
+  });
+  scope.querySelector('[data-open-cards]')?.addEventListener('click',()=>cards.forEach(card=>{if(!card.hidden)card.open=true}));
+  scope.querySelector('[data-close-cards]')?.addEventListener('click',()=>cards.forEach(card=>card.open=false));
+  update();
+});
+addEventListener('beforeprint',()=>document.querySelectorAll('details').forEach(el=>{
+  el.dataset.openBeforePrint=String(el.open);el.open=true;
+}));
+addEventListener('afterprint',()=>document.querySelectorAll('details[data-open-before-print]').forEach(el=>{
+  el.open=el.dataset.openBeforePrint==='true';delete el.dataset.openBeforePrint;
+}));
+</script></body></html>

@@ -99,3 +99,47 @@ and do not enter inheritance or couple risk calculations. Missing metrics
 remain explicit. Nearby indels (within 20 bp) and indels >=50 bp receive a
 separate complex-region tier requiring joint haplotype/read validation;
 these flags do not prove that a call is false or benign.
+
+## Rapports HTML français
+
+Le [guide de qualité](../../docs/rapport_genomique/report.md) définit le contenu
+attendu des rapports individuels et du couple. Sa version HTML autonome est
+`docs/rapport_genomique/guide.html`.
+
+`build_genomic_reports()` réutilise les JSON figés, vérifie les SHA-256 des VCF,
+enrichit les observations avec les fiches cliniques versionnées, extrait le
+panel ciblé PGx/nutrition/traits et génère trois HTML autonomes. Les appels
+inconnus restent inconnus ; aucun diplotype, posologie, groupe ABO définitif
+ou ascendance n'est fabriqué. Le filtre de navigation ne change aucun calcul.
+
+```python
+from pathlib import Path
+from tools.jouvence_genomics.html_reporting import build_genomic_reports
+
+reports = build_genomic_reports(
+    Path("analysis/parent_a/results.json"),
+    Path("analysis/parent_b/results.json"),
+    Path("analysis/couple/results.json"),
+    Path("analysis/rapports_html"),
+    skill_scripts=Path("/chemin/vers/html-report/scripts"),
+    report_date="2026-10-10",
+)
+```
+
+Le renderer provient du guide HTML local et expose `render_report`. Utiliser
+`uv run --with Markdown==3.8.2 --with beautifulsoup4==4.13.4 --with plotly==6.3.0`
+pour son environnement ; aucun runtime Plotly n'est embarqué lorsque le rapport
+ne contient pas de graphiques. Les détails et filtres utilisent du JavaScript
+local. Les HTML nominaux, caches, tableaux et captures restent sous `analysis/`
+ou `output/`, exclus de Git.
+
+Les connaissances génériques `clinical_*_cards.json` et `trait_markers.json`
+contiennent les sources et doivent être revues lorsqu'une recommandation ou
+classification évolue. Les cartes décrivent une maladie et sa prise en charge
+conditionnelle ; elles n'attribuent pas ce diagnostic à un porteur ou un VUS.
+
+Le panel de traits vérifie DP/GQ, AD, compatibilité de référence et FILTER.
+Les homozygotes doivent être cohérents avec les lectures. CYP3A5 *3 et un
+allèle ABO O courant correspondent ici à la référence : un site absent ne
+permet donc aucune conclusion à leur sujet. Les gènes PGx complexes, les allèles
+HLA, RhD et l'ascendance nécessitent des méthodes supplémentaires.

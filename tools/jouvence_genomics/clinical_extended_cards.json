@@ -1,0 +1,952 @@
+{
+  "AARS2": {
+    "title": "Maladies mitochondriales liées à AARS2",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie, phénotype dépendant des deux allèles.",
+    "phenotype": ["Forme infantile : cardiomyopathie, faiblesse/hypotonie et troubles métaboliques parfois sévères.", "Forme neurologique plus tardive : difficultés de marche, ataxie ou spasticité, déclin cognitif et manifestations psychiatriques.", "Chez certaines femmes atteintes : insuffisance ovarienne prématurée ; anomalies de la substance blanche à l'IRM."],
+    "diagnosis": ["Si symptômes compatibles : consultation de neurologie/maladies mitochondriales, examen neurologique, IRM et bilan cardiaque selon le tableau.", "Confirmer deux variants pathogènes en trans et discuter le bilan ovarien si pertinent."],
+    "management": ["Si diagnostic confirmé : rééducation et traitement symptomatique ; suivi cardiaque, neurologique et endocrinologique adapté.", "Il n'existe pas de traitement curatif génétique établi dans la référence consultée."],
+    "interpretation": "Un seul variant récessif ou un VUS ne démontre ni maladie mitochondriale ni insuffisance ovarienne.",
+    "sources": [{"label": "GeneReviews — AARS2-Related Disorder", "url": "https://www.ncbi.nlm.nih.gov/books/NBK608563/"}]
+  },
+  "ABCA1": {
+    "title": "Maladie de Tangier et déficit familial en HDL",
+    "inheritance": "Tangier : autosomique récessive ; certains déficits en HDL : monoalléliques",
+    "evidence": "Association établie.",
+    "phenotype": ["Deux allèles pathogènes peuvent entraîner un HDL très bas, des amygdales orange, une augmentation du volume du foie/de la rate et une neuropathie.", "Les manifestations varient avec l'âge ; un risque cardiovasculaire précoce peut être présent.", "Certains allèles monoalléliques réduisent le HDL sans provoquer le tableau complet de Tangier."],
+    "diagnosis": ["Si variant confirmé ou HDL très bas : bilan lipidique comprenant HDL et apoA-I, antécédents cardiovasculaires et examen clinique.", "Exclure les causes secondaires d'hypo-HDL et faire interpréter le génotype en lipidologie/génétique."],
+    "management": ["Si diagnostic confirmé : prévention cardiovasculaire individualisée, prise en charge des autres facteurs de risque et suivi des atteintes cliniques.", "Aucun supplément ne doit être prescrit à partir d'un VUS ABCA1 seul."],
+    "interpretation": "La conséquence clinique dépend de l'allèle et du nombre d'allèles atteints ; un HDL sanguin mesure directement le trait.",
+    "sources": [{"label": "MedlinePlus Genetics — ABCA1", "url": "https://medlineplus.gov/genetics/gene/abca1/"}]
+  },
+  "ABCB4": {
+    "title": "Déficit MDR3 / cholestase familiale et lithiases biliaires",
+    "inheritance": "Autosomique récessive pour la forme sévère ; certaines susceptibilités sont monoalléliques",
+    "evidence": "Association établie, pénétrance et mécanisme variables.",
+    "phenotype": ["Deux allèles pathogènes : cholestase débutant souvent dans l'enfance, prurit, jaunisse et progression possible vers une maladie hépatique sévère.", "Certains porteurs monoalléliques : calculs biliaires précoces ou récidivants (LPAC), cholestase gravidique ou médicamenteuse.", "Toutes les variantes d'ABCB4 n'ont pas ces effets."],
+    "diagnosis": ["Si symptômes ou variant pathogène confirmé : bilan hépatique et échographie, avis hépatologique.", "En cas de prurit pendant une grossesse : évaluation obstétricale et dosage des acides biliaires ; ne pas attendre une confirmation génétique."],
+    "management": ["Si diagnostic confirmé : traitement de la cholestase et des lithiases décidé en hépatologie ; suivi obstétrical spécifique si cholestase gravidique.", "Les formes avancées peuvent nécessiter une transplantation ; aucune mesure de ce type ne découle d'un VUS seul."],
+    "interpretation": "Un VUS ne permet pas d'annoncer une cholestase future ni d'attribuer un symptôme à ce gène.",
+    "sources": [{"label": "MedlinePlus Genetics — ABCB4", "url": "https://medlineplus.gov/genetics/gene/abcb4/"}]
+  },
+  "ASAH1": {
+    "title": "Maladie de Farber et amyotrophie avec épilepsie myoclonique",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie ; activité enzymatique résiduelle et allèles influencent le phénotype.",
+    "phenotype": ["Farber : nodules sous-cutanés, articulations douloureuses/contractures et voix rauque ; atteintes viscérales ou neurologiques possibles.", "Autre forme : faiblesse et fonte musculaires avec épilepsie myoclonique progressive dans l'enfance.", "Le spectre clinique peut aller de formes précoces sévères à des formes plus limitées."],
+    "diagnosis": ["Si symptômes compatibles : centre de maladies métaboliques, dosage de l'activité de la céramidase acide et examens des organes concernés.", "Confirmer les deux allèles et leur phase ; bilan neurologique/EEG si crises ou myoclonies."],
+    "management": ["Si maladie confirmée : prise en charge articulaire, respiratoire, nutritionnelle et neurologique spécialisée.", "Une greffe de cellules souches hématopoïétiques peut être discutée pour certaines formes de Farber sélectionnées, notamment sans atteinte neurologique majeure ; elle ne prévient pas nécessairement l'évolution neurologique.", "Les approches enzymatiques ou génétiques ne doivent pas être présentées comme un traitement standard sur la base de ce dépistage."],
+    "interpretation": "Un variant hétérozygote incertain n'est pas un diagnostic de maladie de Farber.",
+    "sources": [{"label": "MedlinePlus Genetics — ASAH1", "url": "https://medlineplus.gov/genetics/gene/asah1/"}, {"label": "Cohorte de greffe pour Farber : résultats et limites", "url": "https://pubmed.ncbi.nlm.nih.gov/30815900/"}, {"label": "Farber : limites du bénéfice neurologique après greffe", "url": "https://pubmed.ncbi.nlm.nih.gov/31240154/"}]
+  },
+  "ATP13A2": {
+    "title": "Syndrome de Kufor-Rakeb / parkinsonisme récessif",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie, maladie très rare et expressivité variable.",
+    "phenotype": ["Parkinsonisme souvent juvénile : lenteur, rigidité et troubles de la marche.", "Spasticité, anomalies des mouvements oculaires et déclin cognitif peuvent s'y ajouter.", "Des tableaux neurologiques atypiques sont décrits ; la présence de fer à l'IRM n'est pas constante."],
+    "diagnosis": ["Si signes compatibles : neurologie spécialisée dans les mouvements anormaux et IRM selon le tableau.", "Confirmer les deux variants et exclure d'autres causes de parkinsonisme juvénile."],
+    "management": ["Si diagnostic confirmé : traitement symptomatique du parkinsonisme et de la spasticité, rééducation et accompagnement cognitif.", "Aucun traitement préventif n'est justifié par un variant incertain isolé."],
+    "interpretation": "Un portage récessif ne signifie pas qu'un parkinsonisme va apparaître.",
+    "sources": [{"label": "NCBI Gene — ATP13A2", "url": "https://www.ncbi.nlm.nih.gov/gene/23400/"}, {"label": "GeneReviews — Neurodegeneration with Brain Iron Accumulation Overview", "url": "https://www.ncbi.nlm.nih.gov/books/NBK121988/"}]
+  },
+  "ATP6V0A1": {
+    "title": "Encéphalopathie épileptique ou épilepsie myoclonique liée à ATP6V0A1",
+    "inheritance": "Récessive pour certaines formes ; dominante de novo pour certains variants faux-sens",
+    "evidence": "Association publiée et répliquée, mécanisme dépendant du variant.",
+    "phenotype": ["Certaines formes dominantes : retard du développement et épilepsie précoce sévère, parfois avec atrophie cérébrale.", "Certaines formes bialléliques : épilepsie myoclonique progressive avec atteinte neurologique.", "La sévérité et l'âge de début varient selon les allèles."],
+    "diagnosis": ["Si symptômes compatibles : consultation neuropédiatrique, EEG et IRM.", "Faire vérifier le mécanisme, la phase et la ségrégation familiale ; une perte de fonction isolée n'est pas interchangeable avec un faux-sens de novo."],
+    "management": ["Si maladie confirmée : traitement antiépileptique et prise en charge du développement selon le tableau.", "Aucun traitement spécifique de la pompe lysosomale n'est établi par les sources consultées."],
+    "interpretation": "Le gène possède plusieurs modes de transmission ; l'annotation 'délétère' ne choisit pas à elle seule le bon mécanisme.",
+    "sources": [{"label": "Étude primaire — ATP6V0A1 et neurodéveloppement", "url": "https://pubmed.ncbi.nlm.nih.gov/33833240/"}, {"label": "Étude primaire — épilepsie myoclonique / ATP6V0A1", "url": "https://pubmed.ncbi.nlm.nih.gov/34909687/"}]
+  },
+  "ATP6V0A2": {
+    "title": "Cutis laxa autosomique récessive type 2A",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Peau lâche ou ridée, traits du visage particuliers et fermeture retardée des fontanelles.", "Retard du développement, déficience intellectuelle, crises et troubles moteurs variables.", "Les formes 'wrinkly skin' sont généralement plus modérées ; début souvent infantile."],
+    "diagnosis": ["Si tableau compatible : examen de génétique clinique et bilan neurologique/du développement.", "Confirmation biallélique ; exploration de la glycosylation et examens complémentaires orientés par le spécialiste."],
+    "management": ["Si diagnostic confirmé : suivi multidisciplinaire et rééducation ; traitement symptomatique des crises et troubles associés.", "Pas de supplémentation ou de traitement cutané préventif à déduire d'un VUS."],
+    "interpretation": "Une variante hétérozygote ne suffit pas à expliquer une peau lâche.",
+    "sources": [{"label": "MedlinePlus Genetics — ATP6V0A2", "url": "https://medlineplus.gov/genetics/gene/atp6v0a2/"}]
+  },
+  "CBS": {
+    "title": "Homocystinurie classique par déficit en CBS",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie et maladie traitable après confirmation.",
+    "phenotype": ["Luxation du cristallin, myopie et morphologie marfanoïde/fragilité osseuse possibles.", "Risque de thrombose, parfois première manifestation chez l'adulte.", "Retard du développement ou troubles psychiatriques variables ; certaines formes répondent à la vitamine B6."],
+    "diagnosis": ["Si suspicion clinique : homocystéine totale plasmatique et acides aminés, en distinguant les autres causes d'hyperhomocystéinémie.", "Confirmation biallélique et avis de métabolisme ; bilan ophtalmologique et vasculaire selon les signes."],
+    "management": ["Si diagnostic confirmé : test de réponse à la pyridoxine, régime/bétaïne et cofacteurs décidés par le centre spécialisé.", "Le traitement se suit sur des dosages biologiques ; aucun régime ni forte dose de B6 pour un VUS seul."],
+    "interpretation": "CBS est une maladie métabolique monogénique, pas un conseil nutrigénomique déduit de tout polymorphisme du gène.",
+    "sources": [{"label": "GeneReviews — Homocystinuria due to CBS Deficiency", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1524/"}]
+  },
+  "CD40": {
+    "title": "Immunodéficience hyper-IgM liée au déficit CD40",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie ; à distinguer de CD40LG, lié à l'X.",
+    "phenotype": ["Infections bactériennes et opportunistes dès l'enfance, avec IgG/IgA basses et IgM normales ou élevées.", "Atteintes digestives/hépatiques et neutropénie peuvent survenir.", "La gravité varie ; les porteurs d'un seul allèle ne sont généralement pas atteints."],
+    "diagnosis": ["Si symptômes : immunologie clinique, immunoglobulines et sous-populations lymphocytaires.", "Confirmer les variants bialléliques et le déficit fonctionnel/expression CD40 selon le centre."],
+    "management": ["Si déficit confirmé : substitution en immunoglobulines et prévention/traitement des infections dirigés par l'immunologue.", "Une greffe de cellules souches peut être discutée dans des situations sélectionnées après bilan spécialisé."],
+    "interpretation": "La stratégie immunologique concerne une maladie confirmée, jamais un VUS isolé.",
+    "sources": [{"label": "Étude clinique — déficit CD40 chez onze patients", "url": "https://pubmed.ncbi.nlm.nih.gov/24122029/"}, {"label": "Étude clinique — transplantation pour déficit CD40", "url": "https://pubmed.ncbi.nlm.nih.gov/29884852/"}]
+  },
+  "CDAN1": {
+    "title": "Anémie dysérythropoïétique congénitale type I",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Anémie souvent macrocytaire dès la naissance ou l'enfance, parfois anténatale sévère.", "Ictère et augmentation du foie/de la rate ; surcharge en fer possible même sans transfusions régulières.", "La sévérité hématologique et les besoins transfusionnels sont variables."],
+    "diagnosis": ["Si anémie inexpliquée : numération, réticulocytes, bilan d'hémolyse et du fer en hématologie.", "Confirmer deux allèles ; étude médullaire uniquement selon indication clinique."],
+    "management": ["Si maladie confirmée : suivi de l'anémie et de la surcharge en fer ; transfusions, chélation ou autres traitements décidés en centre spécialisé.", "Éviter une supplémentation en fer automatique sans bilan biologique."],
+    "interpretation": "Une variante incertaine n'explique pas seule une anémie.",
+    "sources": [{"label": "GeneReviews — Congenital Dyserythropoietic Anemia Type I", "url": "https://www.ncbi.nlm.nih.gov/books/NBK5313/"}]
+  },
+  "CDC14A": {
+    "title": "Surdité récessive avec ou sans infertilité masculine",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie, atteinte de fertilité dépendante du variant/transcrit.",
+    "phenotype": ["Surdité neurosensorielle souvent sévère ou profonde.", "Chez certains hommes biallélique atteints : anomalies spermatiques et infertilité.", "L'infertilité ne concerne pas tous les allèles responsables de surdité."],
+    "diagnosis": ["Si signes : audiogramme/avis ORL ; spermogramme et andrologie seulement si question clinique pertinente.", "Confirmer les allèles et vérifier le transcrit, la phase et les données spécifiques au variant."],
+    "management": ["Si surdité confirmée : appareillage ou implantation selon évaluation ORL et accompagnement auditif.", "Si infertilité confirmée : prise en charge en médecine de la reproduction individualisée."],
+    "interpretation": "Ne pas annoncer une infertilité à partir de l'appartenance au gène seule.",
+    "sources": [{"label": "Étude primaire — CDC14A, audition et fertilité", "url": "https://pubmed.ncbi.nlm.nih.gov/29293958/"}, {"label": "Étude primaire — importance des transcrits CDC14A", "url": "https://pubmed.ncbi.nlm.nih.gov/32231217/"}]
+  },
+  "CNN2": {
+    "title": "Association candidate à une atrésie pulmonaire — preuve insuffisante",
+    "inheritance": "Non établi de manière robuste pour le signal du catalogue",
+    "evidence": "Association limitée/non établie dans les sources indépendantes consultées.",
+    "phenotype": ["L'atrésie pulmonaire est une malformation cardiaque congénitale où la voie de sortie pulmonaire est obstruée.", "Le catalogue peut relayer une assertion de variant ; cela ne prouve pas qu'une perte de fonction quelconque de CNN2 cause cette maladie."],
+    "diagnosis": ["Vérifier l'origine et les critères de l'assertion gene-maladie avant toute interprétation.", "Une évaluation cardiaque n'est indiquée que sur des signes cliniques, une histoire familiale ou une recommandation médicale indépendante."],
+    "management": ["Aucun traitement ou dépistage cardiaque spécifique justifié par un VUS CNN2 seul.", "Si une cardiopathie est diagnostiquée : prise en charge de cardiologie congénitale selon la malformation réelle."],
+    "interpretation": "Ne pas classer ce signal comme maladie récessive ou risque du couple établi.",
+    "sources": [{"label": "NCBI Gene — CNN2", "url": "https://www.ncbi.nlm.nih.gov/gene/1265"}]
+  },
+  "COL18A1": {
+    "title": "Syndrome de Knobloch",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Myopie importante et anomalies vitréorétiniennes, avec risque de décollement de rétine.", "Défaut occipital/encéphalocèle dans certaines formes ; anomalies neurologiques variables.", "Les problèmes visuels peuvent être précoces ; expressivité variable."],
+    "diagnosis": ["Si suspicion : examen ophtalmologique avec fond d'œil/rétine et recherche clinique d'anomalie occipitale.", "Confirmation biallélique ; imagerie neurologique si indiquée par les signes."],
+    "management": ["Si diagnostic confirmé : suivi rétinien et traitement rapide des complications ophtalmologiques.", "La prise en charge des anomalies occipitales ou neurologiques dépend de leur présence réelle."],
+    "interpretation": "Un variant unique ou incertain n'établit pas le syndrome.",
+    "sources": [{"label": "MedlinePlus Genetics — COL18A1", "url": "https://medlineplus.gov/genetics/gene/col18a1/"}]
+  },
+  "COL1A2": {
+    "title": "Maladies du collagène I liées à COL1A2",
+    "inheritance": "Dominante pour de nombreuses formes d'ostéogenèse imparfaite/EDS ; récessive pour l'EDS cardio-valvulaire",
+    "evidence": "Associations établies mais mécanismes différents selon le variant.",
+    "phenotype": ["Ostéogenèse imparfaite : fractures, fragilité osseuse, parfois dentinogenèse imparfaite et surdité.", "EDS arthrochalasique : hypermobilité et luxations, notamment de hanche.", "EDS cardio-valvulaire récessif : anomalies valvulaires sévères, peau et articulations fragiles."],
+    "diagnosis": ["Si signes : génétique clinique, examen osseux/articulaire ; bilan cardiaque si tableau cardio-valvulaire.", "Vérifier précisément le type d'allèle et le mécanisme ; une LoF hétérozygote ne correspond pas automatiquement à l'EDS récessif."],
+    "management": ["Si maladie confirmée : prévention des fractures, rééducation et suivi osseux, dentaire, auditif ou cardiaque selon la forme.", "Les décisions thérapeutiques nécessitent un diagnostic clinique moléculaire cohérent."],
+    "interpretation": "Le nom du gène seul ne permet pas de choisir entre formes dominantes et récessives.",
+    "sources": [{"label": "MedlinePlus Genetics — COL1A2", "url": "https://medlineplus.gov/genetics/gene/col1a2/"}]
+  },
+  "COL6A3": {
+    "title": "Dystrophies liées au collagène VI",
+    "inheritance": "Autosomique dominante ou récessive selon les allèles",
+    "evidence": "Association établie ; effet dominant négatif et perte de fonction ne sont pas équivalents.",
+    "phenotype": ["Continuum entre myopathie de Bethlem relativement modérée et dystrophie d'Ullrich précoce sévère.", "Faiblesse musculaire, contractures, hyperlaxité distale et scoliose ; atteinte respiratoire possible.", "L'âge de début et la progression varient largement."],
+    "diagnosis": ["Si faiblesse/contractures : centre neuromusculaire, examen clinique et fonction respiratoire.", "Interpréter variants et phase ; IRM musculaire/études du collagène VI selon indication spécialisée."],
+    "management": ["Si diagnostic confirmé : kinésithérapie adaptée, prévention des contractures et suivi respiratoire/orthopédique.", "Ventilation assistée si nécessaire ; pas de traitement génétique curatif établi dans GeneReviews."],
+    "interpretation": "Un VUS ne justifie pas une surveillance de dystrophie musculaire chez une personne asymptomatique.",
+    "sources": [{"label": "GeneReviews — Collagen VI-Related Dystrophies", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1503/"}]
+  },
+  "CPE": {
+    "title": "Obésité syndromique liée au déficit CPE",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, décrite dans un nombre limité de familles.",
+    "phenotype": ["Obésité sévère, troubles du développement/intellectuels et hypogonadisme hypogonadotrope dans les familles publiées.", "Des troubles de la régulation du glucose/diabète peuvent survenir.", "Le spectre naturel est encore incomplet."],
+    "diagnosis": ["Si tableau compatible : endocrinologie/génétique clinique, bilan métabolique et hormonal selon symptômes.", "Confirmer les deux allèles et réexaminer les autres causes d'obésité syndromique."],
+    "management": ["Si diagnostic confirmé : prise en charge endocrinologique, métabolique et développementale individualisée.", "Aucun traitement spécifique CPE standard n'est établi par les études citées."],
+    "interpretation": "Un VUS CPE ne prédit pas une obésité ni une réponse à un régime.",
+    "sources": [{"label": "Étude primaire — déficit CPE", "url": "https://pubmed.ncbi.nlm.nih.gov/26120850/"}, {"label": "Famille supplémentaire — déficit CPE", "url": "https://pubmed.ncbi.nlm.nih.gov/32936766/"}]
+  },
+  "CST6": {
+    "title": "Dysplasie ectodermique liée à CST6",
+    "inheritance": "Autosomique récessive pour les déficits publiés ; mécanisme à vérifier",
+    "evidence": "Association émergente, petit nombre de familles.",
+    "phenotype": ["Peau sèche, eczéma, desquamation ou kératose ; cheveux peu abondants dans certaines formes.", "Troubles de la transpiration, blépharite et photophobie possibles.", "Les cheveux peuvent être préservés dans certains déficits en CST6."],
+    "diagnosis": ["Si tableau compatible : dermatologie et examen ophtalmologique selon symptômes.", "Confirmer les allèles, leur phase et les données fonctionnelles du variant."],
+    "management": ["Si maladie confirmée : soins dermatologiques et prise en charge des atteintes oculaires/transpiration.", "Aucun traitement génétique ciblé établi dans les publications consultées."],
+    "interpretation": "La sécheresse cutanée courante ne suffit pas à relier un VUS CST6 à une maladie.",
+    "sources": [{"label": "Étude primaire — déficit CST6", "url": "https://pubmed.ncbi.nlm.nih.gov/30425301/"}, {"label": "Extension phénotypique CST6", "url": "https://pubmed.ncbi.nlm.nih.gov/36371786/"}]
+  },
+  "DCAF15": {
+    "title": "Association mécanisme-spécifique au syndrome de Cornelia de Lange",
+    "inheritance": "À vérifier au niveau de l'allèle ; ne pas présumer un déficit récessif",
+    "evidence": "Association émergente ; signal publié de gain de fonction récurrent p.Ser470Phe.",
+    "phenotype": ["Le syndrome de Cornelia de Lange peut comporter retard de croissance, visage caractéristique, anomalies des membres et troubles du développement.", "Ces manifestations ne peuvent pas être extrapolées à toute variante de DCAF15."],
+    "diagnosis": ["Avant tout examen : vérifier la publication, l'allèle exact et son mécanisme ; une LoF n'est pas un gain de fonction.", "Si tableau syndromique réel : évaluation de génétique clinique et diagnostic différentiel des cohésinopathies."],
+    "management": ["Aucune prise en charge spécifique sur la seule base d'un VUS DCAF15.", "Si un syndrome clinique est confirmé : soins orientés par les anomalies réellement présentes."],
+    "interpretation": "Le catalogue gene-maladie ne suffit pas à transformer une LoF prédite en variant causal de Cornelia de Lange.",
+    "sources": [{"label": "Résumé primaire ESHG — DCAF15 gain de fonction", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10772079/"}, {"label": "GenCC — DCAF15", "url": "https://thegencc.org/genes/HGNC%3A25095"}]
+  },
+  "DCDC2": {
+    "title": "Ciliopathie DCDC2 : cholangite sclérosante néonatale / atteinte rénale",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie pour les formes bialléliques, phénotype variable.",
+    "phenotype": ["Cholestase/ictère néonatal, cholangite sclérosante et progression possible vers la cirrhose.", "Néphronophtise ou anomalies rénales dans certaines formes.", "Des atteintes auditives sont rapportées ; leur présence n'est pas constante."],
+    "diagnosis": ["Si signes : hépatologie pédiatrique, bilan hépatique et exploration rénale selon symptômes.", "Confirmer les deux allèles et leur phase ; audiologie si plainte ou contexte clinique."],
+    "management": ["Si maladie confirmée : soins de la cholestase et des complications hépatiques/rénales.", "Transplantation hépatique possible dans les formes avancées ; aucun traitement préventif pour un VUS isolé."],
+    "interpretation": "Les associations de DCDC2 à des traits complexes ne sont pas un diagnostic de ciliopathie.",
+    "sources": [{"label": "Étude primaire — DCDC2 et cholangite néonatale", "url": "https://pubmed.ncbi.nlm.nih.gov/27469900/"}]
+  },
+  "DEF6": {
+    "title": "Immunodéficience avec dysrégulation auto-immune liée à DEF6",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, publiée et répliquée.",
+    "phenotype": ["Infections et auto-immunité multiviscérale, cytopénies ou inflammation digestive possibles.", "Susceptibilité à l'EBV et lymphoprolifération/lymphome dans certaines familles.", "Le défaut perturbe la régulation immunitaire et le recyclage de CTLA-4."],
+    "diagnosis": ["Si signes : immunologie clinique, bilan immunitaire/auto-immun et recherche de lymphoprolifération selon tableau.", "Confirmer le déficit biallélique et discuter les tests fonctionnels spécialisés."],
+    "management": ["Si diagnostic confirmé : traitement des infections et de l'auto-immunité décidé en immunologie.", "Les traitements ciblant la voie CTLA-4 ou la greffe relèvent d'une décision spécialisée ; ils ne sont pas indiqués par un VUS."],
+    "interpretation": "Le variant doit être établi causal avant d'attribuer un risque immunitaire.",
+    "sources": [{"label": "Étude primaire — déficit DEF6", "url": "https://pubmed.ncbi.nlm.nih.gov/31308374/"}, {"label": "DEF6, EBV et auto-immunité", "url": "https://pubmed.ncbi.nlm.nih.gov/32562707/"}]
+  },
+  "DNAH11": {
+    "title": "Dyskinésie ciliaire primitive liée à DNAH11",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Infections respiratoires récidivantes, toux humide chronique, sinusites/otites et bronchectasies.", "Détresse respiratoire néonatale ou inversion de la position des organes possibles.", "Fertilité parfois altérée ; l'ultrastructure des cils peut sembler normale dans DNAH11."],
+    "diagnosis": ["Si tableau compatible : centre de dyskinésie ciliaire, monoxyde d'azote nasal et étude spécialisée du battement ciliaire.", "Confirmer deux variants pathogènes ; un examen microscopique normal n'exclut pas cette forme."],
+    "management": ["Si diagnostic confirmé : drainage bronchique, traitement des infections et suivi pulmonaire/ORL.", "Avis de médecine de la reproduction si difficulté clinique, sans conclure une infertilité à partir d'un VUS."],
+    "interpretation": "Un portage hétérozygote n'est pas une dyskinésie ciliaire primitive.",
+    "sources": [{"label": "MedlinePlus Genetics — DNAH11", "url": "https://medlineplus.gov/genetics/gene/dnah11/"}]
+  },
+  "DOCK8": {
+    "title": "Immunodéficience combinée par déficit DOCK8",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Eczéma et allergies importantes, IgE élevées et infections répétées dès l'enfance.", "Infections virales cutanées persistantes, atteintes respiratoires et risque accru de certains cancers.", "La gravité nécessite un suivi spécialisé chez les personnes atteintes."],
+    "diagnosis": ["Si tableau compatible : immunologie, immunoglobulines/sous-populations lymphocytaires et expression DOCK8 selon le centre.", "Confirmer deux allèles, en recherchant également les délétions/CNV du gène."],
+    "management": ["Si déficit confirmé : prévention et traitement des infections, gestion des allergies et surveillance adaptée.", "Greffe de cellules souches à discuter en centre spécialisé ; pas d'indication sur un VUS isolé."],
+    "interpretation": "Un VCF de petits variants peut manquer des délétions DOCK8 ; un variant unique n'établit pas le déficit.",
+    "sources": [{"label": "MedlinePlus Genetics — DOCK8", "url": "https://medlineplus.gov/genetics/gene/dock8/"}, {"label": "Déficit DOCK8 : cohorte de transplantation", "url": "https://pubmed.ncbi.nlm.nih.gov/30391550/"}]
+  },
+  "DTNBP1": {
+    "title": "Syndrome d'Hermansky-Pudlak type 7",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie, type très rare.",
+    "phenotype": ["Albinisme oculocutané, nystagmus et baisse visuelle.", "Défaut des granules plaquettaires : saignements malgré une numération plaquettaire parfois normale.", "Colite ou autres manifestations sont possibles ; ne pas extrapoler automatiquement les risques des autres types HPS."],
+    "diagnosis": ["Si tableau compatible : ophtalmologie et hématologie avec exploration plaquettaire spécifique.", "Confirmer les deux allèles et le sous-type moléculaire."],
+    "management": ["Si diagnostic confirmé : photoprotection, aides visuelles et plan de prise en charge des saignements/procédures.", "Le suivi d'organes dépend du sous-type et des manifestations cliniques."],
+    "interpretation": "Un VUS DTNBP1 ne justifie pas d'annoncer albinisme ou trouble hémorragique.",
+    "sources": [{"label": "GeneReviews — Hermansky-Pudlak Syndrome", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1287/"}]
+  },
+  "DYSF": {
+    "title": "Dysferlinopathies",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Faiblesse musculaire proximale des ceintures ou distale, souvent à partir de l'adolescence/jeune adulte.", "Créatine kinase très élevée, parfois avant la faiblesse ; progression variable.", "Les variants peuvent provoquer une dystrophie des ceintures ou une myopathie de Miyoshi."],
+    "diagnosis": ["Si faiblesse ou CK persistante élevée : centre neuromusculaire, examen/IRM musculaire.", "Confirmer les deux allèles ; étude de la dysferline si nécessaire, en distinguant une myosite inflammatoire."],
+    "management": ["Si diagnostic confirmé : rééducation adaptée, aide fonctionnelle et suivi des complications.", "Les approches de thérapie génique restent à distinguer des soins standards ; aucun traitement pour un VUS seul."],
+    "interpretation": "Un variant hétérozygote n'est pas une dysferlinopathie.",
+    "sources": [{"label": "MedlinePlus Genetics — DYSF", "url": "https://medlineplus.gov/genetics/gene/dysf/"}]
+  },
+  "FAT1": {
+    "title": "Néphropathie avec ou sans anomalies oculaires et syndactylie",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare mais publiée dans plusieurs familles ; mécanisme allèle-dépendant.",
+    "phenotype": ["Protéinurie/néphropathie glomérulotubulaire pouvant progresser vers l'insuffisance rénale.", "Dans certaines formes : petits yeux/colobomes, ptosis et syndactylie cutanée.", "L'atteinte rénale ou syndromique peut être isolée ou combinée."],
+    "diagnosis": ["Si signes : pression artérielle, fonction rénale et recherche de protéinurie ; avis néphrologique.", "Examen ophtalmologique si signes ; confirmer les allèles en trans et leur pertinence clinique."],
+    "management": ["Si maladie confirmée : traitement et surveillance néphrologiques, prise en charge des atteintes oculaires.", "Aucun traitement génétique spécifique validé dans les études consultées."],
+    "interpretation": "Les associations tumorales somatiques de FAT1 ne signifient pas une prédisposition germinale chez un porteur de VUS.",
+    "sources": [{"label": "Étude primaire — syndrome récessif FAT1", "url": "https://pubmed.ncbi.nlm.nih.gov/30862798/"}, {"label": "Extension des néphropathies FAT1", "url": "https://pubmed.ncbi.nlm.nih.gov/34013115/"}]
+  },
+  "FEZF1": {
+    "title": "Syndrome de Kallmann lié à FEZF1",
+    "inheritance": "Autosomique récessive pour les familles initiales ; formes complexes à réévaluer",
+    "evidence": "Association rare, nombre limité de familles.",
+    "phenotype": ["Puberté absente ou incomplète par déficit gonadotrope, avec odorat absent/réduit.", "Infertilité liée au déficit hormonal ; présentation variable selon le sexe et l'âge.", "D'autres gènes ou combinaisons peuvent produire un tableau semblable."],
+    "diagnosis": ["Si signes : endocrinologie, bilan gonadotrope/sexuel et évaluation de l'odorat.", "Confirmation moléculaire et diagnostic différentiel des hypogonadismes congénitaux."],
+    "management": ["Si déficit hormonal confirmé : induction pubertaire/substitution et, selon projet, traitements de fertilité spécialisés.", "Un VUS FEZF1 seul ne prédit pas une infertilité ni un besoin de FIV."],
+    "interpretation": "Interpréter avec puberté, hormones et phénotype ; le catalogue seul ne suffit pas.",
+    "sources": [{"label": "Étude primaire — FEZF1 et Kallmann", "url": "https://pubmed.ncbi.nlm.nih.gov/25192046/"}]
+  },
+  "FUZ": {
+    "title": "Ciliopathie squelettique/orofaciodigitale liée à FUZ",
+    "inheritance": "Autosomique récessive dans les cas publiés",
+    "evidence": "Association émergente, petit nombre de patients ; spectre encore en cours de définition.",
+    "phenotype": ["Anomalies squelettiques, digitales et craniofaciales/orales variables.", "Certaines formes comportent une dysplasie thoracique ou des malformations d'autres organes.", "L'extrapolation d'un syndrome précis à toute LoF prédite n'est pas valide."],
+    "diagnosis": ["Si malformations compatibles : génétique clinique, radiographies/imagerie dirigées par le tableau.", "Confirmer les variants, leur phase et une association clinique cohérente ; réanalyse de la littérature."],
+    "management": ["Si diagnostic confirmé : prise en charge des malformations et complications effectivement présentes.", "Aucun traitement ciblé FUZ établi par les publications consultées."],
+    "interpretation": "À conserver dans une catégorie de recherche plutôt que d'annoncer un risque reproductif chiffré.",
+    "sources": [{"label": "Étude primaire — FUZ et syndrome orofaciodigital", "url": "https://pubmed.ncbi.nlm.nih.gov/38702430/"}, {"label": "Extension phénotypique FUZ", "url": "https://pubmed.ncbi.nlm.nih.gov/41952398/"}]
+  },
+  "GDAP2": {
+    "title": "Ataxie cérébelleuse récessive SCAR27",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, répliquée dans quelques familles.",
+    "phenotype": ["Troubles progressifs de l'équilibre et de la coordination, dysarthrie.", "Atrophie cérébelleuse et autres manifestations neurologiques possibles.", "Âge de début et sévérité variables ; histoire naturelle encore limitée."],
+    "diagnosis": ["Si tableau compatible : neurologie, examen cérébelleux et IRM.", "Confirmer les allèles en trans et rechercher les diagnostics différentiels d'ataxie."],
+    "management": ["Si maladie confirmée : rééducation de l'équilibre, orthophonie et soutien fonctionnel.", "Aucun traitement ciblé GDAP2 établi dans les sources consultées."],
+    "interpretation": "Un VUS isolé ne permet pas de prédire une ataxie future.",
+    "sources": [{"label": "Étude primaire — GDAP2 et ataxie", "url": "https://pubmed.ncbi.nlm.nih.gov/30084953/"}, {"label": "Famille supplémentaire SCAR27", "url": "https://pubmed.ncbi.nlm.nih.gov/32437512/"}]
+  },
+  "GFPT1": {
+    "title": "Syndrome myasthénique congénital lié à GFPT1",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Fatigabilité et faiblesse, souvent surtout des ceintures ; début et sévérité variables.", "Atteinte respiratoire possible dans les formes sévères ; signes oculaires parfois peu marqués.", "Anomalies de la jonction neuromusculaire ; agrégats tubulaires possibles sur biopsie."],
+    "diagnosis": ["Si fatigabilité inexpliquée : neurologie neuromusculaire et électrophysiologie de la transmission.", "Confirmer deux allèles pathogènes et distinguer une myasthénie auto-immune."],
+    "management": ["Si diagnostic confirmé : traitements de la transmission neuromusculaire selon le sous-type, notamment anticholinestérasiques lorsque indiqués.", "Suivi moteur/respiratoire ; aucun essai thérapeutique à partir d'un VUS seul."],
+    "interpretation": "La réponse à un traitement dépend du sous-type ; l'immunosuppression n'est pas un traitement générique des CMS.",
+    "sources": [{"label": "GeneReviews — Congenital Myasthenic Syndromes Overview", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1168/"}]
+  },
+  "GGCX": {
+    "title": "Déficit combiné en facteurs de coagulation dépendants de la vitamine K",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie ; atteintes cutanées/oculaires dépendantes des allèles.",
+    "phenotype": ["Saignements liés à plusieurs facteurs de coagulation déficitaires, d'intensité variable.", "Certaines formes associent peau lâche et anomalies de calcification ou signes oculaires.", "Cette maladie rare n'est pas l'effet usuel d'un polymorphisme nutrigénomique."],
+    "diagnosis": ["Si saignements : bilan de coagulation et dosages des facteurs en hématologie.", "Exclure carence acquise en vitamine K, maladie hépatique et médicaments ; confirmer les allèles."],
+    "management": ["Si déficit confirmé : vitamine K et prise en charge des saignements selon réponse biologique et spécialiste.", "Ne pas modifier anticoagulants ou supplémentation sur un VUS GGCX seul."],
+    "interpretation": "La pertinence se vérifie biologiquement ; une annotation rare ne démontre pas un déficit de coagulation.",
+    "sources": [{"label": "NCBI Gene — GGCX", "url": "https://www.ncbi.nlm.nih.gov/gene/2677"}, {"label": "GTR — déficit combiné dépendant de la vitamine K", "url": "https://www.ncbi.nlm.nih.gov/gtr/conditions/C1848534/"}, {"label": "GGCX : réponse à la vitamine K dépendant des allèles", "url": "https://pubmed.ncbi.nlm.nih.gov/33590680/"}]
+  },
+  "GJC2": {
+    "title": "Leucodystrophie hypomyélinisante / paraplégie spastique liée à GJC2",
+    "inheritance": "Autosomique récessive pour les formes neurologiques",
+    "evidence": "Association établie.",
+    "phenotype": ["Forme précoce : retard moteur, nystagmus, hypotonie puis spasticité, anomalies de myélinisation à l'IRM.", "Certaines formes sont plus tardives et dominées par une raideur/faiblesse progressive des jambes.", "Le niveau cognitif et la gravité motrice sont variables."],
+    "diagnosis": ["Si signes : neurologie et IRM cérébrale avec analyse de la substance blanche.", "Confirmer les deux allèles, leur phase et le phénotype précis."],
+    "management": ["Si maladie confirmée : rééducation, gestion de la spasticité et aides fonctionnelles.", "Pas de traitement préventif ou curatif déduit d'un VUS isolé."],
+    "interpretation": "D'autres phénotypes monoalléliques existent ; l'interprétation doit suivre le variant et la maladie considérée.",
+    "sources": [{"label": "MedlinePlus Genetics — GJC2", "url": "https://medlineplus.gov/genetics/gene/gjc2/"}]
+  },
+  "GLRB": {
+    "title": "Hyperekplexie héréditaire",
+    "inheritance": "Récessive ou, plus rarement, dominante selon le variant",
+    "evidence": "Association établie.",
+    "phenotype": ["Sursauts excessifs déclenchés par un bruit/toucher, avec raideur généralisée.", "Début souvent néonatal ; apnées possibles chez le nourrisson.", "Chutes et difficultés motrices peuvent persister ; à distinguer d'une épilepsie."],
+    "diagnosis": ["Si signes compatibles : neurologie avec examen des réflexes de sursaut et diagnostic différentiel.", "Confirmer le variant et déterminer si le mécanisme est dominant ou récessif."],
+    "management": ["Si diagnostic confirmé : traitement tel que clonazépam lorsque indiqué et mesures de sécurité adaptées.", "Chez les nourrissons atteints : plan spécialisé de gestion des épisodes de raideur/apnée."],
+    "interpretation": "Une variante incertaine ne justifie ni médicament ni diagnostic d'hyperekplexie.",
+    "sources": [{"label": "GeneReviews — Hereditary Hyperekplexia Overview", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1260/"}]
+  },
+  "GNAT1": {
+    "title": "Cécité nocturne stationnaire / rétinopathie liée à GNAT1",
+    "inheritance": "Dominante ou récessive selon les allèles",
+    "evidence": "Association établie, phénotype et mécanisme spécifiques au variant.",
+    "phenotype": ["Difficulté à voir dans l'obscurité dès l'enfance, souvent relativement stationnaire dans certaines formes.", "Certaines formes bialléliques provoquent une dégénérescence rétinienne progressive.", "L'examen du fond d'œil peut être discret malgré une gêne nocturne."],
+    "diagnosis": ["Si signes : ophtalmologie rétinienne, électrorétinogramme et imagerie selon le tableau.", "Revoir le mécanisme exact, le génotype et la ségrégation familiale."],
+    "management": ["Si maladie confirmée : correction optique, aides visuelles et suivi de la progression si nécessaire.", "Aucun traitement ou supplément de vitamine A à déduire d'un VUS GNAT1."],
+    "interpretation": "Le nom du gène ne distingue pas une maladie stationnaire d'une rétinopathie progressive.",
+    "sources": [{"label": "MedlinePlus Genetics — GNAT1", "url": "https://medlineplus.gov/genetics/gene/gnat1/"}]
+  },
+  "GOLGA2": {
+    "title": "Trouble neurodéveloppemental avec hypotonie et atteinte musculaire",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association émergente, très petit nombre de familles.",
+    "phenotype": ["Retard du développement, hypotonie et atteinte musculaire dans les cas décrits.", "Microcéphalie progressive, crises et anomalies cérébrales possibles.", "Le spectre et l'histoire naturelle restent peu définis."],
+    "diagnosis": ["Si tableau compatible : génétique clinique/neuropédiatrie et examens orientés par les signes.", "Confirmer deux allèles en trans et rechercher les alternatives diagnostiques."],
+    "management": ["Si maladie confirmée : prise en charge symptomatique neurologique, musculaire et développementale.", "Aucun traitement ciblé GOLGA2 établi dans les sources consultées."],
+    "interpretation": "Une LoF prédite est un candidat de recherche, pas un diagnostic automatique.",
+    "sources": [{"label": "Étude primaire — GOLGA2", "url": "https://pubmed.ncbi.nlm.nih.gov/26742501/"}, {"label": "NCBI Gene — GOLGA2", "url": "https://www.ncbi.nlm.nih.gov/gene/2801"}]
+  },
+  "HFM1": {
+    "title": "Insuffisance ovarienne prématurée liée à HFM1",
+    "inheritance": "Principalement autosomique récessive ; assertions monoalléliques à interpréter avec prudence",
+    "evidence": "Association rare ; différents tableaux reproductifs sont en cours de description.",
+    "phenotype": ["Perte de fonction ovarienne avant 40 ans, cycles absents/irréguliers et infertilité dans certaines formes bialléliques.", "Des anomalies de maturation ou développement embryonnaire sont décrites pour des allèles particuliers.", "La présence d'un VUS n'est pas une mesure de la réserve ovarienne."],
+    "diagnosis": ["Si cycles anormaux ou difficulté de fertilité : bilan gynécologique/endocrinologique usuel, gonadotrophines et réserve ovarienne selon indication.", "Confirmer les deux allèles et réévaluer les données allèle-spécifiques avec un généticien."],
+    "management": ["Si insuffisance ovarienne confirmée : prise en charge hormonale, santé osseuse et discussion des options reproductives avec le spécialiste.", "Pas de recommandation de stimulation ou FIV sur la base d'un VUS HFM1 seul."],
+    "interpretation": "Le résultat moléculaire incertain ne prédit pas le calendrier de la fertilité.",
+    "sources": [{"label": "Cohorte primaire — gènes bialléliques et insuffisance ovarienne", "url": "https://pubmed.ncbi.nlm.nih.gov/32962729/"}, {"label": "HFM1 et arrêt embryonnaire préimplantatoire", "url": "https://pubmed.ncbi.nlm.nih.gov/41423819/"}]
+  },
+  "HOGA1": {
+    "title": "Hyperoxalurie primitive type 3",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Calculs rénaux d'oxalate de calcium, souvent dès l'enfance ; douleurs, hématurie ou infections possibles.", "Néphrocalcinose et atteinte rénale sont possibles, généralement moins sévères que certaines autres hyperoxaluries primitives.", "Évolution variable ; les porteurs d'un seul allèle sont habituellement asymptomatiques."],
+    "diagnosis": ["Si calculs précoces/récidivants : analyse du calcul, oxalate urinaire et bilan néphrologique.", "Confirmer deux variants pathogènes et distinguer types 1/2/3 ainsi que les hyperoxaluries acquises."],
+    "management": ["Si diagnostic confirmé : hydratation et prévention spécialisée des calculs, notamment citrate lorsque indiqué, avec suivi rénal.", "Les traitements RNAi du type 1 ne doivent pas être présentés comme un traitement générique du type 3."],
+    "interpretation": "Un portage HOGA1 ou une variante incertaine ne justifie pas un régime restrictif automatique.",
+    "sources": [{"label": "GeneReviews — Primary Hyperoxaluria Type 3", "url": "https://www.ncbi.nlm.nih.gov/books/NBK316514/"}]
+  },
+  "HSPG2": {
+    "title": "Syndrome de Schwartz-Jampel / dysplasie dyssegmentaire",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie ; formes distinctes selon la fonction résiduelle.",
+    "phenotype": ["Schwartz-Jampel : raideur musculaire/myotonie, petite taille, anomalies squelettiques et articulaires.", "Dysplasie dyssegmentaire : malformations squelettiques congénitales beaucoup plus sévères, parfois létales.", "Les deux tableaux ne s'extrapolent pas de la même façon à un faux-sens incertain."],
+    "diagnosis": ["Si signes : génétique clinique, examen neuromusculaire et radiographies orientées.", "Confirmer les deux allèles et la cohérence du mécanisme avec la forme clinique."],
+    "management": ["Si diagnostic confirmé : traitement symptomatique de la raideur et suivi orthopédique/rééducation.", "Plan périopératoire spécialisé selon le tableau ; aucun traitement pour un VUS seul."],
+    "interpretation": "L'effet sur le perlecan et le génotype déterminent la forme de maladie.",
+    "sources": [{"label": "MedlinePlus Genetics — HSPG2", "url": "https://medlineplus.gov/genetics/gene/hspg2/"}]
+  },
+  "INO80": {
+    "title": "Déficit de commutation des immunoglobulines lié à INO80",
+    "inheritance": "Biallélique dans les cas publiés",
+    "evidence": "Association émergente/limitée ; nombre faible de cas.",
+    "phenotype": ["Déficit de production de certains isotypes d'immunoglobulines et infections répétées dans les patients publiés.", "L'histoire naturelle et le spectre d'organes sont encore insuffisamment définis."],
+    "diagnosis": ["Si infections récurrentes : bilan immunologique clinique avant d'attribuer un rôle au variant.", "Confirmation des allèles et, si nécessaire, exploration fonctionnelle de la commutation en centre spécialisé."],
+    "management": ["Si déficit immunitaire confirmé : prise en charge selon le déficit mesuré, prévention/traitement des infections.", "Aucun traitement spécifique INO80 à proposer à un porteur de VUS."],
+    "interpretation": "La biologie cellulaire du gène ne suffit pas à définir une maladie récessive chez un individu.",
+    "sources": [{"label": "Étude primaire — déficit de commutation et INO80", "url": "https://pubmed.ncbi.nlm.nih.gov/25312759/"}]
+  },
+  "KCNJ1": {
+    "title": "Syndrome de Bartter type 2",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Perte rénale de sel : polyurie, déshydratation, retard de croissance, anomalies du potassium et alcalose.", "Forme anténatale possible avec hydramnios et prématurité.", "Hypercalciurie et néphrocalcinose ; potassium parfois élevé transitoirement chez le nouveau-né."],
+    "diagnosis": ["Si signes : ionogramme sanguin/urinaire, équilibre acido-basique et avis néphrologique.", "Confirmer deux allèles et rechercher les autres causes de tubulopathie."],
+    "management": ["Si diagnostic confirmé : correction du sel/potassium et traitement néphrologique adaptés aux résultats biologiques.", "Suivi de croissance et de fonction rénale ; pas de supplémentation électrolytique sur un VUS seul."],
+    "interpretation": "L'atteinte se vérifie sur des marqueurs biologiques ; un portage ne signifie pas Bartter.",
+    "sources": [{"label": "MedlinePlus Genetics — KCNJ1", "url": "https://medlineplus.gov/genetics/gene/kcnj1/"}, {"label": "ERKNet : consensus diagnostic et traitement du syndrome de Bartter", "url": "https://pubmed.ncbi.nlm.nih.gov/33509356/"}]
+  },
+  "LIG1": {
+    "title": "Immunodéficience par déficit en ligase I",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, documentée dans plusieurs familles.",
+    "phenotype": ["Déficit en anticorps ou immunodéficience combinée, de sévérité très variable.", "Lymphopénie et macrocytose/anémie possibles ; infections dès l'enfance dans les formes sévères.", "La sensibilité cellulaire aux lésions de l'ADN peut être augmentée."],
+    "diagnosis": ["Si signes : numération sanguine, immunoglobulines et populations lymphocytaires en immunologie.", "Confirmer les allèles et discuter les explorations fonctionnelles de réparation de l'ADN."],
+    "management": ["Si maladie confirmée : remplacement d'anticorps/prévention des infections selon déficit ; greffe dans certaines formes sévères.", "Les adaptations de soins requièrent un spécialiste ; aucune décision sur un VUS isolé."],
+    "interpretation": "Un variant rare LIG1 ne démontre pas une radiosensibilité clinique.",
+    "sources": [{"label": "Étude primaire — immunodéficiences LIG1", "url": "https://pubmed.ncbi.nlm.nih.gov/30395541/"}]
+  },
+  "LMNA": {
+    "title": "Laminopathies : muscle, cœur, neuropathie et lipodystrophie",
+    "inheritance": "Dominante pour de nombreuses laminopathies ; récessive pour certaines formes particulières",
+    "evidence": "Associations établies ; elles dépendent du type d'allèle et du mécanisme.",
+    "phenotype": ["Certaines formes : faiblesse musculaire, contractures, cardiomyopathie et troubles de conduction/rythme.", "D'autres : lipodystrophie, anomalies métaboliques, neuropathie ou dysplasie mandibulo-acrale.", "Les syndromes de vieillissement prématuré sont liés à des mécanismes particuliers et ne s'appliquent pas à tout variant LMNA."],
+    "diagnosis": ["Si variant pathogène confirmé ou signes/histoire familiale : génétique clinique et évaluations cardiaque, musculaire ou métabolique adaptées.", "Vérifier l'association maladie-allèle et le mode de transmission ; revue spécialisée de tout VUS."],
+    "management": ["Si laminopathie confirmée : surveillance et traitement cardiaques parfois essentiels, rééducation ou gestion métabolique selon la forme.", "Ne pas recommander un défibrillateur ou une surveillance intensive à partir d'un VUS seul."],
+    "interpretation": "Un filtre limité aux maladies AR n'épuise pas les associations dominantes de LMNA.",
+    "sources": [{"label": "MedlinePlus Genetics — LMNA", "url": "https://medlineplus.gov/genetics/gene/lmna/"}]
+  },
+  "LRP5": {
+    "title": "Ostéoporose-pseudogliome et vitréorétinopathie exsudative familiale",
+    "inheritance": "Récessive pour l'ostéoporose-pseudogliome ; dominante ou récessive pour certaines rétinopathies",
+    "evidence": "Associations établies ; effet fonctionnel variable.",
+    "phenotype": ["Déficit biallélique : fragilité osseuse/fractures et atteinte visuelle congénitale ou précoce importante.", "Certaines formes : défaut de vascularisation rétinienne, complications rétiniennes et baisse visuelle.", "D'autres allèles augmentent la densité osseuse : l'effet ne se déduit pas du nom du gène."],
+    "diagnosis": ["Si signes : ophtalmologie rétinienne et bilan de fragilité osseuse.", "Confirmer le variant, son effet (perte/gain de fonction) et la phase pour les formes récessives."],
+    "management": ["Si diagnostic confirmé : prévention/traitement des fractures et prise en charge rétinienne selon atteintes.", "Aucun traitement osseux ciblé sur un VUS sans anomalie clinique/biologique."],
+    "interpretation": "Une variante LRP5 incertaine ne prédit ni ostéoporose ni densité osseuse élevée.",
+    "sources": [{"label": "MedlinePlus Genetics — LRP5", "url": "https://medlineplus.gov/genetics/gene/lrp5/"}]
+  },
+  "LRRK1": {
+    "title": "Dysplasie métaphysaire ostéosclérotique",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare établie, variabilité intrafamiliale importante.",
+    "phenotype": ["Os très denses surtout aux métaphyses, mais fragiles ; fractures récidivantes possibles.", "Certaines formes : atteinte optique, anomalies dentaires ou ostéonécrose de la mâchoire.", "Début et gravité variables, de formes limitées à une ostéopétrose sévère."],
+    "diagnosis": ["Si fractures/anomalies radiologiques : consultation maladies osseuses et radiographies spécialisées.", "Confirmer les allèles ; évaluations ophtalmologique/dentaire selon symptômes."],
+    "management": ["Si diagnostic confirmé : prévention des fractures, soins orthopédiques et dentaires spécialisés.", "Aucun traitement LRRK1 spécifique standard établi par les études citées."],
+    "interpretation": "LRRK1 ne doit pas être confondu avec LRRK2 et le risque de Parkinson.",
+    "sources": [{"label": "Étude primaire — variants LRRK1 bialléliques", "url": "https://pubmed.ncbi.nlm.nih.gov/27055475/"}, {"label": "Variabilité du phénotype LRRK1", "url": "https://pubmed.ncbi.nlm.nih.gov/34798323/"}]
+  },
+  "MED16": {
+    "title": "Trouble neurodéveloppemental lié à MED16",
+    "inheritance": "Autosomique récessive dans les cohortes publiées",
+    "evidence": "Association récente, répliquée ; histoire naturelle encore incomplète.",
+    "phenotype": ["Retard moteur et du langage, déficience intellectuelle et hypotonie variables.", "Malformations craniofaciales, des membres ou cardiaques dans certaines formes.", "Le spectre et la sévérité dépendent des allèles."],
+    "diagnosis": ["Si tableau compatible : génétique clinique, évaluation développementale et examens des organes selon signes.", "Confirmer les deux allèles et réévaluer la ségrégation/littérature récente."],
+    "management": ["Si diagnostic confirmé : interventions développementales et soins des malformations présentes.", "Aucun traitement moléculaire ciblé MED16 établi dans les cohortes citées."],
+    "interpretation": "Le statut candidat reste distinct d'un diagnostic, particulièrement pour un faux-sens non caractérisé.",
+    "sources": [{"label": "Cohorte primaire — MED16", "url": "https://pubmed.ncbi.nlm.nih.gov/40081376/"}, {"label": "Cohorte primaire — MED16 et développement neural", "url": "https://pubmed.ncbi.nlm.nih.gov/40254158/"}]
+  },
+  "MLIP": {
+    "title": "Myopathie avec myalgies et rhabdomyolyse liée à MLIP",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, répliquée ; atteinte cardiaque pas systématique.",
+    "phenotype": ["CK élevée, douleurs/crampes et intolérance à l'effort.", "Épisodes de rhabdomyolyse et faiblesse souvent modérée ; déclencheurs variables.", "Quelques atteintes cardiaques sont rapportées, sans les généraliser à tous les patients."],
+    "diagnosis": ["Si signes : CK, fonction rénale lors d'épisode aigu et examen neuromusculaire.", "Confirmer les deux allèles et exclure les causes acquises/les autres myopathies métaboliques."],
+    "management": ["Si maladie confirmée : plan spécialisé de prévention/gestion de rhabdomyolyse et adaptation de l'activité.", "Urines foncées et douleurs musculaires aiguës importantes nécessitent une évaluation clinique rapide, quel que soit le génotype."],
+    "interpretation": "Un VUS ne permet pas de déclarer une susceptibilité à la rhabdomyolyse.",
+    "sources": [{"label": "Étude primaire — myopathie récessive MLIP", "url": "https://pubmed.ncbi.nlm.nih.gov/34581780/"}, {"label": "Description clinique MLIP", "url": "https://pubmed.ncbi.nlm.nih.gov/36641683/"}]
+  },
+  "MYO7A": {
+    "title": "Surdité MYO7A et syndrome d'Usher type 1B",
+    "inheritance": "Récessive pour Usher et certaines surdités ; dominante pour certains allèles de surdité isolée",
+    "evidence": "Association établie, variante et mécanisme spécifiques.",
+    "phenotype": ["Usher 1B : surdité congénitale profonde, troubles vestibulaires et rétinite pigmentaire progressive.", "Surdité isolée dans d'autres formes, avec début/sévérité variables.", "L'atteinte visuelle ne peut pas être déduite de tout variant MYO7A."],
+    "diagnosis": ["Si signes : audiologie, évaluation vestibulaire et rétinienne selon tableau.", "Confirmer allèles, phase et association clinique précise."],
+    "management": ["Si diagnostic confirmé : prise en charge auditive, aides visuelles et rééducation de l'équilibre.", "Les thérapies géniques MYO7A doivent être présentées comme recherche selon essai, pas soin garanti."],
+    "interpretation": "Un variant incertain n'établit ni Usher ni future perte visuelle.",
+    "sources": [{"label": "MedlinePlus Genetics — MYO7A", "url": "https://medlineplus.gov/genetics/gene/myo7a/"}]
+  },
+  "NAV3": {
+    "title": "Trouble neurodéveloppemental associé à NAV3",
+    "inheritance": "Récessive dans plusieurs familles ; cas monoalléliques/de novo également publiés",
+    "evidence": "Association émergente depuis des cohortes récentes ; mécanismes et pénétrance encore à préciser.",
+    "phenotype": ["Retard du développement et déficience intellectuelle avec langage faible/absent dans certaines formes.", "Microcéphalie, hypotonie, traits dysmorphiques et difficultés comportementales variables.", "Les anomalies de l'IRM ne sont pas constantes."],
+    "diagnosis": ["Si tableau compatible : génétique clinique et évaluation développementale.", "Confirmer variants et phase/ségrégation ; réanalyse périodique des données gene-maladie et du mécanisme."],
+    "management": ["Si diagnostic confirmé : interventions éducatives, orthophonie et traitements des symptômes présents.", "Aucun traitement génétique NAV3 établi dans les publications consultées."],
+    "interpretation": "Une LoF ou un faux-sens prédit n'est pas automatiquement causal ; conserver le niveau d'incertitude visible.",
+    "sources": [{"label": "Cohorte primaire — NAV3", "url": "https://pubmed.ncbi.nlm.nih.gov/38977784/"}, {"label": "Familles supplémentaires — NAV3", "url": "https://pubmed.ncbi.nlm.nih.gov/39708122/"}]
+  },
+  "NR1H4": {
+    "title": "Cholestase familiale progressive type 5 / déficit FXR",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, documentée dans plusieurs familles.",
+    "phenotype": ["Ictère/cholestase très précoce, GGT souvent peu élevée malgré l'atteinte hépatique.", "Troubles de coagulation et progression rapide vers l'insuffisance hépatique dans les formes sévères.", "Les marqueurs et l'évolution doivent être interprétés en hépatologie spécialisée."],
+    "diagnosis": ["Si signes : bilan hépatique, coagulation et évaluation urgente spécialisée chez un nourrisson atteint.", "Confirmer les variants bialléliques et le sous-type de cholestase."],
+    "management": ["Si maladie confirmée : prise en charge de la cholestase et des déficits nutritionnels/coagulation.", "Transplantation discutée dans les formes avancées ; aucun traitement à partir d'un VUS."],
+    "interpretation": "Un variant unique n'établit pas le déficit FXR récessif.",
+    "sources": [{"label": "Étude clinique — NR1H4 et insuffisance hépatique rapide", "url": "https://pubmed.ncbi.nlm.nih.gov/32443034/"}]
+  },
+  "OBSCN": {
+    "title": "Myopathie/intolérance à l'effort associée à OBSCN",
+    "inheritance": "Biallélique pour les formes de rhabdomyolyse publiées ; autres assertions à vérifier",
+    "evidence": "Association rare et émergente ; grand gène complexe et variants difficiles à interpréter.",
+    "phenotype": ["Crampes, myalgies et intolérance à l'effort ; rhabdomyolyse/myoglobinurie chez certains patients.", "CK élevée ou atteinte musculaire variable.", "L'absence de cardiomyopathie dans certaines séries interdit d'extrapoler un risque cardiaque à tout variant."],
+    "diagnosis": ["Si signes : CK, bilan neuromusculaire et fonction rénale lors d'un épisode aigu.", "Confirmer les allèles et la phase ; revue du transcrit, de la cartographie des lectures et des preuves fonctionnelles."],
+    "management": ["Si maladie confirmée : prévention/gestion spécialisée des épisodes de rhabdomyolyse et activité adaptée.", "Aucun traitement OBSCN ciblé établi ; un VUS seul ne justifie pas de restrictions sportives."],
+    "interpretation": "L'association ne permet pas de qualifier toute LoF OBSCN de pathogène.",
+    "sources": [{"label": "Étude clinique — OBSCN et intolérance/rhabdomyolyse", "url": "https://pubmed.ncbi.nlm.nih.gov/38159459/"}, {"label": "Étude primaire — myopathie biallélique OBSCN", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12877425/"}]
+  },
+  "OBSL1": {
+    "title": "Syndrome 3M type 2",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Retard de croissance important dès la vie fœtale et petite taille persistante.", "Traits du visage et anomalies squelettiques caractéristiques, membres longs et fins.", "Développement intellectuel généralement préservé ; sévérité variable."],
+    "diagnosis": ["Si signes : pédiatrie/endocrinologie et génétique clinique, analyse de croissance et radiographies orientées.", "Confirmer deux allèles et distinguer les autres causes de petite taille syndromique."],
+    "management": ["Si diagnostic confirmé : suivi de croissance et des complications orthopédiques ; interventions endocrinologiques selon évaluation.", "Pas de traitement de croissance à partir d'un VUS isolé."],
+    "interpretation": "Un portage ne prédit pas la taille d'un enfant.",
+    "sources": [{"label": "MedlinePlus Genetics — OBSL1", "url": "https://medlineplus.gov/genetics/gene/obsl1/"}]
+  },
+  "OPLAH": {
+    "title": "Déficit en 5-oxoprolinase / 5-oxoprolinurie",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Déficit biochimique établi ; conséquences cliniques hétérogènes et causalité neurologique débattue.",
+    "phenotype": ["Élévation de la 5-oxoproline urinaire ; plusieurs familles ont une évolution peu symptomatique.", "Des troubles neurologiques/épilepsies sont rapportés dans d'autres familles, sans un spectre uniforme.", "La 5-oxoprolinurie a aussi des causes acquises ou d'autres causes génétiques."],
+    "diagnosis": ["Si anomalie biologique/symptômes : acides organiques urinaires et bilan métabolique spécialisé.", "Confirmer les allèles, exclure les causes acquises et notamment un déficit GSS distinct."],
+    "management": ["Si déficit confirmé : suivi selon signes et biochimie ; éviter d'attribuer automatiquement tous symptômes à OPLAH.", "Aucun traitement préventif standard à prescrire à un porteur de VUS."],
+    "interpretation": "Distinguer constat biochimique et maladie clinique ; ne pas annoncer une maladie neurologique inévitable.",
+    "sources": [{"label": "Étude primaire — évolution souvent bénigne OPLAH", "url": "https://pubmed.ncbi.nlm.nih.gov/25129617/"}, {"label": "Cohorte primaire — 14 familles OPLAH", "url": "https://pubmed.ncbi.nlm.nih.gov/27477828/"}, {"label": "Série clinique — phénotypes OPLAH", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11316440/"}]
+  },
+  "P4HTM": {
+    "title": "Syndrome HIDEA",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, répliquée.",
+    "phenotype": ["Hypotonie et difficultés développementales/intellectuelles.", "Hypoventilation et dysautonomie : respiration, température et autres fonctions automatiques peuvent être affectées.", "Épilepsie et anomalies oculaires variables ; début généralement précoce."],
+    "diagnosis": ["Si tableau compatible : neuropédiatrie, évaluation respiratoire/sommeil et ophtalmologie selon symptômes.", "Confirmer les deux allèles et vérifier les transcrits pertinents."],
+    "management": ["Si diagnostic confirmé : support respiratoire si nécessaire, traitement des crises et rééducation.", "Aucun traitement P4HTM ciblé validé dans les publications consultées."],
+    "interpretation": "Un VUS ne permet pas de prédire une hypoventilation chez une personne asymptomatique.",
+    "sources": [{"label": "Étude primaire — HIDEA et P4HTM", "url": "https://pubmed.ncbi.nlm.nih.gov/30940925/"}, {"label": "Analyse moléculaire du syndrome HIDEA", "url": "https://pubmed.ncbi.nlm.nih.gov/35908151/"}]
+  },
+  "PANX1": {
+    "title": "Infertilité féminine liée à la mort ovocytaire",
+    "inheritance": "Dominante ou récessive selon les variants publiés",
+    "evidence": "Association rare, mécanisme canalopathique spécifique.",
+    "phenotype": ["Dégradation/mort ovocytaire, souvent observée lors de cycles d'AMP, et échecs de fécondation/développement dans certaines familles.", "La présentation est liée à la fonction ovocytaire et ne s'extrapole pas à tous les variants PANX1.", "Des variants monoalléliques et bialléliques ont été décrits."],
+    "diagnosis": ["Si infertilité réelle avec anomalies ovocytaires répétées : médecine de la reproduction et revue des données embryologiques.", "Confirmer l'allèle et son mécanisme ; un faux-sens rare ne démontre pas une canalopathie."],
+    "management": ["Si cause confirmée : options reproductives personnalisées en centre d'AMP.", "Aucun traitement génétique PANX1 standard établi par les études citées ; pas d'AMP justifiée par un VUS seul."],
+    "interpretation": "Un filtre AR peut manquer le mécanisme dominant ; ne pas en déduire automatiquement un risque de 25 %.",
+    "sources": [{"label": "Étude primaire — canalopathie PANX1", "url": "https://pubmed.ncbi.nlm.nih.gov/30918116/"}, {"label": "Étude primaire — variants PANX1 homozygotes", "url": "https://pubmed.ncbi.nlm.nih.gov/33495594/"}]
+  },
+  "PGAM2": {
+    "title": "Glycogénose musculaire type X",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie, maladie rare.",
+    "phenotype": ["Intolérance à l'effort, crampes et douleurs musculaires.", "Rhabdomyolyse et urines foncées/myoglobinurie possibles après exercice intense.", "Début souvent à l'adolescence ou chez le jeune adulte, sévérité variable."],
+    "diagnosis": ["Si signes : CK, bilan de rhabdomyolyse et centre neuromusculaire/métabolique.", "Confirmer les deux allèles ; tests enzymatiques ou autres explorations seulement selon indication."],
+    "management": ["Si diagnostic confirmé : adaptation spécialisée de l'exercice et plan de prise en charge des épisodes.", "Aucun régime ou restriction sportive automatique pour un VUS PGAM2."],
+    "interpretation": "Le déficit en phosphoglycérate mutase doit être confirmé avant attribution clinique.",
+    "sources": [{"label": "MedlinePlus Genetics — PGAM2", "url": "https://medlineplus.gov/genetics/gene/pgam2/"}]
+  },
+  "PHKB": {
+    "title": "Glycogénose type IXb par déficit en phosphorylase kinase",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Foie augmenté, hypoglycémie à jeun/cétose et retard de croissance chez l'enfant.", "Atteinte musculaire possible ; sévérité hépatique et évolution variables.", "Certaines formes s'améliorent avec l'âge mais nécessitent un suivi."],
+    "diagnosis": ["Si signes : glycémie/cétones, bilan hépatique et avis de métabolisme.", "Confirmer les deux allèles et le sous-type de glycogénose."],
+    "management": ["Si diagnostic confirmé : prévention du jeûne et alimentation adaptée par un centre spécialisé, surveillance hépatique.", "Ne pas appliquer un régime glycogénose à une personne porteuse d'un VUS seul."],
+    "interpretation": "Les conseils alimentaires de traitement concernent le déficit confirmé, pas tout variant PHKB.",
+    "sources": [{"label": "GeneReviews — Phosphorylase Kinase Deficiency", "url": "https://www.ncbi.nlm.nih.gov/books/NBK55061/"}]
+  },
+  "PIBF1": {
+    "title": "Syndrome de Joubert type 33",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, décrite dans plusieurs familles.",
+    "phenotype": ["Hypotonie, retard du développement et ataxie ; anomalie cérébelleuse avec signe de la dent molaire à l'IRM.", "Troubles oculomoteurs et respiratoires possibles.", "Atteintes rénales ou oculaires dans certaines formes."],
+    "diagnosis": ["Si tableau compatible : neuropédiatrie, IRM et évaluation rénale/ophtalmologique.", "Confirmer les allèles en trans et rechercher les autres gènes de Joubert."],
+    "management": ["Si maladie confirmée : rééducation, accompagnement du développement et suivi des organes concernés.", "Aucun traitement PIBF1 ciblé établi dans les publications consultées."],
+    "interpretation": "Le gène ne suffit pas à annoncer toutes les complications du spectre Joubert.",
+    "sources": [{"label": "Étude primaire — PIBF1 et Joubert", "url": "https://pubmed.ncbi.nlm.nih.gov/29695797/"}, {"label": "Famille supplémentaire PIBF1", "url": "https://pubmed.ncbi.nlm.nih.gov/33004012/"}]
+  },
+  "PKD1": {
+    "title": "Polykystose rénale liée à PKD1",
+    "inheritance": "Principalement autosomique dominante ; formes bialléliques hypomorphes particulières",
+    "evidence": "Association dominante établie ; les formes dites récessives ne s'appliquent pas à tout variant.",
+    "phenotype": ["Kystes rénaux progressifs, hypertension, douleurs/hématurie et insuffisance rénale à âge variable.", "Kystes hépatiques fréquents ; certaines complications vasculaires/valvulaires dépendent du contexte.", "Des combinaisons d'allèles hypomorphes peuvent donner des formes très précoces."],
+    "diagnosis": ["Si variant pathogène confirmé ou histoire/signes : imagerie rénale, pression artérielle et fonction rénale en néphrologie.", "Vérifier la cartographie spécifique PKD1, ses pseudogènes et l'allèle ; recherche familiale selon indication."],
+    "management": ["Si diagnostic confirmé : contrôle tensionnel, surveillance et traitement des complications.", "Tolvaptan dans certaines formes à progression rapide après évaluation spécialisée ; pas d'indication pour un VUS."],
+    "interpretation": "Ne pas limiter PKD1 au risque AR du couple ni appliquer automatiquement une probabilité de 25 %.",
+    "sources": [{"label": "GeneReviews — Polycystic Kidney Disease, Autosomal Dominant", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1246/"}]
+  },
+  "PLCH1": {
+    "title": "Association récessive à l'holoprosencéphalie",
+    "inheritance": "Autosomique récessive dans les familles publiées",
+    "evidence": "Association émergente, nombre limité de familles.",
+    "phenotype": ["Défaut de séparation du cerveau antérieur, d'intensité variable.", "Anomalies faciales, troubles du développement et déficits endocriniens peuvent s'y associer.", "Les formes vont de malformations majeures à des signes plus discrets."],
+    "diagnosis": ["Si malformations compatibles : génétique clinique et imagerie cérébrale ; bilan endocrinien selon signes.", "Confirmer les variants en trans et exclure les nombreuses autres causes d'holoprosencéphalie."],
+    "management": ["Si diagnostic confirmé : soins neurologiques, alimentaires et endocriniens selon atteintes.", "Aucun traitement génétique préventif établi dans l'étude primaire."],
+    "interpretation": "Un faux-sens rare ne démontre pas cette association émergente chez une personne.",
+    "sources": [{"label": "Étude primaire — PLCH1 et holoprosencéphalie", "url": "https://pubmed.ncbi.nlm.nih.gov/33820834/"}]
+  },
+  "PNPLA2": {
+    "title": "Myopathie avec stockage de lipides neutres",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Faiblesse musculaire progressive, parfois asymétrique, avec CK élevée.", "Cardiomyopathie possible ; évolution et âge de début variables.", "Accumulation de lipides dans les cellules/muscles ; à distinguer du syndrome ABHD5 avec ichthyose."],
+    "diagnosis": ["Si signes : centre neuromusculaire, CK et bilan cardiaque selon tableau.", "Confirmer les deux allèles ; recherche spécialisée d'anomalies de stockage lipidique si indiquée."],
+    "management": ["Si maladie confirmée : rééducation et suivi/traitement des complications cardiaques.", "Aucun régime ou supplément spécifique à prescrire à partir d'un VUS PNPLA2 seul."],
+    "interpretation": "La fonction lipidique du gène n'est pas une indication nutrigénomique automatique.",
+    "sources": [{"label": "MedlinePlus Genetics — PNPLA2", "url": "https://medlineplus.gov/genetics/gene/pnpla2/"}]
+  },
+  "POP1": {
+    "title": "Dysplasie anauxétique type 2",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, répliquée ; spectre squelettique variable.",
+    "phenotype": ["Retard de croissance et raccourcissement des membres, souvent dès la période prénatale.", "Anomalies vertébrales/articulaires et hypermobilité possibles.", "Des formes plus modérées existent ; le spectre continue d'être décrit."],
+    "diagnosis": ["Si signes : génétique clinique et radiographies de dysplasie squelettique.", "Confirmer les allèles en trans et distinguer les déficits RMRP/NEPRO ou autres causes."],
+    "management": ["Si diagnostic confirmé : suivi orthopédique, croissance et rééducation selon les besoins.", "Aucun traitement ciblé POP1 établi par les séries consultées."],
+    "interpretation": "Un variant hétérozygote ou incertain n'établit pas une dysplasie squelettique.",
+    "sources": [{"label": "Étude primaire — POP1 et dysplasie", "url": "https://pubmed.ncbi.nlm.nih.gov/21455487/"}, {"label": "Extension phénotypique POP1", "url": "https://pubmed.ncbi.nlm.nih.gov/28067412/"}]
+  },
+  "PRSS1": {
+    "title": "Pancréatite héréditaire liée à PRSS1",
+    "inheritance": "Autosomique dominante pour certains variants gain de fonction ; autres allèles ont d'autres effets",
+    "evidence": "Association établie, allèle-spécifique ; pénétrance variable.",
+    "phenotype": ["Crises de pancréatite aiguë/récidivante, parfois dès l'enfance, avec douleurs abdominales.", "Évolution possible vers pancréatite chronique, maldigestion, carences et diabète.", "Risque de cancer pancréatique accru dans la pancréatite héréditaire, modulé notamment par le tabagisme."],
+    "diagnosis": ["Avant conclusion : confirmer l'allèle et sa qualité technique, puis interpréter son effet connu et la pénétrance.", "Si symptômes ou variant causal confirmé : gastroentérologie/pancréatologie, histoire familiale et bilan pancréatique selon indication."],
+    "management": ["Si maladie/variant causal confirmé : prévention spécialisée, éviction du tabagisme et limitation/éviction de l'alcool selon conseil médical.", "Traitement des crises, enzymes pancréatiques/diabète si nécessaire ; surveillance oncologique uniquement selon indications spécialisées."],
+    "interpretation": "Une perte de fonction, un gain de fonction et un appel de mauvaise qualité ne sont pas interchangeables ; pas de surveillance oncologique sur un VUS seul.",
+    "sources": [{"label": "GeneReviews — PRSS1-Related Hereditary Pancreatitis", "url": "https://www.ncbi.nlm.nih.gov/books/NBK84399/"}]
+  },
+  "RASGRP1": {
+    "title": "Immunodéficience avec susceptibilité à l'EBV",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, répliquée.",
+    "phenotype": ["Infections répétées et anomalies de l'expansion des lymphocytes T.", "Infection EBV persistante, lymphoprolifération ou lymphome dans certaines familles.", "Dysrégulation immunitaire et manifestations auto-immunes variables."],
+    "diagnosis": ["Si symptômes : immunologie, bilan lymphocytaire et exploration de l'EBV/lymphoprolifération selon signes.", "Confirmer le déficit biallélique et discuter les tests fonctionnels."],
+    "management": ["Si maladie confirmée : soins immunologiques et traitements des infections/complications.", "Options telles que greffe relèvent d'une évaluation spécialisée ; aucun traitement pour un VUS seul."],
+    "interpretation": "Un portage récessif ne signifie pas une immunodéficience ou un futur lymphome.",
+    "sources": [{"label": "Étude primaire — perte RASGRP1 et EBV", "url": "https://pubmed.ncbi.nlm.nih.gov/29282224/"}, {"label": "Étude primaire — immunodéficience RASGRP1", "url": "https://pubmed.ncbi.nlm.nih.gov/27776107/"}]
+  },
+  "RC3H1": {
+    "title": "Association à une dysrégulation immunitaire / lymphohistiocytose hémophagocytaire",
+    "inheritance": "Récessive pour certaines assertions ; mécanisme à vérifier",
+    "evidence": "Association limitée à modérée dans les curations consultées.",
+    "phenotype": ["Le syndrome hémophagocytaire peut comporter fièvre persistante, cytopénies, augmentation du foie/de la rate et inflammation sévère.", "L'association précise RC3H1 et son spectre restent moins établis que d'autres causes de HLH."],
+    "diagnosis": ["Si symptômes évocateurs : prise en charge clinique rapide en hématologie/immunologie, indépendamment du VUS.", "Vérifier mécanisme, phase et preuves de l'allèle ; diagnostic différentiel génétique/acquis de HLH."],
+    "management": ["Si HLH confirmé : traitement urgent selon protocole et cause établis.", "Aucune prévention médicamenteuse ou greffe justifiée par un VUS RC3H1 seul."],
+    "interpretation": "Le signal de catalogue reste une piste de recherche, pas un risque reproductif établi.",
+    "sources": [{"label": "GenCC — RC3H1, curations limited/moderate", "url": "https://thegencc.org/genes/HGNC%3A29434"}, {"label": "NCBI Gene — RC3H1", "url": "https://www.ncbi.nlm.nih.gov/gene/149041"}]
+  },
+  "RDH12": {
+    "title": "Rétinopathies liées à RDH12",
+    "inheritance": "Principalement autosomique récessive ; certains allèles dominants particuliers existent",
+    "evidence": "Association établie, spectre allèle-dépendant.",
+    "phenotype": ["Baisse visuelle précoce sévère, nystagmus et atteinte rétinienne dans la forme amaurose de Leber.", "Rétinite pigmentaire, dystrophie cônes-bâtonnets ou maculaire dans d'autres formes.", "Progression et vision résiduelle variables."],
+    "diagnosis": ["Si signes : ophtalmologie rétinienne, OCT et électrorétinogramme selon tableau.", "Confirmer les allèles, la phase et le mécanisme ; conseil génétique visuel."],
+    "management": ["Si diagnostic confirmé : aides basse vision et prise en charge des complications.", "Thérapie génique RDH12 en développement ; ne pas confondre avec un traitement validé pour un autre gène rétinien."],
+    "interpretation": "Un VUS ne prédit pas une cécité ; les porteurs d'un allèle null récessif sont généralement indemnes.",
+    "sources": [{"label": "NCBI Gene — RDH12", "url": "https://www.ncbi.nlm.nih.gov/gene/145226"}, {"label": "Cohorte primaire — rétinopathie RDH12", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3209419/"}]
+  },
+  "RP1L1": {
+    "title": "Dystrophie maculaire occulte / rétinite pigmentaire",
+    "inheritance": "Dominante pour certaines dystrophies maculaires ; récessive pour certaines rétinopathies",
+    "evidence": "Association établie mais effets variants spécifiques et pénétrance variable.",
+    "phenotype": ["Diminution progressive de la vision centrale parfois avec fond d'œil apparemment normal (forme occulte).", "Certaines formes récessives : atteinte plus diffuse de type rétinite pigmentaire.", "Âge de début et gravité variables."],
+    "diagnosis": ["Si signes : ophtalmologie spécialisée, OCT et électrophysiologie maculaire/complète selon indication.", "Confirmer l'allèle, son mécanisme et la phase ; une grande série de faux-sens rares ne suffit pas."],
+    "management": ["Si diagnostic confirmé : suivi visuel, aides optiques/basse vision et soins des complications.", "Aucun traitement RP1L1 spécifique standard établi dans les études citées."],
+    "interpretation": "Le mode de transmission ne se déduit pas d'une unique annotation de catalogue.",
+    "sources": [{"label": "Étude primaire — RP1L1 dominant", "url": "https://pubmed.ncbi.nlm.nih.gov/20826268/"}, {"label": "Cohorte primaire — spectre RP1L1", "url": "https://pubmed.ncbi.nlm.nih.gov/40172514/"}]
+  },
+  "RTTN": {
+    "title": "Microcéphalie / malformations cérébrales liées à RTTN",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie, spectre variable.",
+    "phenotype": ["Microcéphalie et petite taille/retard de croissance dès la période prénatale dans certaines formes.", "Retard du développement, déficience intellectuelle et crises possibles.", "Polymicrogyrie, pachygyrie ou anomalies du corps calleux/cervelet selon les patients."],
+    "diagnosis": ["Si signes : génétique clinique/neuropédiatrie, croissance et IRM cérébrale.", "Confirmer les deux allèles et leur phase ; explorer les autres causes de malformation cérébrale."],
+    "management": ["Si diagnostic confirmé : interventions développementales, traitement des crises et soins adaptés aux organes atteints.", "Aucun traitement génétique RTTN curatif établi dans les études citées."],
+    "interpretation": "Un variant récessif unique n'établit pas un trouble du développement futur.",
+    "sources": [{"label": "Étude primaire — RTTN et microcéphalie", "url": "https://pubmed.ncbi.nlm.nih.gov/26608784/"}, {"label": "Cohorte primaire — spectre RTTN", "url": "https://pubmed.ncbi.nlm.nih.gov/29883675/"}]
+  },
+  "SEC24D": {
+    "title": "Syndrome de Cole-Carpenter type 2",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare établie, formes sévères et plus modérées.",
+    "phenotype": ["Fragilité osseuse, fractures et anomalies de développement craniofacial.", "Anomalies de croissance et déformations squelettiques possibles.", "Certaines formes prénatales sont sévères et ressemblent à l'ostéogenèse imparfaite."],
+    "diagnosis": ["Si signes : génétique clinique et centre de fragilité osseuse avec radiographies ciblées.", "Confirmer deux variants en trans ; diagnostic différentiel d'ostéogenèse imparfaite."],
+    "management": ["Si diagnostic confirmé : soins orthopédiques, prévention des fractures et rééducation.", "Traitements osseux selon diagnostic spécialisé ; aucun traitement pour un VUS seul."],
+    "interpretation": "Une prédiction de conséquence doit être validée avant de conclure une dysplasie osseuse.",
+    "sources": [{"label": "Étude primaire — SEC24D et Cole-Carpenter", "url": "https://pubmed.ncbi.nlm.nih.gov/25683121/"}]
+  },
+  "SERPINA1": {
+    "title": "Déficit en alpha-1-antitrypsine",
+    "inheritance": "Codominante ; risque surtout avec deux allèles déficitaires, selon combinaison et expositions",
+    "evidence": "Association établie, forte dépendance à l'allèle et au tabac.",
+    "phenotype": ["Atteinte pulmonaire emphysémateuse/bronchectasies chez l'adulte, aggravée par le tabagisme.", "Atteinte hépatique possible dès l'enfance ou à l'âge adulte, surtout pour certains allèles de rétention protéique.", "Des porteurs peuvent rester sans manifestations ; les allèles null et de rétention ne sont pas équivalents."],
+    "diagnosis": ["Si variant pertinent confirmé ou signes : dosage sanguin d'alpha-1-antitrypsine et typage/phénotypage, interprétés avec l'inflammation.", "Bilan pulmonaire/hépatique selon résultats et histoire ; confirmer la combinaison allélique."],
+    "management": ["Si déficit confirmé : prévention du tabagisme/expositions et suivi pulmonaire/hépatique ; soins usuels des atteintes.", "Augmentation en alpha-1-antitrypsine dans certaines indications pulmonaires spécialisées ; pas de traitement sur VUS seul."],
+    "interpretation": "Le dosage biologique et le génotype complet importent davantage que la simple présence d'un faux-sens rare.",
+    "sources": [{"label": "GeneReviews — Alpha-1 Antitrypsin Deficiency", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1519/"}]
+  },
+  "SI": {
+    "title": "Déficit congénital en sucrase-isomaltase",
+    "inheritance": "Principalement autosomique récessive ; effets partiels de certains allèles à distinguer",
+    "evidence": "Association établie pour le déficit congénital.",
+    "phenotype": ["Diarrhée, douleurs et ballonnements après ingestion de saccharose/amidons, souvent à partir de leur introduction alimentaire.", "Retard de croissance dans les formes sévères ; formes plus modérées diagnostiquées tardivement possibles.", "Les symptômes digestifs ont de nombreuses causes non génétiques."],
+    "diagnosis": ["Si symptômes : gastroentérologie, bilan des causes fréquentes et tests digestifs enzymatiques/respiratoires selon indication.", "Confirmer génotype et déficit fonctionnel ; un VUS ne démontre pas une intolérance au sucre."],
+    "management": ["Si déficit confirmé : adaptation alimentaire individualisée avec diététicien ; substitution enzymatique dans les indications disponibles. La sacrosidase remplace l'activité sucrase, mais pas l'activité isomaltase.", "Éviter une restriction large des glucides sur la base d'un variant incertain seul."],
+    "interpretation": "La réponse digestive se vérifie cliniquement ; ceci n'est pas une prescription nutrigénomique automatique.",
+    "sources": [{"label": "MedlinePlus Genetics — déficit en sucrase-isomaltase", "url": "https://medlineplus.gov/genetics/condition/congenital-sucrase-isomaltase-deficiency/"}, {"label": "FDA : notice de la sacrosidase et limites de substitution", "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/020772s030lbl.pdf"}]
+  },
+  "SLC12A6": {
+    "title": "Neuropathie liée à SLC12A6 / syndrome d'Andermann",
+    "inheritance": "Récessive pour le syndrome classique ; autres allèles/mécanismes à vérifier",
+    "evidence": "Association établie pour le syndrome biallélique.",
+    "phenotype": ["Neuropathie motrice et sensitive progressive avec faiblesse et perte des réflexes.", "Agénésie/hypoplasie du corps calleux fréquente mais non obligatoire.", "Troubles du développement, scoliose et manifestations neuropsychiatriques variables."],
+    "diagnosis": ["Si signes : neurologie, électroneuromyogramme et IRM selon tableau.", "Confirmer les deux allèles et la phase ; revue allèle-spécifique pour les autres formes de neuropathie."],
+    "management": ["Si diagnostic confirmé : rééducation, orthèses et prise en charge des complications neurologiques/orthopédiques.", "Aucun traitement génétique curatif établi dans la référence consultée."],
+    "interpretation": "Un variant unique incertain ne démontre pas le syndrome d'Andermann.",
+    "sources": [{"label": "MedlinePlus Genetics — SLC12A6", "url": "https://medlineplus.gov/genetics/gene/slc12a6/"}]
+  },
+  "SLC25A38": {
+    "title": "Anémie sidéroblastique congénitale",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Anémie microcytaire sévère souvent très précoce, nécessitant parfois des transfusions régulières.", "Surcharge en fer et complications hépatiques/cardiaques possibles.", "Tableau différent d'une simple carence alimentaire en fer."],
+    "diagnosis": ["Si anémie inexpliquée : hématologie, numération et bilan martial ; examens médullaires selon indication.", "Confirmer les deux allèles et le type d'anémie sidéroblastique."],
+    "management": ["Si diagnostic confirmé : transfusions et gestion de la surcharge en fer ; greffe possible dans certaines situations spécialisées.", "Ne pas supplémenter en fer sur une anémie microcytaire sans bilan ni utiliser le VUS comme diagnostic."],
+    "interpretation": "Le portage hétérozygote ne provoque habituellement pas l'anémie récessive.",
+    "sources": [{"label": "Cohorte primaire — anémie SLC25A38", "url": "https://pubmed.ncbi.nlm.nih.gov/34298585/"}, {"label": "NCBI Gene — SLC25A38", "url": "https://www.ncbi.nlm.nih.gov/gene/54977/"}]
+  },
+  "SLC6A19": {
+    "title": "Maladie de Hartnup",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie ; nombreux sujets bialléliques peu ou pas symptomatiques.",
+    "phenotype": ["Défaut de transport d'acides aminés neutres avec aminoacidurie.", "Photosensibilité/éruption de type pellagre et ataxie épisodique possibles, notamment en contexte de stress nutritionnel.", "Expressivité très variable, parfois découverte biochimique sans maladie clinique."],
+    "diagnosis": ["Si tableau compatible : acides aminés urinaires et bilan métabolique spécialisé.", "Confirmer deux allèles et distinguer autres causes de symptômes cutanés/neurologiques."],
+    "management": ["Si maladie confirmée : alimentation adéquate, photoprotection et niacine selon indication du centre spécialisé.", "Aucune supplémentation ciblée à partir d'un VUS SLC6A19 seul."],
+    "interpretation": "Le statut biochimique et les symptômes déterminent les soins ; le gène n'est pas un conseil de régime universel.",
+    "sources": [{"label": "MedlinePlus Genetics — SLC6A19", "url": "https://medlineplus.gov/genetics/gene/slc6a19/"}]
+  },
+  "SLC9A3": {
+    "title": "Diarrhée sodée congénitale",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare établie.",
+    "phenotype": ["Diarrhée aqueuse dès la période néonatale, pertes de sodium et déshydratation.", "Distension abdominale, troubles électrolytiques et difficultés de croissance possibles.", "Une maladie inflammatoire intestinale a été décrite chez certains patients."],
+    "diagnosis": ["Si diarrhée néonatale sévère : évaluation pédiatrique rapide, ionogrammes et électrolytes des selles.", "Confirmer deux allèles et distinguer autres diarrhées congénitales."],
+    "management": ["Si maladie confirmée : correction hydrique/électrolytique et nutrition spécialisée avec suivi gastroentérologique.", "Pas de restriction ou supplémentation saline chez une personne asymptomatique porteuse d'un VUS."],
+    "interpretation": "Les décisions dépendent des pertes mesurées, pas de l'annotation de transporteur seule.",
+    "sources": [{"label": "Étude clinique — SLC9A3 et diarrhée sodée", "url": "https://pubmed.ncbi.nlm.nih.gov/31276831/"}, {"label": "Données cliniques supplémentaires SLC9A3", "url": "https://pubmed.ncbi.nlm.nih.gov/35775128/"}]
+  },
+  "SLC9B1": {
+    "title": "Assertion ClinVar liée à Usher — association gene-maladie à vérifier",
+    "inheritance": "Non établi indépendamment pour ce signal ; Usher classique est habituellement récessif",
+    "evidence": "Assertion de variant retrouvée ; association SLC9B1–Usher insuffisamment établie dans les sources consultées.",
+    "phenotype": ["Le syndrome d'Usher associe surdité et dégénérescence rétinienne progressive, avec parfois troubles vestibulaires.", "Ces caractéristiques ne doivent pas être attribuées automatiquement à SLC9B1 à partir d'un enregistrement ClinVar."],
+    "diagnosis": ["Faire revoir l'origine des soumissions ClinVar, le transcrit/locus et une éventuelle mauvaise attribution à un gène voisin.", "Si symptômes auditifs/visuels : évaluation clinique et panel Usher validé, indépendamment de ce signal incertain."],
+    "management": ["Aucun diagnostic de surdicécité ni traitement sur la seule base de ce signal.", "Si Usher est réellement confirmé : prise en charge auditive/visuelle et conseil génétique suivant le gène causal établi."],
+    "interpretation": "Deux soumissions ClinVar sans conflit n'établissent pas à elles seules la validité du lien gene-maladie.",
+    "sources": [{"label": "ClinVar — assertion SLC9B1 et Usher à réexaminer", "url": "https://www.ncbi.nlm.nih.gov/clinvar/RCV003389545/"}, {"label": "MedlinePlus Genetics — Usher", "url": "https://medlineplus.gov/genetics/condition/usher-syndrome/"}]
+  },
+  "SLX4": {
+    "title": "Anémie de Fanconi, groupe P",
+    "inheritance": "Autosomique récessive pour Fanconi ; associations de cancer monoalléliques à interpréter séparément",
+    "evidence": "Association récessive établie.",
+    "phenotype": ["Malformations, petite taille et anomalies pigmentaires variables.", "Insuffisance médullaire/cytopénies et risques tumoraux accrus chez les personnes atteintes.", "Les anomalies congénitales peuvent être absentes ; début et évolution variables."],
+    "diagnosis": ["Si suspicion : hématologie/génétique et test de cassures chromosomiques adapté.", "Confirmer les deux allèles et distinguer le portage de la maladie ; revue séparée d'un allèle monoallélique établi."],
+    "management": ["Si Fanconi confirmé : suivi hématologique/oncologique spécialisé ; greffe pour certaines atteintes médullaires.", "La surveillance tumorale ne se déduit pas d'un VUS SLX4 ou d'un signal récessif isolé."],
+    "interpretation": "Les mécanismes bialléliques et éventuelles prédispositions monoalléliques nécessitent deux analyses distinctes.",
+    "sources": [{"label": "GeneReviews — Fanconi Anemia", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1401/"}]
+  },
+  "SMARCA4": {
+    "title": "Prédisposition tumorale SMARCA4 / autres mécanismes distincts",
+    "inheritance": "Autosomique dominante pour certaines prédispositions germinales ; mutations somatiques distinctes",
+    "evidence": "Associations établies mais fortement dépendantes du mécanisme et du contexte germinal/somatique.",
+    "phenotype": ["Certains variants germinaux pathogènes : prédisposition à des tumeurs rhabdoïdes et au carcinome ovarien à petites cellules de type hypercalcémique.", "Certains allèles distincts : syndrome de Coffin-Siris et trouble du développement.", "Une mutation observée dans une tumeur utérine n'est pas automatiquement une maladie héréditaire récessive."],
+    "diagnosis": ["Pour un signal VUS/complexe : valider lecture/transcrit et mécanisme avant toute conclusion.", "Si variant germinal causal confirmé ou histoire tumorale compatible : oncogénétique avec revue familiale et clinico-moléculaire."],
+    "management": ["Si prédisposition confirmée : stratégie de surveillance et prévention personnalisée en oncogénétique.", "Aucune chirurgie préventive ni surveillance tumorale spécifique justifiée par un VUS seul."],
+    "interpretation": "Le catalogue peut mélanger cancer somatique et génétique germinale ; l'appartenance à SMARCA4 n'établit pas un risque.",
+    "sources": [{"label": "GeneReviews — Rhabdoid Tumor Predisposition Syndrome", "url": "https://www.ncbi.nlm.nih.gov/books/NBK469816/"}, {"label": "NCI PDQ — prédisposition SMARCA4", "url": "https://www.ncbi.nlm.nih.gov/books/NBK613400/"}]
+  },
+  "SNRNP200": {
+    "title": "Rétinite pigmentaire liée à SNRNP200",
+    "inheritance": "Principalement autosomique dominante dans les études classiques ; assertion AR à réévaluer",
+    "evidence": "Association dominante établie, allèle-spécifique.",
+    "phenotype": ["Vision nocturne diminuée, réduction progressive du champ visuel et atteinte rétinienne.", "Âge de début et progression variables.", "La maladie implique certains variants de l'épissage ; toute LoF prédite n'a pas automatiquement le même effet."],
+    "diagnosis": ["Si signes : ophtalmologie rétinienne, OCT/électrorétinogramme selon indication.", "Confirmer l'allèle et le mode de transmission, notamment si le catalogue indique un mécanisme récessif."],
+    "management": ["Si maladie confirmée : suivi ophtalmologique, aides basse vision et soins des complications.", "Pas de traitement ou supplément vitaminique ciblé sur un VUS seul."],
+    "interpretation": "Ne pas calculer un risque de 25 % à partir d'une assertion AR générique sans validation allèle-maladie.",
+    "sources": [{"label": "Étude primaire — SNRNP200 et rétinite dominante", "url": "https://pubmed.ncbi.nlm.nih.gov/19878916/"}, {"label": "Étude primaire — variants SNRNP200", "url": "https://pubmed.ncbi.nlm.nih.gov/33553197/"}]
+  },
+  "SOX9": {
+    "title": "Dysplasie campomélique / anomalies de développement SOX9",
+    "inheritance": "Autosomique dominante, souvent de novo ; anomalies régulatrices/locus possibles",
+    "evidence": "Association établie, mécanisme et région atteinte importants.",
+    "phenotype": ["Anomalies squelettiques congénitales avec courbure/raccourcissement des os longs dans certaines formes.", "Atteinte des voies aériennes, malformations craniofaciales et troubles vertébraux peuvent être graves chez le nouveau-né.", "Variations du développement sexuel dans certaines personnes 46,XY ; des formes sans courbure osseuse existent."],
+    "diagnosis": ["Avant attribution : confirmer le variant/locus et vérifier sa conséquence réelle ; une assertion 'not provided' est insuffisante.", "Si tableau compatible : génétique clinique, radiographies et explorations des voies aériennes/organes selon signes."],
+    "management": ["Si diagnostic confirmé : prise en charge respiratoire, orthopédique, auditive et craniofaciale selon atteintes.", "Décisions endocrinologiques/chirurgicales individualisées en équipe spécialisée ; jamais sur un VUS seul."],
+    "interpretation": "Une anomalie grave dominante confirmée nécessite cohérence avec le phénotype et validation technique ; un signal incertain ne démontre pas le syndrome.",
+    "sources": [{"label": "GeneReviews — Campomelic Dysplasia", "url": "https://www.ncbi.nlm.nih.gov/books/NBK1760/"}]
+  },
+  "TACO1": {
+    "title": "Maladie mitochondriale / syndrome de Leigh lié à TACO1",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, répliquée.",
+    "phenotype": ["Troubles neurologiques progressifs, faiblesse/spasticité, difficultés de marche et régression possibles.", "Anomalies typiques des noyaux gris/tronc cérébral à l'IRM dans le spectre Leigh.", "Début parfois juvénile plus tardif que d'autres formes de Leigh."],
+    "diagnosis": ["Si signes : centre de maladies mitochondriales, neurologie/IRM et bilan métabolique ciblé.", "Confirmer les deux allèles et discuter l'exploration du déficit de complexe IV selon contexte."],
+    "management": ["Si maladie confirmée : prise en charge neurologique, nutritionnelle et respiratoire selon atteintes.", "Aucun traitement TACO1 curatif établi dans les études citées."],
+    "interpretation": "Un portage récessif ne démontre pas un déficit mitochondrial.",
+    "sources": [{"label": "Étude primaire — TACO1 et Leigh", "url": "https://pubmed.ncbi.nlm.nih.gov/19503089/"}, {"label": "Familles supplémentaires — TACO1", "url": "https://pubmed.ncbi.nlm.nih.gov/32444556/"}]
+  },
+  "TAF2": {
+    "title": "Trouble du développement avec microcéphalie et corps calleux fin",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, répliquée.",
+    "phenotype": ["Retard global du développement et déficience intellectuelle, microcéphalie souvent postnatale.", "Spasticité/signes pyramidaux et anomalies des pieds possibles.", "Corps calleux fin à l'IRM ; sévérité variable."],
+    "diagnosis": ["Si signes : génétique clinique/neuropédiatrie, bilan développemental et IRM selon indication.", "Confirmer variants et phase, revoir le diagnostic différentiel."],
+    "management": ["Si diagnostic confirmé : rééducation, orthophonie et gestion de la spasticité/complications.", "Aucun traitement génétique ciblé TAF2 établi dans les séries citées."],
+    "interpretation": "Un VUS ou un variant récessif unique n'annonce pas un trouble intellectuel.",
+    "sources": [{"label": "Étude primaire — TAF2", "url": "https://pubmed.ncbi.nlm.nih.gov/24084144/"}, {"label": "Cohorte primaire — spectre TAF2", "url": "https://pubmed.ncbi.nlm.nih.gov/34474177/"}]
+  },
+  "TECPR2": {
+    "title": "Neuropathie sensorielle/autonomique et spasticité liées à TECPR2",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie, maladie rare.",
+    "phenotype": ["Retard du développement, hypotonie puis troubles moteurs/spasticité.", "Dysautonomie pouvant perturber respiration, déglutition et transit digestif.", "Atteinte sensorielle, apnées et complications respiratoires possibles ; progression variable."],
+    "diagnosis": ["Si tableau compatible : neurologie et explorations respiratoires/sommeil, déglutition selon symptômes.", "Confirmer les deux allèles et leur phase."],
+    "management": ["Si diagnostic confirmé : soins respiratoires/alimentaires et rééducation ; prévention des complications adaptée.", "Pas de traitement spécifique TECPR2 établi dans la référence consultée."],
+    "interpretation": "Un variant incertain n'est pas un diagnostic de dysautonomie.",
+    "sources": [{"label": "MedlinePlus Genetics — TECPR2", "url": "https://medlineplus.gov/genetics/gene/tecpr2/"}]
+  },
+  "TG": {
+    "title": "Hypothyroïdie par dyshormonogenèse liée à la thyroglobuline",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Production insuffisante d'hormones thyroïdiennes dès la naissance, souvent avec goitre.", "Sans traitement d'une forme congénitale sévère : troubles de croissance et du développement.", "Certaines formes sont compensées par un goitre avec hormones proches de la normale."],
+    "diagnosis": ["Si signes/variant pertinent : TSH et T4 libre, bilan thyroïdien clinique.", "Confirmer les deux allèles ; distinguer causes auto-immunes/acquises d'hypothyroïdie."],
+    "management": ["Si hypothyroïdie confirmée : traitement hormonal et surveillance endocrinologique adaptés, particulièrement rapidement chez le nouveau-né.", "Pas de lévothyroxine ou d'iode supplémentaire à partir d'un VUS TG seul."],
+    "interpretation": "La fonction thyroïdienne se mesure directement ; les associations polygéniques auto-immunes sont distinctes.",
+    "sources": [{"label": "MedlinePlus Genetics — TG", "url": "https://medlineplus.gov/genetics/gene/tg/"}]
+  },
+  "TMPRSS3": {
+    "title": "Surdité neurosensorielle récessive liée à TMPRSS3",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Surdité congénitale/prélinguale ou débutant dans l'enfance selon les allèles.", "Sévérité et progression variables ; habituellement sans autre atteinte syndromique."],
+    "diagnosis": ["Si signes : audiogramme et bilan ORL.", "Confirmer deux allèles en trans, rechercher également les CNV/réarrangements si un seul allèle est identifié."],
+    "management": ["Si diagnostic confirmé : appareillage/implantation selon niveau auditif et accompagnement de la communication.", "Aucune intervention auditive ni diagnostic sur un VUS seul."],
+    "interpretation": "Un portage hétérozygote est distinct d'une surdité biallélique.",
+    "sources": [{"label": "NCBI Gene — TMPRSS3", "url": "https://www.ncbi.nlm.nih.gov/gene/64699"}, {"label": "GTR — TMPRSS3 et surdité", "url": "https://www.ncbi.nlm.nih.gov/gtr/genes/64699/"}]
+  },
+  "TRB": {
+    "title": "Attribution multigène à vérifier — locus du récepteur T bêta",
+    "inheritance": "Aucun mode mendélien à attribuer à partir du signal PRSS1 partagé",
+    "evidence": "La présence de TRB dans un enregistrement multigène ne démontre pas une association à la pancréatite.",
+    "phenotype": ["TRB désigne le locus du récepteur des lymphocytes T, soumis à une recombinaison somatique physiologique.", "Les descriptions de pancréatite d'un enregistrement touchant aussi PRSS1 ne doivent pas être réattribuées à TRB."],
+    "diagnosis": ["Revoir l'intervalle du variant et l'annotation ClinVar complète au niveau de chaque gène.", "Aucun examen immunitaire ou pancréatique spécifique justifié par la simple étiquette TRB."],
+    "management": ["Pas de traitement ni maladie à annoncer pour cette attribution ambiguë.", "Les décisions suivent le gène/allèle causal effectivement confirmé, par exemple PRSS1 si applicable."],
+    "interpretation": "Une ligne ClinVar multigène n'est pas une preuve de plusieurs maladies.",
+    "sources": [{"label": "NCBI Gene — TRB", "url": "https://www.ncbi.nlm.nih.gov/gene/6957/"}, {"label": "GeneReviews — PRSS1", "url": "https://www.ncbi.nlm.nih.gov/books/NBK84399/"}]
+  },
+  "TRIT1": {
+    "title": "Maladie mitochondriale liée à TRIT1",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, publiée dans plusieurs familles.",
+    "phenotype": ["Trouble précoce du développement, hypotonie et épilepsie.", "Microcéphalie/anomalies cérébrales possibles ; atteinte métabolique mitochondriale variable.", "La sévérité dépend des allèles et des organes concernés."],
+    "diagnosis": ["Si tableau compatible : centre mitochondrial, neurologie/EEG et bilan métabolique dirigé.", "Confirmer deux variants en trans et la cohérence clinico-fonctionnelle."],
+    "management": ["Si diagnostic confirmé : traitement des crises et soins nutritionnels/respiratoires/développementaux selon signes.", "Aucun traitement TRIT1 curatif établi dans l'étude citée."],
+    "interpretation": "Une variante incertaine ne démontre pas une maladie mitochondriale.",
+    "sources": [{"label": "Étude primaire — maladie récessive TRIT1", "url": "https://pubmed.ncbi.nlm.nih.gov/28185376/"}]
+  },
+  "TUBB8": {
+    "title": "Défaut de maturation ovocytaire lié à TUBB8",
+    "inheritance": "Souvent dominante avec effet dominant négatif ; formes bialléliques pour certains allèles",
+    "evidence": "Association établie, forte dépendance au variant et à son effet sur le fuseau.",
+    "phenotype": ["Arrêt méiotique/maturation ovocytaire anormale, infertilité féminine dans les familles atteintes.", "Certains variants entraînent échecs de fécondation ou de développement embryonnaire.", "Le mécanisme peut être transmis par un homme sans atteinte de fertilité correspondante."],
+    "diagnosis": ["Avant conclusion : confirmer qualité technique et données fonctionnelles/clinico-familiales du variant.", "Si infertilité avec anomalies ovocytaires répétées : médecine de la reproduction et revue des observations de laboratoire d'AMP."],
+    "management": ["Si cause confirmée : conseil reproductif et choix des options d'AMP individualisés.", "Aucun traitement TUBB8 standard curatif démontré ; un VUS seul ne justifie pas un recours à la FIV ou au don d'ovocytes."],
+    "interpretation": "Le nom du gène et une prédiction faux-sens ne démontrent pas une infertilité ; ne pas appliquer un risque AR générique.",
+    "sources": [{"label": "Étude primaire — TUBB8 et arrêt méiotique", "url": "https://pubmed.ncbi.nlm.nih.gov/26789871/"}, {"label": "Étude primaire — spectre ovocytaire TUBB8", "url": "https://pubmed.ncbi.nlm.nih.gov/27273344/"}]
+  },
+  "UROD": {
+    "title": "Porphyrie cutanée tardive familiale / porphyrie hépatoérythropoïétique",
+    "inheritance": "Susceptibilité dominante à pénétrance incomplète pour PCT ; récessive pour HEP",
+    "evidence": "Association établie, effets environnementaux importants.",
+    "phenotype": ["PCT : fragilité/bulles cutanées sur zones exposées au soleil, souvent à l'âge adulte.", "Fer, alcool, œstrogènes et certaines infections peuvent contribuer à l'expression.", "Deux allèles sévères peuvent donner une porphyrie hépatoérythropoïétique plus précoce et importante."],
+    "diagnosis": ["Si symptômes : porphyrines urinaires/plasmatiques avec centre de porphyries.", "Confirmer l'allèle et rechercher les cofacteurs biologiques ; distinguer les autres porphyries."],
+    "management": ["Si PCT confirmée : photoprotection, prise en charge des cofacteurs et traitements spécialisés tels que saignées ou antipaludéen à faible dose selon indication.", "Ne pas appliquer ces traitements ni arrêter une prescription à partir d'un VUS seul."],
+    "interpretation": "Un porteur d'allèle pathogène peut rester sans maladie ; absence de symptômes et biochimie doivent être prises en compte.",
+    "sources": [{"label": "GeneReviews — Familial Porphyria Cutanea Tarda", "url": "https://www.ncbi.nlm.nih.gov/books/NBK143129/"}, {"label": "GeneReviews — Hepatoerythropoietic Porphyria", "url": "https://www.ncbi.nlm.nih.gov/books/NBK169003/"}]
+  },
+  "USH1C": {
+    "title": "Syndrome d'Usher type 1C / surdité récessive",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie ; association précise dépend des allèles.",
+    "phenotype": ["Usher 1C : surdité précoce sévère, troubles vestibulaires et rétinite pigmentaire progressive.", "Certains variants donnent une surdité non syndromique sans atteinte rétinienne démontrée.", "L'âge de la gêne visuelle et la sévérité varient."],
+    "diagnosis": ["Si signes : audiologie et ophtalmologie rétinienne ; évaluation vestibulaire selon tableau.", "Confirmer deux allèles en trans et leur association à la forme syndromique ou isolée."],
+    "management": ["Si diagnostic confirmé : aides auditives/visuelles et rééducation de l'équilibre.", "Les approches géniques restent une piste de recherche selon protocole, sans indication sur VUS seul."],
+    "interpretation": "Un variant unique ne démontre pas un syndrome d'Usher.",
+    "sources": [{"label": "MedlinePlus Genetics — Usher syndrome", "url": "https://medlineplus.gov/genetics/condition/usher-syndrome/"}]
+  },
+  "VPS13B": {
+    "title": "Syndrome de Cohen",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Retard du développement/intellectuel, hypotonie et traits du visage caractéristiques.", "Myopie/atteinte rétinienne, obésité surtout tronculaire et neutropénie possibles.", "Expression variable ; plusieurs signes se précisent avec l'âge."],
+    "diagnosis": ["Si tableau compatible : génétique clinique, bilan développemental, ophtalmologie et numération selon signes.", "Confirmer deux allèles, incluant recherche de CNV si nécessaire."],
+    "management": ["Si diagnostic confirmé : soins visuels, accompagnement du développement et prise en charge métabolique/infectieuse selon atteintes.", "Aucun traitement VPS13B curatif établi dans la référence consultée."],
+    "interpretation": "Un VUS n'explique pas à lui seul l'obésité ou un trouble du développement.",
+    "sources": [{"label": "MedlinePlus Genetics — VPS13B", "url": "https://medlineplus.gov/genetics/gene/vps13b/"}]
+  },
+  "XG": {
+    "title": "Antigène sanguin Xg(a) — trait, pas maladie",
+    "inheritance": "Locus à la frontière pseudo-autosomique du chromosome X ; expression dépendant de la région régulatrice",
+    "evidence": "Base génétique du système sanguin XG établie.",
+    "phenotype": ["Présence/absence de l'antigène Xg(a) sur les globules rouges.", "Ce système est distinct d'ABO et Rh ; un phénotype Xg(a−) n'est pas une maladie récessive."],
+    "diagnosis": ["Pour une question transfusionnelle : typage sérologique en laboratoire, plutôt qu'inférence d'un VCF incomplet.", "Vérifier coordonnées/allèle et sexe chromosomique technique si l'on étudie ce trait."],
+    "management": ["Aucun traitement ou surveillance médicale pour le simple phénotype Xg(a−).", "Les besoins transfusionnels se gèrent avec le laboratoire d'immunohématologie."],
+    "interpretation": "Une assertion 'pathogenic' dans une base ne doit pas transformer un groupe sanguin en maladie.",
+    "sources": [{"label": "NCBI Gene — XG", "url": "https://www.ncbi.nlm.nih.gov/gene/7499"}, {"label": "Étude primaire — base régulatrice de Xg(a)", "url": "https://pubmed.ncbi.nlm.nih.gov/29748255/"}]
+  },
+  "XPC": {
+    "title": "Xeroderma pigmentosum, groupe C",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association établie.",
+    "phenotype": ["Photosensibilité, anomalies pigmentaires précoces et risque élevé de cancers cutanés/oculaires chez les personnes atteintes.", "L'atteinte neurologique est généralement absente dans les formes XPC contrairement à certains autres types XP.", "La sévérité dépend des allèles et de l'exposition aux UV."],
+    "diagnosis": ["Si signes : dermatologie/génétique et bilan ophtalmologique ; confirmation moléculaire biallélique.", "Tests fonctionnels de réparation de l'ADN selon indication spécialisée."],
+    "management": ["Si maladie confirmée : photoprotection stricte et surveillance cutanée/oculaire spécialisée.", "Aucune surveillance intensive de XP justifiée par un VUS ou portage récessif isolé."],
+    "interpretation": "Un porteur d'un seul allèle récessif n'a pas le xeroderma pigmentosum.",
+    "sources": [{"label": "MedlinePlus Genetics — XPC", "url": "https://medlineplus.gov/genetics/gene/xpc/"}]
+  },
+  "XYLT2": {
+    "title": "Syndrome spondylo-oculaire",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare établie.",
+    "phenotype": ["Fragilité osseuse et fractures vertébrales/de membres, avec petite taille/déformations.", "Cataracte ou autres anomalies oculaires et surdité possibles.", "Atteinte cardiaque dans certaines formes ; expressivité variable."],
+    "diagnosis": ["Si signes : génétique clinique, bilan osseux/orthopédique, ophtalmologie et audiologie.", "Confirmer deux allèles en trans ; examen cardiaque si indiqué par le tableau."],
+    "management": ["Si maladie confirmée : prévention et traitement des fractures, soins oculaires/auditifs.", "Traitements osseux éventuels décidés en centre spécialisé ; pas de bisphosphonate sur VUS seul."],
+    "interpretation": "Le spectre multiviscéral se vérifie cliniquement, il n'est pas une prédiction automatique.",
+    "sources": [{"label": "Étude primaire — XYLT2 et syndrome spondylo-oculaire", "url": "https://pubmed.ncbi.nlm.nih.gov/26027496/"}, {"label": "Variabilité intrafamiliale XYLT2", "url": "https://pubmed.ncbi.nlm.nih.gov/30496831/"}]
+  },
+  "YME1L1": {
+    "title": "Mitochondriopathie avec atrophie optique liée à YME1L1",
+    "inheritance": "Autosomique récessive dans les cas publiés",
+    "evidence": "Association émergente/rare, petit nombre de familles.",
+    "phenotype": ["Développement moteur retardé, faiblesse/hypotonie et ataxie dès l'enfance dans les cas décrits.", "Atrophie du nerf optique et baisse visuelle.", "Le spectre naturel et la sévérité restent peu définis."],
+    "diagnosis": ["Si tableau compatible : neurologie/centre mitochondrial et examen ophtalmologique.", "Confirmer les deux allèles et les preuves spécifiques au mécanisme de maturation de la protéine."],
+    "management": ["Si diagnostic confirmé : soins visuels, rééducation et prise en charge mitochondriale symptomatique.", "Aucun traitement YME1L1 curatif établi dans l'étude primaire."],
+    "interpretation": "Ne pas extrapoler l'allèle fondateur publié à tous les faux-sens ou LoF prédits.",
+    "sources": [{"label": "Étude primaire — YME1L1", "url": "https://pubmed.ncbi.nlm.nih.gov/27495975/"}]
+  },
+  "ZBTB42": {
+    "title": "Syndrome de contractures congénitales létales type 6",
+    "inheritance": "Autosomique récessive dans la famille initiale",
+    "evidence": "Association limitée à un très petit nombre de cas ; mécanisme allèle-spécifique à réévaluer.",
+    "phenotype": ["Diminution des mouvements fœtaux et contractures multiples.", "Hydramnios et complications périnatales sévères dans les cas publiés.", "L'étude initiale ne permet pas de prédire ce tableau pour toute variante rare ZBTB42."],
+    "diagnosis": ["Si anomalies fœtales compatibles : médecine fœtale/génétique, imagerie et recherche des nombreuses causes d'akinésie.", "Confirmer les deux allèles, la phase et les données fonctionnelles du variant exact."],
+    "management": ["Si cause confirmée : conseil génétique et prise en charge obstétricale/périnatale selon le tableau.", "Pas de décision reproductive fondée sur un VUS ZBTB42 seul."],
+    "interpretation": "La rareté et une annotation de conséquence ne suffisent pas à établir un risque létal.",
+    "sources": [{"label": "Étude primaire — ZBTB42 et LCCS6", "url": "https://pubmed.ncbi.nlm.nih.gov/25055871/"}, {"label": "GTR — LCCS6", "url": "https://www.ncbi.nlm.nih.gov/gtr/conditions/C4015686/"}]
+  },
+  "GOT2": {
+    "title": "Encéphalopathie du transport malate-aspartate liée à GOT2",
+    "inheritance": "Autosomique récessive",
+    "evidence": "Association rare, maladie potentiellement traitable dans les cas publiés.",
+    "phenotype": ["Retard du développement, microcéphalie et épilepsie précoce dans les patients décrits.", "Anomalies métaboliques incluant perturbation de la synthèse de sérine.", "La réponse thérapeutique publiée ne s'extrapole pas à un porteur hétérozygote."],
+    "diagnosis": ["Si signes : neurologie et centre de métabolisme, bilan métabolique ciblé.", "Confirmer les deux allèles et l'imputabilité clinique/fonctionnelle."],
+    "management": ["Si maladie confirmée : sérine et pyridoxine ont amélioré l'épilepsie chez des patients publiés ; protocole spécialisé avec surveillance.", "Ne pas entreprendre une supplémentation à forte dose sur la base d'un VUS."],
+    "interpretation": "Le traitement publié concerne des personnes atteintes d'un déficit biallélique confirmé.",
+    "sources": [{"label": "Étude primaire — encéphalopathie GOT2 traitable", "url": "https://pubmed.ncbi.nlm.nih.gov/31422819/"}]
+  }
+}
