@@ -14,6 +14,8 @@ from collections import defaultdict
 from html import escape
 from urllib.parse import urlsplit
 
+from .report_panels import reportable_polygenic_results
+
 
 VARIANT_COLUMNS = {
     "gene": "Gène", "rsid": "Marqueur", "chrom": "Chr.", "pos": "Position",
@@ -33,7 +35,7 @@ KIND_ALIASES = {
 }
 KIND_LABELS = {
     "genetic": "Résultats génétiques ciblés", "technical": "Observation technique",
-    "score": "Score indisponible", "external": "Rapport externe — non reproduit",
+    "score": "Score qualifié",
 }
 STATUS_LABELS = {
     "called": "Appel explicite", "observed": "Observé", "provisional": "À confirmer",
@@ -55,11 +57,12 @@ def render_panel_dashboard(panels: list[dict]) -> str:
         ``status``, ``summary`` et ``interpretation_fr``. ``variants`` contient
         les lignes source et ``sources`` des dictionnaires ``title/url``.
         Les champs des variants sont facultatifs : voir ``VARIANT_COLUMNS``.
-        ``kind`` distingue genetic, technical, score et external (des alias
-        documentés dans ``KIND_ALIASES`` sont acceptés). Un panel score demande
-        ``qualified=True`` ET un statut validated/qualified/available pour
-        afficher son résumé qualifié ; autrement aucun score individuel n'est
-        déduit. ``provenance_fr`` est un texte facultatif de traçabilité.
+        ``kind`` distingue genetic, technical et score (des alias documentés
+        dans ``KIND_ALIASES`` sont acceptés). Les panels external sont exclus,
+        y compris de leurs JSON/CSV embarqués. Un score exige ``qualified=True``,
+        un statut validated/qualified/available et ``qualification_evidence``
+        admis par ``reportable_polygenic_results`` ; autrement il reste hors
+        rapport. ``provenance_fr`` est un texte facultatif de traçabilité.
 
     Returns
     -------
@@ -76,7 +79,16 @@ def render_panel_dashboard(panels: list[dict]) -> str:
     ne sont calculés ici. Les entrées ne sont jamais modifiées.
     """
 
-    prepared = [_prepare_panel(panel) for panel in panels]
+    prepared = []
+    for panel in panels:
+        kind = KIND_ALIASES.get(str(panel.get("kind", "")).lower())
+        if kind == "external":
+            continue  # Ni contenu caché, ni données exportables du fournisseur.
+        if kind == "score" and not (panel.get("qualified") is True
+                and panel.get("status") in {"validated", "qualified", "available"}
+                and reportable_polygenic_results({"scores": [panel.get("qualification_evidence", {})]})):
+            continue  # Les audits de scores sont consultés séparément.
+        prepared.append(_prepare_panel(panel))
     if len({panel["id"] for panel in prepared}) != len(prepared):
         raise ValueError("Chaque panel doit avoir un id unique dans ce tableau.")
     grouped = defaultdict(list)
@@ -111,7 +123,6 @@ def render_panel_dashboard(panels: list[dict]) -> str:
                          f'aria-pressed="false">{escape(category)} <span>{len(items)}</span></button>')
     fragments.extend(['</div><label class="jp-search">Rechercher un panel ou un marqueur'
                       '<input type="search" data-panel-search-input placeholder="Gène, sujet, rsID…" autocomplete="off"></label>',
-                      '<label class="jp-audit-toggle"><input type="checkbox" data-panel-include-audit> Inclure les panels non évalués et audits de scores</label>',
                       f'<p class="jp-filter-count" data-panel-count aria-live="polite">{len(prepared)} panels affichés</p></div>',
                       '<p class="jp-empty" data-panel-no-results hidden>Aucun panel ne correspond à ces filtres.</p>',
                       '<div class="jp-category-groups">'])
@@ -167,7 +178,7 @@ def _prepare_panel(panel: dict) -> dict:
         else row.get(key) not in (None, "", []) for row in variants)]
     if variants and not columns:
         columns = ["gene", "rsid", "genotype", "status"]
-    qualified = kind == "score" and panel.get("qualified") is True and panel["status"] in {"validated", "qualified", "available"}
+    qualified = kind == "score" and bool(reportable_polygenic_results({"scores": [panel.get("qualification_evidence", {})]}))
     return {**panel, "kind": kind, "variants": variants, "sources": sources,
             "qualified": qualified, "columns": columns, "payload": payload,
             "html_id": "jp-panel-" + hashlib.sha256(panel["id"].encode()).hexdigest()[:16]}
@@ -177,14 +188,11 @@ def _render_panel(panel: dict) -> str:
     """Rendre le résumé et les lignes initiales d'un panel, toutes données embarquées."""
 
     kind = panel["kind"]
-    label = "Score fourni — qualification déclarée" if panel["qualified"] else KIND_LABELS[kind]
+    label = "Score reproduit et qualifié" if panel["qualified"] else KIND_LABELS[kind]
     if kind == "genetic" and panel["status"] == "research_only":
         label = "Association publiée — exploratoire"
     status_label = STATUS_LABELS.get(panel["status"], panel["status"])
     summary = panel["summary"]
-    if kind == "score" and not panel["qualified"]:
-        summary = "Les données disponibles ne permettent pas d’afficher un score individuel qualifié."
-        status_label = "Qualification insuffisante pour un score local"
     search = " ".join([panel["title"], panel["category"], panel["summary"],
                        *[str(row.get(key) or "") for row in panel["variants"] for key in ("gene", "rsid")]])
     fragments = [f'<details id="{panel["html_id"]}" class="jp-panel jp-panel--{kind}" '
@@ -200,31 +208,12 @@ def _render_panel(panel: dict) -> str:
                  f'<span class="jp-panel-preview">{escape(summary)}</span>'
                  '<span class="jp-panel-open">Explorer ce panel <span aria-hidden="true">↗</span></span></summary>',
                  '<div class="jp-panel-content">']
-    if kind == "external":
-        fragments.append('<p class="jp-attribution">Information attribuée au rapport du fournisseur : '
-                         'elle n’a pas été reproduite ni validée par notre calcul local.</p>')
-    if kind == "score" and not panel["qualified"]:
-        fragments.append(f'<p class="jp-evidence-note"><strong>État documenté :</strong> {escape(panel["summary"])}</p>')
     fragments.append(f'<p class="jp-interpretation">{escape(panel["interpretation_fr"])}</p>')
     if panel.get("download_csv"):
         download_id = panel["html_id"] + "-csv"
         fragments.append(f'<p><a id="{download_id}" class="jp-full-csv" href="#{download_id}" '
                          f'data-companion-file="{escape(panel["download_csv"], quote=True)}" download>'
                          + escape(panel.get("download_label", "Exporter toutes les observations explicites du modèle (CSV) ↓")) + '</a></p>')
-    explanatory = [row for row in panel["variants"] if row.get("explanation_fr")]
-    if explanatory:
-        fragments.append('<div class="jp-explanations"><h5>Comprendre chaque marqueur</h5>')
-        for row in explanatory:
-            fragments.append('<details class="explanation prose"><summary>'
-                f'{escape(str(row.get("phenotype") or row.get("gene") or "Marqueur"))}</summary>'
-                f'<p><strong>Résultat du fournisseur :</strong> {escape(str(row.get("reported_genotype") or "non renseigné"))}.</p>'
-                f'<p class="jp-attribution">{escape(str(row.get("provider_label_fr") or "Interprétation attribuée au fournisseur, non validée localement."))}</p>'
-                f'<p class="jp-evidence-note">{escape(_display_value(row.get("quality_issues")))}</p>'
-                f'<p>{escape(row["explanation_fr"])}</p>'
-                f'<p><strong>Suite possible :</strong> {escape(str(row.get("next_steps_fr") or "à préciser"))}</p>'
-                f'<p class="jp-provenance">{escape(str(row.get("gene") or ""))} · {escape(str(row.get("rsid") or "diplotype déclaré"))} '
-                f'· page {escape(str(row.get("source_page") or ""))}</p></details>')
-        fragments.append('</div>')
     if panel.get("provenance_fr"):
         fragments.append(f'<p class="jp-provenance">{escape(str(panel["provenance_fr"]))}</p>')
     variants = panel["variants"]

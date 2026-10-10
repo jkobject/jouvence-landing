@@ -51,8 +51,11 @@ lisibles ou si plusieurs pages sont blanches.
 Un percentile théorique fondé sur Hardy–Weinberg et indépendance des loci est
 explicitement distingué d'une calibration empirique adaptée à la population.
 Même une calibration empirique ne constitue pas, seule, une probabilité absolue
-de maladie. Les scores du fournisseur hors ±1 sigma peuvent être consultés dans
-un espace attribué, sans passer dans la synthèse des scores locaux qualifiés.
+de maladie. Un résultat du fournisseur ne figure dans le rapport personnel que
+si sa reproduction indépendante et sa qualification ont été vérifiées. Sinon,
+il reste dans un audit séparé, même lorsque son percentile dépasse ±1 sigma.
+Ce retrait concerne aussi les tableaux et CSV du rapport, ses annexes et ses
+pièces jointes. Un calcul partiel n'est pas une reproduction du modèle complet.
 
 La navigation par panels propose un export CSV complet de ses lignes source,
 avec protection contre les formules de tableur. Pour un grand modèle, annoncer
@@ -328,8 +331,9 @@ Le filtre éditorial est **strictement au-delà de ±1 sigma** : `abs(z) > 1`,
 ou un intervalle entièrement au-dessus de +1 ou au-dessous de −1. Il ne suffit
 pas à rendre un score valide. Un sous-score dont les sommes ont été vérifiées
 contre un logiciel indépendant n'est pas automatiquement un substitut validé
-du PGS publié. Ces résultats de recherche restent en annexe sans percentile
-personnel en synthèse tant que leur performance prédictive n'est pas validée.
+du PGS publié. Ces résultats de recherche restent dans un audit privé séparé,
+hors du rapport personnel, tant que leur reproduction et leur qualification
+prédictive ne sont pas validées.
 
 Un percentile signifie « position du score dans la population de référence ».
 Ce n'est ni une probabilité de développer une maladie ni un risque à vie.

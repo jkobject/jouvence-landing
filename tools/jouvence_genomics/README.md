@@ -226,6 +226,14 @@ dans l'HTML, ni embarquées dans ses pièces jointes, ni ajoutées aux CSV des p
 Les génotypes du fournisseur restent attribués à ce fournisseur ; les critères
 de qualité et conclusions des analyses locales ne sont pas modifiés.
 
+Le rapport personnel n'affiche aucun résultat importé non reproduit
+indépendamment, même si le document fournit un percentile hors ±1 sigma.
+Les PDF/HTML, les scores incomplets et leurs blocages restent dans l'audit
+privé séparé, pas dans les panels, CSV ou pièces jointes du rapport personnel.
+Une somme recalculée sur quelques variants n'est pas un PGS complet ; la
+reproduction arithmétique et la qualification d'un résultat sont deux contrôles
+distincts.
+
 `supplementary_results` de `build_genomic_reports()` associe à chaque nom
 d'échantillon les chemins JSON `dante_html`, `dante_comparison`, `pdf_reports`
 (liste), `pdf_comparison`, `associations` et `exact_polygenic`. Les SHA-256
@@ -235,10 +243,70 @@ document externe à une personne par la simple proximité de son nom de fichier.
 Le dashboard offre filtres de catégories, recherche, explications françaises,
 animations respectant `prefers-reduced-motion`, tableaux progressifs et CSV UTF-8.
 Les champs supplémentaires restent dans le CSV ; les cellules pouvant être des
-formules sont neutralisées. Les panels sans score qualifié sont masqués par défaut,
-mais leur audit est accessible. Pour les gros modèles, un aperçu limité est séparé
+formules sont neutralisées. Les scores non qualifiés restent entièrement hors
+rapport ; leurs audits se consultent séparément. Pour les gros modèles, un aperçu limité est séparé
 du CSV complet des observations explicites ; les sites inconnus restent dans
 l'audit du modèle. Aucun dosage manquant n'est complété.
+
+### Essais de reproduction indépendants, sans BAM
+
+`reproduction.py` fournit trois fonctions publiques : `evaluate_site_filter()`,
+`audit_pgs_reproduction()` et `verify_subset_with_plink()`. Elles distinguent
+explicitement les appels observés, les dosages inconnus et la vérification
+arithmétique. Le filtre original reste la règle par défaut ; l'expérience
+`gatk_hard_filter_2025` applique des seuils publiés aux annotations disponibles,
+sans modifier les VCF ni les critères du rapport clinique.
+
+```python
+from tools.jouvence_genomics.reproduction import audit_pgs_reproduction, verify_subset_with_plink
+
+audit = audit_pgs_reproduction(
+    [Path("private/sample.vcf.gz")],
+    [Path("data/reference/PGS000001_hmPOS_GRCh37.txt.gz")],
+    output_directory=Path("analysis/reproduction"),
+)
+validation = verify_subset_with_plink(
+    Path("analysis/reproduction/PGS000001.json"),
+    Path("private/tools/plink2"), Path("analysis/reproduction/plink"),
+)
+```
+
+Une sous-somme vérifiée par PLINK n'est ni un PGS complet, ni un percentile,
+ni une reproduction du chiffre commercial. Les sites inconnus restent bornés,
+jamais imputés comme référence. Un score exploitable demande ensuite une
+calibration et une validation prédictive adaptées, distinctes de ce test.
+
+`pharmacogenomic_reproduction.py` fournit `prepare_pharmcat_runtime()` et
+`reproduce_pharmacogenomics()`. Le runtime public PharmCAT/JDK est épinglé par
+SHA-256 et isolé dans le cache ; cet adaptateur est actuellement macOS arm64.
+Il projette seulement des SNP GRCh37 existants vers GRCh38, avec mapping unique,
+réciproque et contrôle des références publiques. Il exécute le matcher officiel
+en mode non phasé, sans reporter clinique ni recommandation de posologie.
+Cet essai accepte seulement les GT diploïdes. Les échecs FORMAT/FT sont
+exclus ; les filtres individuels absents/non évalués restent explicitement signalés.
+
+```python
+from tools.jouvence_genomics.pharmacogenomic_reproduction import reproduce_pharmacogenomics
+
+pgx_audit = reproduce_pharmacogenomics(
+    Path("analysis/sample/results.json"),
+    Path("data/reference/pharmcat"), Path("analysis/sample/pharmcat_audit"),
+)
+```
+
+Utiliser `uv run --with pyliftover==0.4.1` pour cet adaptateur. Les références
+publiques sont préparées avant la lecture des génotypes ; aucun génome n'est
+transmis. Les SNP manquants, indels, HLA et CNV restent inconnus. Un diplotype
+compatible avec des appels incomplets n'est pas un diplotype confirmé.
+
+Ces deux essais acceptent actuellement des entrées **GRCh37** vérifiées. Pour
+un futur VCF GRCh38, le moteur et les poids devront correspondre à cet assemblage.
+Pour un VCF GRCh37, les poids PGS Catalog GRCh37 évitent un liftOver inutile.
+Un liftOver ne remappe pas les lectures, ne rappelle aucun génotype et ne
+récupère pas les données perdues. Même un nouveau VCF GRCh38 de variants seuls
+ne documente pas ses positions absentes : demander si possible un gVCF avec
+blocs de référence et métriques de qualité, ou un VCF tous-sites réellement
+génotypé aux loci ciblés. Un BAM/CRAM indexé permettrait un rappel ultérieur.
 
 ### Catalogue d'associations et références d'ascendance alternatives
 

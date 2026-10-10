@@ -2,17 +2,84 @@
 
 import unittest
 import tempfile
+import hashlib
+import json
+from copy import deepcopy
 from pathlib import Path
+from unittest.mock import patch
 
 from tools.jouvence_genomics.html_reporting import (
     collect_variant_records, render_couple_section, render_trait_sections, _structural_section,
-    write_french_html, _external_coverage_section,
+    write_french_html, _external_coverage_section, build_genomic_reports, _population_audit,
 )
 from tools.jouvence_genomics.traits import load_trait_markers
 from tools.jouvence_genomics.catalogs import review_stars
 
 
 class HtmlReportTests(unittest.TestCase):
+    def test_unqualified_scores_are_not_an_html_audit_section(self):
+        html = _population_audit({"polygenic": {"scores": [{"status": "raw_complete_uncalibrated",
+            "trait_fr": "PRIVATE_INCOMPLETE_SCORE", "pgs_id": "PGS000001", "n_variants": 10}]}}, {})
+        self.assertEqual(html, "")
+
+    @unittest.skipUnless((Path.home() / ".codex/plugins/cache/ci-skills/core-skills/1.1.376/skills/html-report/scripts").is_dir(),
+                         "Le test de rendu nécessite le renderer HTML local documenté.")
+    def test_default_reports_exclude_external_claims_and_unqualified_attachments(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            analyses = []
+            inputs = []
+            for name in ("First", "Second"):
+                vcf = root / (name + ".vcf")
+                vcf.write_text("##fileformat=VCFv4.2\n#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t" + name + "\n")
+                inputs.append({"path": str(vcf), "sha256": hashlib.sha256(vcf.read_bytes()).hexdigest()})
+                result = {"sample_name": name, "all_reviewed_clinvar_matches": [], "novel_variant_analysis": {},
+                          "qc": [], "provenance": {"inputs": [inputs[-1]], "run_utc": "2026-10-10T00:00:00Z"}}
+                path = root / (name + ".json")
+                path.write_text(json.dumps(result))
+                analyses.append(path)
+            couple = root / "couple.json"
+            couple.write_text(json.dumps({"first_name": "First", "second_name": "Second", "shared_recessive_genes": []}))
+            original_pdf = root / "provider.pdf"
+            original_pdf.write_bytes(b"PDF fixture preserved privately")
+            document = {"filename": original_pdf.name, "path": str(original_pdf),
+                        "sha256": hashlib.sha256(original_pdf.read_bytes()).hexdigest(),
+                        "findings": [{"title": "PRIVATE_EXTERNAL_PDF_CLAIM", "genotype_reported": "T/T"} for _ in range(49)]}
+            external = {"documents": [{"name": "provider.html", "sha256": "source"}], "panels": [
+                {"id": "vendor-prs", "title": "PRIVATE_EXTERNAL_PGS_CLAIM", "reported_z": 9,
+                 "reported_percentile": 99.9, "pgs_id": "PGS999999"}]}
+            polygenic = {"sample_name": "First", "input_files": [inputs[0]], "scores": [
+                {"status": "raw_complete_uncalibrated", "show_in_summary": False,
+                 "trait_fr": "PRIVATE_INCOMPLETE_SCORE", "pgs_id": "PGS999998", "n_variants": 100}]}
+            documents = {"dante_html": external, "dante_comparison": {"input_files": [inputs[0]], "comparisons": []},
+                         "pdf_reports": document, "pdf_comparison": {"input_files": [inputs[0]], "comparisons": []},
+                         "exact_polygenic": polygenic, "polygenic": polygenic}
+            paths = {}
+            for key, value in documents.items():
+                path = root / (key + ".json")
+                path.write_text(json.dumps(value))
+                paths[key] = path
+            supplementary = {key: ([path] if key == "pdf_reports" else path) for key, path in paths.items() if key != "polygenic"}
+            traits = {"markers": [], "summary": {"markers_tested": 0}, "panel_verified_at": "2026-10-10", "not_evaluated": []}
+            scripts = Path.home() / ".codex/plugins/cache/ci-skills/core-skills/1.1.376/skills/html-report/scripts"
+            with patch("tools.jouvence_genomics.html_reporting.audit_traits", side_effect=[deepcopy(traits), deepcopy(traits)]):
+                outputs = build_genomic_reports(*analyses, couple, root / "reports", skill_scripts=scripts,
+                    polygenic_results={"First": paths["polygenic"]}, supplementary_results={"First": supplementary})
+            from bs4 import BeautifulSoup
+            page = outputs["personne_1"].read_text()
+            for token in ("PRIVATE_EXTERNAL_PDF_CLAIM", "PRIVATE_EXTERNAL_PGS_CLAIM", "PRIVATE_INCOMPLETE_SCORE",
+                          "PGS999999", "PGS999998", 'id="sources-fournisseur"', 'id="scores-audit"'):
+                self.assertNotIn(token, page)
+            parsed = BeautifulSoup(page, "html.parser")
+            metadata = json.loads(parsed.select_one("#report-metadata").string)
+            self.assertTrue(set(metadata["attachments_sha256"]).isdisjoint(
+                {"dante_html.json", "dante_comparison.json", "pdf_reports.json", "pdf_comparison.json", "exact_polygenic.json", "polygenic.json"}))
+            self.assertFalse(parsed.select("a[data-companion-file]"))
+            folder = outputs["personne_1"].parent
+            self.assertEqual(json.loads((folder / "pdf_reports.json").read_text()), [document])
+            self.assertEqual(json.loads((folder / "dante_html.json").read_text()), external)
+            self.assertEqual(json.loads((folder / "polygenic.json").read_text()), polygenic)
+
     def test_import_coverage_does_not_render_source_comparisons(self):
         extras = {"dante_html": {"documents": ["example.html"], "panels": []},
                   "dante_comparison": {"counts": {"discordant": 1}, "comparisons": [

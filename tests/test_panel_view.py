@@ -71,20 +71,29 @@ class PanelViewTests(unittest.TestCase):
     def test_unqualified_scores_never_acquire_a_global_numeric_result(self):
         html = render_panel_dashboard([self.panel(kind="score", status="research_only",
                                                  qualified=True, variants=[{"dosage": 1, "weight": 2.5, "contribution": 2.5}])])
-        self.assertIn("Score indisponible", html)
-        self.assertIn("pas d’afficher un score individuel qualifié", html)
-        self.assertNotIn("Score fourni — qualification déclarée", html)
+        self.assertEqual(self.parse(html).panels, [])
+        self.assertNotIn("Score indisponible", html)
+        self.assertNotIn("data-panel-export", html)
+        self.assertNotIn("2.5", html)
         self.assertNotIn("<svg", html)
         self.assertNotIn("<canvas", html)
         self.assertNotIn("percentile-result", html)
 
-    def test_external_results_are_attributed_not_local_qualifications(self):
+    def test_external_results_are_not_present_even_with_qualification_flag(self):
         html = render_panel_dashboard([self.panel(kind="external", qualified=True, status="available",
                                                  summary="Rapport Dante : 94e percentile indiqué.")])
-        self.assertIn("Rapport externe — non reproduit", html)
-        self.assertIn("Information attribuée au rapport du fournisseur", html)
-        self.assertIn("94e percentile indiqué", html)
-        self.assertNotIn("Score fourni — qualification déclarée", html)
+        self.assertEqual(self.parse(html).panels, [])
+        self.assertNotIn("Rapport Dante", html)
+        self.assertNotIn("94e percentile", html)
+        self.assertNotIn("Rapport externe", html)
+
+    def test_qualified_boolean_alone_cannot_authorize_a_score(self):
+        panel = self.panel(kind="score", status="qualified", qualified=True,
+                           summary="PRIVATE_UNPROVEN_SCORE", variants=[{"contribution": 123}])
+        html = render_panel_dashboard([panel])
+        self.assertEqual(self.parse(html).panels, [])
+        self.assertNotIn("PRIVATE_UNPROVEN_SCORE", html)
+        self.assertNotIn("data-panel-export", html)
 
     def test_invalid_links_nonfinite_data_and_duplicate_ids_fail(self):
         for panel in [self.panel(sources=[{"title": "Mauvais", "url": "javascript:alert(1)"}]),

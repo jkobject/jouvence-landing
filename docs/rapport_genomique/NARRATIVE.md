@@ -44,20 +44,22 @@ sa performance prédictive clinique.
 
 ## Panels et audit séparé des rapports du fournisseur
 
-Les rapports PDF/HTML sont importés comme données non exécutées. Leurs résultats
-restent attribués au fournisseur et confrontés aux génotypes explicitement
-présents dans les VCF, avec provenance par document et par page. Cette comparaison
-reste dans un audit technique séparé, communiqué à part. Le rapport personnel
-traduit les explications et offre un export CSV par panel, sans tableau de
-discordances ni mélange des génotypes de deux sources. Les réserves cliniques
-et techniques qui changent la fiabilité d'une observation locale restent visibles.
-Elle distingue le périmètre annoncé par un fournisseur du contenu réellement
+Les rapports PDF/HTML sont importés comme données non exécutées, avec provenance
+par document et par page, puis confrontés aux génotypes explicitement présents
+dans les VCF. Imports et comparaisons restent dans un audit technique séparé.
+Le rapport personnel ne réaffiche aucun résultat du fournisseur non reproduit
+indépendamment. Le retrait porte aussi sur les tableaux, CSV et pièces jointes
+de l'HTML, pas seulement sur les badges. Les réserves cliniques et techniques
+qui changent la fiabilité d'une observation réellement extraite des données
+locales restent visibles ; une observation n'est pas un diagnostic.
+L'audit distingue le périmètre annoncé par un fournisseur du contenu réellement
 extractible : une page blanche ou un test non pris en charge n'est pas un négatif.
 
 L'enrichissement GWAS sépare associations, rsID, publications, mesures étudiées
 et appels explicites. Il ne transforme pas des milliers d'associations en
-milliers de maladies détectées. Les scores externes hors ±1 sigma peuvent être
-inspectés dans une rubrique attribuée et non reproduite ; ils ne deviennent pas
-des scores locaux qualifiés. Les gros modèles disposent d'une table limitée et
+milliers de maladies détectées. Seuls les scores dont la reproduction et la
+qualification ont été vérifiées peuvent figurer dans le rapport personnel,
+avec le seuil de première lecture fixé à ±1 sigma. Les calculs incomplets et
+leurs blocages restent dans l'audit séparé. Les gros modèles disposent d'une table limitée et
 d'un CSV complet des observations, sans alourdir l'HTML par des copies du
 catalogue entier.

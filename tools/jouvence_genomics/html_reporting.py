@@ -27,7 +27,7 @@ from .catalogs import review_stars
 from .vcf import normalize_allele
 from .patient_view import (select_patient_signals, render_patient_sections,
                           render_population_results, ancestry_plot_spec)
-from .report_panels import build_report_panels
+from .report_panels import build_report_panels, reportable_polygenic_results
 from .panel_view import render_panel_dashboard
 
 
@@ -195,7 +195,7 @@ def render_variant_catalog(records: list[dict], catalog: dict, references: dict)
             }:
                 html.append('<p class="caveat">La prédiction d’épissage/LoF est plausible, mais ni le transcript réellement produit ni la dégradation de l’ARN ne sont démontrés. Ce signal n’est pas un portage récessif établi.</p>')
             if gene in {"TUBB8", "PRSS1"} and tier == "technical" and clinical:
-                html.append('<p class="caveat">Pourquoi ce résultat peut différer d’un rapport commercial : '
+                html.append('<p class="caveat">Pourquoi cet appel demande une vérification technique : '
                             'le variant est bien trouvé dans notre catalogue, mais l’appel de cet échantillon '
                             'n’est pas retenu pour qualité insuffisante. Le classement ClinVar ne valide pas les lectures. '
                             'Les métriques ci-dessus et les lectures d’un BAM, ou une confirmation indépendante, '
@@ -407,8 +407,9 @@ def build_genomic_reports(
         Audits privés, indexés par personne puis par type : associations,
         exact_polygenic, dante_html, dante_comparison, pdf_reports (liste),
         pdf_comparison, ancestry_sensitivity. Les audits VCF doivent porter les mêmes empreintes.
-        Les documents externes restent attribués au fournisseur, sans les
-        transformer en résultats locaux ou compléter les génotypes absents.
+        Les documents externes sont conservés dans leurs JSON privés séparés,
+        jamais affichés, liés ou joints à l'HTML. Les scores non qualifiés
+        suivent le même périmètre d'audit hors rapport.
 
     Returns
     -------
@@ -503,6 +504,16 @@ def build_genomic_reports(
             if any((row["source_document"], row["source_sha256"]) not in documents
                    for row in extras["pdf_comparison"]["comparisons"]):
                 raise ValueError("Comparaison liée à une autre révision de PDF")
+        # Les imports et les scores incomplets restent disponibles dans leurs
+        # audits privés ; aucune valeur fournisseur ne franchit ce périmètre.
+        report_extras = {key: extras[key] for key in ("ancestry", "associations", "ancestry_sensitivity") if key in extras}
+        score_audit = extras.get("polygenic")
+        qualified_scores = reportable_polygenic_results(score_audit)
+        if qualified_scores is None:
+            score_audit = extras.get("exact_polygenic")
+            qualified_scores = reportable_polygenic_results(score_audit)
+        if qualified_scores is not None:
+            report_extras["polygenic"] = qualified_scores
         plots = {}
         if extras.get("ancestry", {}).get("status") == "reference_affinity_supported":
             if ancestry_reference_projection is None:
@@ -510,7 +521,7 @@ def build_genomic_reports(
             projection = json.loads(Path(ancestry_reference_projection).read_text())
             plots["ancestry-space"] = ancestry_plot_spec(extras["ancestry"], projection)
         signals = select_patient_signals(records, traits)
-        for score in extras.get("exact_polygenic", {}).get("scores", []):
+        for score in (qualified_scores or {}).get("scores", []):
             if score.get("trace_csv_path"):
                 source_csv = Path(score["trace_csv_path"])
                 with source_csv.open("rb") as handle:
@@ -540,10 +551,9 @@ def build_genomic_reports(
                     '<p class="caveat">Ce rapport n’est pas un diagnostic. Les observations provisoires demandent une confirmation ; '
                     'les traitements et antécédents n’ont pas été renseignés.</p></section>',
                     render_panel_dashboard(build_report_panels(records, traits, catalog,
-                        polygenic=extras.get("exact_polygenic") or extras.get("polygenic"), supplementary=extras)),
-                    _external_coverage_section(extras, records),
+                        polygenic=qualified_scores, supplementary=report_extras)),
                     render_patient_sections(signals, catalog, references),
-                    render_population_results(extras.get("ancestry"), extras.get("polygenic"), references),
+                    render_population_results(extras.get("ancestry"), qualified_scores, references),
                     _ancestry_sensitivity_section(extras.get("ancestry_sensitivity"))]
         sections.append('<section id="annexes" data-document-only><h2>Détails et transparence de l’analyse</h2>'
                         f'<details class="audit-details"><summary>Ouvrir l’annexe : {len(records)} observations, qualité, VUS et sites non évalués</summary>'
@@ -554,27 +564,30 @@ def build_genomic_reports(
                         + '<section id="variants"><h2>Catalogue détaillé de chaque observation</h2>'
                         + render_variant_catalog(records, catalog, references) + '</section>'
                         + render_trait_sections(traits, references)
-                        + _population_audit(extras, references)
+                        + _population_audit(report_extras, references)
                         + '</details></section>')
         sections.append(_provenance_section(result, source_paths[index - 1], frozen_hashes, traits, report_date))
         md = "\n".join(sections)
         (folder / "report.md").write_text(md, encoding="utf-8")
         _save_variant_table(records, folder / "variants.csv")
         metadata = {"title": f"Vos résultats — {name}", "subtitle": "Ce qui compte pour vous, puis les détails pour comprendre et vérifier.",
-                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4.1 · panels et sources distinctes",
+                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4.2 · résultats locaux vérifiables",
                     "references": references, "analysis_input_sha256": frozen_hashes,
                     "clinical_cards_sha256": hashlib.sha256(json.dumps(catalog, sort_keys=True).encode()).hexdigest(),
                     "counts": counts, "patient_signals": {"clinical": len(signals["clinical"]), "validation": len(signals["validation"]), "profiles": signals["profiles"]},
                     "additional_results_sha256": {key: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest() for key, value in extras.items()},
-                    "clinical_history": "non renseignée"}
+                    "clinical_history": "non renseignée",
+                    "report_scope": "Résultats locaux et scores reproduits/qualifiés uniquement ; imports et audits non qualifiés séparés."}
         structural_data = json.dumps(result.get("structural_candidates", []), ensure_ascii=False, indent=2).encode()
         for key, value in extras.items():
             (folder / (key + ".json")).write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
-        # Les audits volumineux et comparaisons fournisseur/VCF restent séparés.
-        # Les panels présentent chaque source sans afficher ces comparaisons.
-        embedded_extras = {key: value for key, value in extras.items()
-                           if key not in {"associations", "exact_polygenic", "pdf_reports", "ancestry_sensitivity",
-                                          "dante_comparison", "pdf_comparison"}}
+        # Liste blanche, également pour les données cachées de l'HTML : les
+        # imports fournisseur et les audits PGS bruts ne sont jamais joints.
+        embedded_extras = {key: value for key, value in report_extras.items() if key in {"ancestry", "polygenic"}}
+        if qualified_scores is not None:
+            (folder / "polygenic.json").write_text(json.dumps(qualified_scores, ensure_ascii=False), encoding="utf-8")
+            # La copie complète reste distincte si elle comporte des exclusions.
+            (folder / "polygenic_audit.json").write_text(json.dumps(score_audit, ensure_ascii=False), encoding="utf-8")
         attachments = {"variants.csv": (folder / "variants.csv").read_bytes(), "traits.json": cache.read_bytes(),
                        "structural_candidates.json": structural_data,
                        **{key + ".json": json.dumps(value, ensure_ascii=False, indent=2).encode() for key, value in embedded_extras.items()}}
@@ -606,7 +619,7 @@ def build_genomic_reports(
     outputs["couple"] = write_french_html(folder, folder / "rapport.html", {
         "title": f"Rapport de couple — {couple['first_name']} et {couple['second_name']}",
         "subtitle": "Une comparaison par maladie et niveau de preuve, avec les limites de phase explicites.",
-        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4.1 · panels et sources distinctes",
+        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4.2 · résultats locaux vérifiables",
         "references": references, "analysis_input_sha256": frozen_hashes,
     }, skill_scripts)
     return outputs
@@ -653,7 +666,7 @@ def _ancestry_sensitivity_section(audit: dict | None) -> str:
 
 
 def _external_coverage_section(extras: dict, records: list[dict]) -> str:
-    """Décrire les documents importés et leurs limites, sans comparaison de GT."""
+    """Décrire un audit privé d'import, jamais appelé par le rapport personnel."""
     if not extras.get("dante_html") and not extras.get("pdf_reports"):
         return ""
     html = ['<section id="sources-fournisseur"><h2>Documents du fournisseur et périmètre des résultats</h2>',
@@ -845,7 +858,11 @@ def _quality_section(result: dict, traits: dict, ancestry: dict | None = None) -
 
 
 def _population_audit(extras: dict, references: dict) -> str:
-    """Rendre visibles les méthodes et exclusions, sans les confondre avec risques."""
+    """Décrire seulement les contrôles locaux et scores qualifiés du rapport.
+
+    Les exclusions et scores non qualifiés restent dans leur audit privé,
+    sans section vide ni lien qui réembarquerait les valeurs écartées.
+    """
 
     text = []
     ancestry = extras.get("ancestry")
@@ -857,22 +874,19 @@ def _population_audit(extras: dict, references: dict) -> str:
                     + _paragraphs(ancestry.get("limitations_fr", []))
                     + _source_links(ancestry.get("sources", []), references)
                     + '<p><a href="ancestry.json">Résultat d’ascendance et contrôles complets</a></p></section>')
-    polygenic = extras.get("polygenic")
+    polygenic = reportable_polygenic_results(extras.get("polygenic"))
     if polygenic:
         rows = []
         for score in polygenic.get("scores", []):
-            state = {"incomplete_not_calibrated": "Incomplet, sans calibration personnelle",
-                     "incomplete_reference_calibrated_bounds_only": "Bornes de recherche seulement",
-                     "research_bounds_not_predictively_validated": "Bornes de recherche, non validées pour prédire la maladie"}.get(score["status"], score["status"])
+            state = "Calcul reproduit et qualifié pour sa référence"
             rows.append(f'<tr><td>{escape(score["trait_fr"])}</td><td>{escape(score["pgs_id"])}</td>'
-                        f'<td>{score.get("usable_genotypes", 0)} / {score["n_variants"]}</td>'
+                        f'<td>{score.get("matched_variants", score.get("usable_genotypes", "non renseigné"))} / {score["n_variants"]}</td>'
                         f'<td>{escape(str(state))}<br>{escape(" ; ".join(score.get("reasons_fr", [])))}</td></tr>')
-        text.append('<section id="scores-audit"><h2>Scores testés et raisons de non-affichage</h2>'
+        text.append('<section id="scores-audit"><h2>Contrôles des scores reproduits et qualifiés</h2>'
                     '<p>Le filtre de synthèse est |z| &gt; 1 dans une référence calibrée. '
                     'Il ne correspond pas à un seuil de signification clinique. Les génotypes absents ne sont pas transformés en référence.</p>'
-                    '<p>La calibration d’un sous-ensemble de recherche peut être vérifiée numériquement sans '
-                    'être validée pour prédire la maladie comme le PGS publié. Les percentiles personnels ne '
-                    'sont pas affichés tant que cette qualification manque ; cela ne signifie pas un score normal.</p>'
+                    '<p>Les scores présents ici ont une preuve arithmétique indépendante et une qualification '
+                    'prédictive pour le score et sa population de référence. Cela ne constitue pas un risque absolu de maladie.</p>'
                     '<div class="table-wrap"><table><thead><tr><th>Sujet</th><th>Modèle</th><th>Sites utilisables / attendus</th><th>État</th></tr></thead><tbody>'
                     + "".join(rows) + '</tbody></table></div>'
                     + _source_links([source for score in polygenic.get("scores", []) for source in score.get("sources", [])], references)
