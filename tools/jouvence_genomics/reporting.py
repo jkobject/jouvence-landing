@@ -25,6 +25,7 @@ def build_results(
     structural_candidates: list[dict[str, object]],
     repeat_analysis: dict[str, object],
     novel_analysis: dict[str, object],
+    sample_name: str = "Dante Labs",
 ) -> tuple[dict[str, object], str]:
     """Attach reproductive estimates and render structured and Markdown output."""
 
@@ -41,6 +42,7 @@ def build_results(
         1 - math.prod(1 - risk for risk in point_risks) if point_risks else None
     )
     result = {
+        "sample_name": sample_name,
         "disclaimer": (
             "Research screening only; not a diagnosis. Confirm every candidate "
             "from reads and in an accredited clinical laboratory."
@@ -77,6 +79,8 @@ def build_results(
             "france_reference": (
                 "gnomAD non-Finnish European proxy, not a French cohort estimate"
             ),
+            "raw_call_filter": "Available GATK SNP/indel hard-filter metrics for FILTER='.' calls",
+            "complex_region_filter": "Nearby indels within 20 bp or >=50 bp require joint haplotype/read review",
         },
     }
     return result, _markdown_report(result)
@@ -128,7 +132,7 @@ def _markdown_report(result: dict[str, object]) -> str:
     novel_recessive_genes = set(novel["additional_recessive_candidate_genes"])
     expanded_recessive_genes = known_recessive_genes | novel_recessive_genes
     lines = [
-        "# Analyse exploratoire Dante Labs",
+        f"# Analyse exploratoire — {result['sample_name']}",
         "",
         "> Recherche uniquement — aucune conclusion clinique ou décision de PGT ne doit reposer sur ce rapport sans confirmation en laboratoire accrédité.",
         "",
@@ -143,12 +147,23 @@ def _markdown_report(result: dict[str, object]) -> str:
             ",", " "
         ),
         f"- Correspondances structurelles ClinVar strictes : {result['structural_summary'].get('strict_clinvar_matches', 0)}",
-        f"- Risque combiné récessif NFE, borne basse : {format_probability(result['combined_offspring_risk_nfe_lower_bound'])}",
+        f"- Risque théorique récessif avec partenaire NFE non testé : {format_probability(result['combined_offspring_risk_nfe_lower_bound'])}",
         "",
         "Deux variants différents dans un gène ne sont jamais appelés homozygotes. Ils sont soit en cis, soit en trans (hétérozygotie composite), soit de phase inconnue.",
         "",
     ]
     lines.extend(_quality_section(result["qc"]))
+    excluded = [item for item in result["all_reviewed_clinvar_matches"]
+                if item.get("quality_flags")]
+    lines.extend(["## Correspondances ClinVar écartées pour qualité", ""])
+    if not excluded:
+        lines.append("Aucune correspondance P/LP écartée par les filtres techniques.")
+    for item in excluded:
+        lines.append(
+            f"- {item['clinvar']['gene']} — `{item['chrom']}:{item['pos']} "
+            f"{item['ref']}>{item['alt']}` ; {' ; '.join(item['quality_flags'])}."
+        )
+    lines.append("")
     lines.extend(["## Résultats récessifs et phasing", ""])
     if not recessive:
         lines.append("Aucun résultat récessif répondant aux filtres stricts.")
@@ -157,6 +172,11 @@ def _markdown_report(result: dict[str, object]) -> str:
     lines.extend(_novel_variant_section(novel))
     lines.extend(_small_variant_section("Candidats dominants", dominant))
     lines.extend(_small_variant_section("Candidats liés à l'X", x_linked))
+    unassigned = [item for item in result["all_reviewed_clinvar_matches"]
+                  if not item.get("quality_flags") and not item["inheritance"]]
+    lines.extend(_small_variant_section(
+        "Correspondances P/LP sans transmission GenCC attribuée", unassigned
+    ))
     lines.extend(_structural_section(result["structural_summary"], structural))
     lines.extend(
         [
@@ -167,12 +187,14 @@ def _markdown_report(result: dict[str, object]) -> str:
             "## Limites déterminantes",
             "",
             "- Une absence dans les VCF variant-only ne prouve pas un génotype de référence fiable.",
-            "- Les CNV/SV Dante n'ont ni caller déclaré, ni support de reads, ni intervalles de confiance, ni QUAL exploitable.",
+        "- Les CNV/SV exigent des fichiers dédiés et une validation des reads. Les fichiers Dante précédemment fournis ont un support technique limité.",
             "- Une correspondance de gène seule n'est pas une classification pathogène ; les correspondances ClinVar structurelles utilisent un seuil strict de 80 % de chevauchement réciproque.",
             "- Un nouveau pLoF est un candidat de recherche, pas un variant pathogène : transcript, mécanisme, NMD, fréquence et appel doivent être revus puis confirmés cliniquement.",
             "- Les missense et indels in-frame restent des VUS, même lorsqu'ils sont rares et situés dans un gène de maladie.",
             "- La phase distante ne peut pas être déduite de deux génotypes `0/1`. Elle exige PID/PS compatible, données parentales, long reads ou autre validation de phase.",
-            "- Les estimations de risque utilisent gnomAD NFE comme proxy français et ne remplacent pas le test de la partenaire.",
+        "- Les chiffres populationnels concernent un partenaire hypothétique. Pour le couple testé, consulter le rapport de comparaison ; NFE est un proxy d'ascendance, pas une cohorte française.",
+        "- Les références sont des instantanés locaux dont les versions figurent dans la provenance JSON ; les classifications peuvent évoluer.",
+        "- Le dépistage des nouveaux variants concerne les gènes autosomiques récessifs et un transcript choisi par gène. Les nouveaux variants dominants/liés à l'X, introniques profonds et régulateurs ne sont pas couverts par ce module.",
             "",
         ]
     )
@@ -184,6 +206,7 @@ def _novel_variant_section(novel: dict[str, object]) -> list[str]:
 
     strict = novel["strict_plof_candidates"]
     vus = novel["protein_altering_vus"]
+    complex_plof = novel.get("complex_plof_candidates", [])
     lines = [
         "## Nouveaux variants codants — analyse sans BAM",
         "",
@@ -200,6 +223,15 @@ def _novel_variant_section(novel: dict[str, object]) -> list[str]:
         lines.append(
             f"- **{item['gene']}** — `{item['chrom']}:{item['pos']} {item['ref']}>{item['alt']}` ; {item['consequence']}{protein} ; GT `{item['genotype']}`, DP {item['DP']}, GQ {item['GQ']} ; {frequency} ; {item['reviewed_plof_variants_in_gene']} précédents LoF P/LP ClinVar revus."
         )
+    lines.extend(["", f"### Signaux pLoF en régions complexes ({len(complex_plof)})", "",
+                  "Ces appels proches ou indels ≥50 pb exigent une reconstruction "
+                  "conjointe du haplotype et une revue des reads. Ils ne sont pas "
+                  "comptés parmi les nouveaux gènes pLoF stricts.", ""])
+    for item in complex_plof:
+        lines.append(f"- **{item['gene']}** — `{item['chrom']}:{item['pos']} "
+                     f"{item['ref']}>{item['alt']}` ; {item['consequence']} ; "
+                     f"DP {item['DP']}, GQ {item['GQ']} ; "
+                     f"{' ; '.join(item['complex_region_flags'])}.")
     lines.extend(
         [
             "",
@@ -212,12 +244,20 @@ def _novel_variant_section(novel: dict[str, object]) -> list[str]:
     for item in vus[:100]:
         frequency = _frequency_text(item)
         protein = f" ; {item['protein_change']}" if item.get("protein_change") else ""
+        clinical = ", ".join(item.get("clinvar_significances", [])) or "absent de ClinVar"
         lines.append(
-            f"- **{item['gene']}** — `{item['chrom']}:{item['pos']} {item['ref']}>{item['alt']}` ; {item['consequence']}{protein} ; {frequency}."
+            f"- **{item['gene']}** — `{item['chrom']}:{item['pos']} {item['ref']}>{item['alt']}` ; {item['consequence']}{protein} ; GT {item['genotype']}, DP {item['DP']}, GQ {item['GQ']} ; {frequency} ; ClinVar : {clinical}."
         )
     if len(vus) > 100:
         lines.append(f"- {len(vus) - 100} VUS supplémentaires sont conservés dans `results.json`.")
+    technical = novel.get("technical_review_candidates", [])
+    lines.extend(["", f"### Candidats écartés par l'audit des appels bruts ({len(technical)})", ""])
+    for item in technical:
+        lines.append(f"- **{item['gene']}** — `{item['chrom']}:{item['pos']} "
+                     f"{item['ref']}>{item['alt']}` ; {' ; '.join(item['quality_flags'])}.")
     lines.extend(["", "### Zygosité et second hit", ""])
+    if not novel.get("recessive_phase_assessments"):
+        lines.append("Aucun nouveau candidat pLoF éligible à une analyse de second hit.")
     for assessment in novel.get("recessive_phase_assessments", []):
         lines.append(f"- **{assessment['gene']}** : `{assessment['status']}`.")
         for pair in assessment["phase_assessments"]:
@@ -232,7 +272,7 @@ def _frequency_text(item: dict[str, object]) -> str:
     """Format global and NFE allele frequencies without treating absence as zero."""
 
     def one(value: object) -> str:
-        return "non observé" if value is None else f"{100 * float(value):.5g} %"
+        return "non renseignée" if value is None else f"{100 * float(value):.5g} %"
 
     return f"AF globale {one(item.get('gnomad_global_af'))}, NFE {one(item.get('gnomad_nfe_af'))}"
 
@@ -243,7 +283,10 @@ def _quality_section(qc: list[dict[str, object]]) -> list[str]:
     lines = ["## Qualité des petits variants", ""]
     for item in qc:
         counts = item["counts"]
-        label = "SNP/SNV" if counts.get("snv_alleles") else "indel"
+        label = "SNP/SNV + indels" if (counts.get("snv_alleles") and
+                                      counts.get("indel_alleles")) else (
+            "SNP/SNV" if counts.get("snv_alleles") else "indel"
+        )
         assessed = counts.get("assessed_heterozygous_balance", 0)
         outside = counts.get("het_balance_outside_0.2_0.8", 0)
         outside_percent = 100 * outside / assessed if assessed else 0
@@ -257,8 +300,15 @@ def _quality_section(qc: list[dict[str, object]]) -> list[str]:
                 ),
             ]
         )
-        if label == "SNP/SNV":
+        if counts.get("snv_alleles"):
             lines.append(f"  Ti/Tv : {item['titv']:.3f}.")
+        lines.append(
+            f"  Allèles SNV : {counts.get('snv_alleles', 0):,} ; "
+            f"autres allèles : {counts.get('indel_alleles', 0):,} ; "
+            f"FILTER=PASS : {counts.get('filter_pass', 0):,} ; "
+            f"filtre non appliqué (.) : {counts.get('filter_not_applied', 0):,} ; "
+            f"filtre échoué : {counts.get('filter_failed', 0):,}."
+        )
     lines.append("")
     return lines
 
@@ -270,7 +320,7 @@ def _recessive_section(item: dict[str, object]) -> list[str]:
         f"### {item['gene']} — {STATUS_LABELS[str(item['status'])]}",
         "",
         f"- Portage NFE : {format_probability(item['nfe_carrier_frequency_france_proxy'])}",
-        f"- Risque par grossesse : {format_range(item['offspring_risk_nfe_lower'], item['offspring_risk_nfe_upper'])}",
+        f"- Risque théorique par grossesse avec partenaire NFE non testé : {format_range(item['offspring_risk_nfe_lower'], item['offspring_risk_nfe_upper'])}",
     ]
     for finding in item["findings"]:
         clinical = finding["clinvar"]
@@ -317,6 +367,10 @@ def _structural_section(
     summary: dict[str, object], candidates: list[dict[str, object]]
 ) -> list[str]:
     """Render prioritized CNV/SV candidates without overcalling them."""
+
+    if summary.get("available") is False:
+        return ["## CNV et variants structurels", "",
+                "Aucun fichier CNV/SV fourni : ce volet n'a pas été analysé.", ""]
 
     lines = [
         "## CNV et variants structurels",

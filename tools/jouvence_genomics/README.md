@@ -54,3 +54,48 @@ The VCF-only result remains reusable. A BAM-aware layer should add local
 realignment, read inspection, callable-region evidence, CNV/SV read support and
 variant re-calling. It should confirm or reject candidates rather than silently
 changing the consequence or inheritance rules implemented here.
+
+## Combined VCF and couple analysis
+
+For one SNP/indel VCF, call the Python function directly:
+
+```python
+from pathlib import Path
+from tools.analyze_dante_vcf import analyze_sample
+from tools.jouvence_genomics.couple import compare_couple, render_couple_report
+
+sample = analyze_sample(
+    Path("sample.vcf.gz"), Path("data/reference"), Path("analysis/sample"),
+    sample_name="Sample",
+)
+couple = compare_couple(first_parent_result, sample)
+report = render_couple_report(couple)
+```
+
+The equivalent CLI uses `--vcf sample.vcf.gz --sample-name Sample`; do not
+also pass `--snp-vcf` or `--indel-vcf`. CNV/SV inputs are optional. A single
+sample and GRCh37 contig lengths are checked before analysis. Inputs have
+SHA-256 hashes and reference filenames in the JSON provenance.
+
+Couple screening compares recessive disease identifiers as well as genes.
+Different alleles can form a relevant pair. VUS pairs are retained for review
+but receive no disease-risk estimate. A conditional 25% biallelic transmission
+requires one quality-passing P/LP carrier haplotype in each parent and a
+shared disease. Unknown phase leaves transmission unresolved. Penetrance,
+allele-specific severity and difficult genomic regions require clinical review.
+`inspect_partner_loci()` records explicit counterpart calls or unassessed
+absence; it does not infer reliable homozygous-reference genotypes.
+
+The novel coding screen currently covers autosomal-recessive genes using one
+selected transcript per gene. Novel dominant/X-linked, deep intronic and
+regulatory variants are outside its scope. GenCC/ClinVar snapshots, gnomAD
+v2.1.1 exome frequencies and v4.1 gene-carrier frequencies remain distinct
+reference sources. NFE is an ancestry proxy, not a French population panel.
+
+For raw (`FILTER=.`) files, `audit_candidate_quality()` attaches INFO metrics
+and checks available SNP/indel annotations against the Broad GATK hard-filter
+recommendations. Failed candidate calls are retained for technical review,
+and do not enter inheritance or couple risk calculations. Missing metrics
+remain explicit. Nearby indels (within 20 bp) and indels >=50 bp receive a
+separate complex-region tier requiring joint haplotype/read validation;
+these flags do not prove that a call is false or benign.

@@ -54,6 +54,42 @@ def parse_info(value: str) -> dict[str, str]:
     return parsed
 
 
+def inspect_vcf_header(path: Path) -> dict[str, object]:
+    """Require one sample and identify the assembly from primary contig lengths.
+
+    The workflow uses GRCh37 references. Unknown or incompatible assemblies
+    stop analysis rather than silently comparing different coordinates.
+    """
+
+    lengths: dict[str, int] = {}
+    metadata: dict[str, object] = {"path": str(path.resolve())}
+    with open_vcf(path) as handle:
+        for line in handle:
+            if line.startswith("##contig="):
+                match = re.search(r"ID=([^,>]+),length=(\d+)", line)
+                if match:
+                    lengths[match[1].removeprefix("chr")] = int(match[2])
+            elif line.startswith("##reference="):
+                metadata["reference"] = line.strip().partition("=")[2]
+            elif line.startswith("##source="):
+                metadata["source"] = line.strip().partition("=")[2]
+            elif line.startswith("#CHROM"):
+                samples = line.strip().split("\t")[9:]
+                if len(samples) != 1:
+                    raise ValueError(f"Expected one sample in {path}, found {samples}")
+                metadata["sample"] = samples[0]
+                break
+        else:
+            raise ValueError(f"No #CHROM header in {path}")
+    expected = {"1": 249250621, "2": 243199373, "X": 155270560}
+    verified = {key: lengths[key] for key in expected if key in lengths}
+    if not verified or any(value != expected[key] for key, value in verified.items()):
+        raise ValueError(f"GRCh37 contig lengths not verified for {path}: {verified}")
+    metadata["assembly"] = "GRCh37"
+    metadata["verified_contig_lengths"] = verified
+    return metadata
+
+
 def normalize_allele(
     chrom: str, pos: str | int, ref: str, alt: str
 ) -> tuple[str, int, str, str]:
@@ -168,6 +204,9 @@ def summarize_small_variant_vcf(path: Path) -> dict[str, object]:
             stats["records"] += 1
             chromosomes[chrom.removeprefix("chr")] += 1
             stats["pass"] += filt in {"PASS", "."}
+            stats["filter_pass"] += filt == "PASS"
+            stats["filter_not_applied"] += filt == "."
+            stats["filter_failed"] += filt not in {"PASS", "."}
             alts = alt.split(",")
             stats["multiallelic"] += len(alts) > 1
             for allele in alts:

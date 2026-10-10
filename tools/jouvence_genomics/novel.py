@@ -244,11 +244,16 @@ def load_primary_transcripts(
 def load_clinvar_novel_evidence(
     clinvar_path: Path,
     minimum_stars: int = 1,
+    selected_keys: set[tuple[str, int, str, str]] | None = None,
 ) -> tuple[
     dict[str, dict[str, object]],
     dict[tuple[str, int, str, str], dict[str, object]],
 ]:
-    """Load gene-level LoF support and exact allele context in one VCF pass."""
+    """Load gene-level LoF support and exact allele context in one VCF pass.
+
+    Restrict context to selected called alleles to avoid storing the complete
+    ClinVar catalogue in RAM. Gene-level support still uses every record.
+    """
 
     variation_ids: dict[str, set[str]] = defaultdict(set)
     disease_ids: dict[str, set[str]] = defaultdict(set)
@@ -271,6 +276,8 @@ def load_clinvar_novel_evidence(
             }
             for allele in alt.split(","):
                 key = normalize_allele(chrom, pos, ref, allele)
+                if selected_keys is not None and key not in selected_keys:
+                    continue
                 context = merged.setdefault(
                     key,
                     {
@@ -457,6 +464,7 @@ def prioritize_recessive_candidates(
     """
 
     strict: list[dict[str, object]] = []
+    complex_plof: list[dict[str, object]] = []
     vus: list[dict[str, object]] = []
     for item in candidates:
         if item["known_reviewed_clinvar"] or item["quality_flags"]:
@@ -488,11 +496,16 @@ def prioritize_recessive_candidates(
         ):
             vus.append({**item, "tier": "protein_altering_vus"})
 
+    flag_complex_candidates(strict + vus)
+    complex_plof = [{**item, "tier": "complex_plof_requires_read_haplotype_review"}
+                    for item in strict if item["complex_region_flags"]]
+    strict = [item for item in strict if not item["complex_region_flags"]]
     strict = _best_annotation_per_gene_and_allele(strict)
     vus = _best_annotation_per_gene_and_allele(vus)
     genes = sorted({str(item["gene"]) for item in strict})
     return {
         "strict_plof_candidates": strict,
+        "complex_plof_candidates": _best_annotation_per_gene_and_allele(complex_plof),
         "protein_altering_vus": vus,
         "additional_recessive_candidate_genes": genes,
         "method": {
@@ -503,6 +516,37 @@ def prioritize_recessive_candidates(
             "classification_warning": "research prioritisation only; no candidate is called pathogenic without clinical confirmation",
         },
     }
+
+
+def flag_complex_candidates(candidates: list[dict[str, object]]) -> None:
+    """Flag nearby indel calls and structural-sized indels for joint review.
+
+    Two calls within 20 bases, with at least one indel, can be representations
+    of one complex haplotype. Their independent protein effects require joint
+    reconstruction. Fifty bases is the conventional SV size boundary. These
+    flags mark uncertainty; they do not establish an artifact or benignity.
+    """
+
+    by_gene: dict[str, list[dict[str, object]]] = defaultdict(list)
+    for item in candidates:
+        item["complex_region_flags"] = []
+        if abs(len(str(item["ref"])) - len(str(item["alt"]))) >= 50:
+            item["complex_region_flags"].append("indel_ge_50bp_requires_read_validation")
+        by_gene[str(item["gene"])].append(item)
+    for items in by_gene.values():
+        ordered = sorted(items, key=lambda item: int(item["pos"]))
+        for index, first in enumerate(ordered):
+            for second in ordered[index + 1:]:
+                if int(second["pos"]) - int(first["pos"]) > 20:
+                    break
+                if first["pos"] == second["pos"]:
+                    continue
+                if any(len(str(item["ref"])) != len(str(item["alt"]))
+                       for item in (first, second)):
+                    for item in (first, second):
+                        flag = "nearby_indel_calls_require_joint_haplotype_review"
+                        if flag not in item["complex_region_flags"]:
+                            item["complex_region_flags"].append(flag)
 
 
 def assess_phase_with_known_variants(

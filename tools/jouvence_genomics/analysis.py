@@ -66,6 +66,10 @@ def match_small_variants(
                         gq = int(call["GQ"]) if call.get("GQ", ".").isdigit() else None
                         balance = _allele_balance(call, alt_index)
                         flags = _quality_flags(int(phase["copies"]), dp, gq, balance)
+                        if filt not in {"PASS", "."}:
+                            flags.append(f"VCF FILTER={filt}")
+                        if "." in call.get("GT", "./."):
+                            flags.append("génotype partiellement manquant")
                         findings.append(
                             {
                                 "source_file": path.name,
@@ -172,6 +176,8 @@ def classify_inheritance(
     dominant: list[dict[str, object]] = []
     x_linked: list[dict[str, object]] = []
     for finding in findings:
+        if finding.get("quality_flags"):
+            continue
         gene = str(finding["clinvar"]["gene"])
         if finding["autosomal_recessive_candidate"]:
             ar_by_gene[gene].append(finding)
