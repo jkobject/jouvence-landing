@@ -347,3 +347,187 @@ outputs = analyze_ancestry(
 La diversité géographique ne se résume pas au nombre de personnes. Les très grands
 panels français ou de biobanques peuvent demander un accord d'accès ; ils ne sont
 pas remplacés par une prétendue nationalité tirée d'un petit groupe French/Basque.
+
+### Extension tous thèmes, indépendante des résultats personnels
+
+Les fonctions ci-dessous sont **opt-in** : elles élargissent l'audit sans changer
+les seuils cliniques, le petit panel de traits ou les rapports déjà produits.
+Le périmètre public est défini avant lecture des génotypes. « Inventorié »,
+« référence préparée », « génotype observé », « calcul effectué » et « résultat
+qualifié » sont des états différents. Un libellé GWAS, une colonne d'annotateur
+ou un modèle PGS n'est pas un test clinique indépendant.
+
+#### GWAS Catalog complet
+
+`full_gwas.py` conserve toutes les lignes du snapshot, sans restriction aux
+sept thèmes historiques. Un seuil de publication `p <= 5e-8` sélectionne les
+loci à rechercher ; les lignes exclues restent exportées avec leur raison.
+Les coordonnées sont contrôlées en GRCh37 par rsID, chaîne GRCh38→37 et REF
+public. La référence dbSNP151Common est ancienne et limitée aux SNP communs :
+les rsID non résolus restent inconnus, pas négatifs.
+
+```python
+from pathlib import Path
+from tools.jouvence_genomics.association_catalog import download_gwas_catalog
+from tools.jouvence_genomics.full_gwas import (
+    prepare_exhaustive_gwas, prepare_full_gwas_resources,
+    map_exhaustive_gwas, audit_exhaustive_gwas,
+)
+
+download = download_gwas_catalog(Path("data/reference/gwas_download"))
+catalogue = prepare_exhaustive_gwas(download, Path("data/reference/gwas_all"))
+resources = prepare_full_gwas_resources(Path("data/reference/gwas_mapping"))
+catalogue = map_exhaustive_gwas(catalogue, resources)
+audit = audit_exhaustive_gwas(
+    [Path("private/sample.vcf.gz")], catalogue,
+    Path("analysis/sample/gwas_all"), sample_name="Sample",
+)
+```
+
+Sorties privées : résumé JSON, observations SQLite et CSV gzip complet, avec
+les colonnes source, la qualité et les états inconnus/exclus. Les formules de
+tableur sont neutralisées dans le CSV. Les p-values sont celles des études,
+pas des tests réalisés sur la personne. Aucun effet n'est additionné ou traduit
+en risque personnel. Un dossier d'audit existant n'est pas écrasé.
+Utiliser `uv run --with biopython --with pyliftover`.
+
+#### Tous les modèles du PGS Catalog, calcul à budget explicite
+
+`pgs_inventory.py` fige les sept tables du catalogue et confronte leurs IDs à
+la liste officielle complète. Le téléchargement des poids est borné par trois
+paramètres obligatoires, sur tous les thèmes, par taille puis ID et jamais
+d'après un résultat personnel. Licences restrictives/inconnues, interactions,
+formats non pris en charge et discordances sont différés avec leur raison.
+Une licence restrictive dans les métadonnées **ou** le fichier de poids est
+éliminatoire ; un ancien header sans licence peut utiliser les termes explicites
+des métadonnées. Ce filtre prudent ne remplace pas une revue juridique.
+
+```python
+from pathlib import Path
+from tools.jouvence_genomics.pgs_inventory import (
+    prepare_pgs_inventory, prepare_bounded_pgs_weights, audit_pgs_inventory,
+)
+
+inventory = prepare_pgs_inventory(Path("data/reference/pgs_inventory"))
+selection = prepare_bounded_pgs_weights(
+    inventory, Path("data/reference/pgs_inventory/weights"),
+    max_variants_per_model=5_000, max_total_variants=2_000_000,
+    max_download_bytes=1_000_000_000,
+)
+audit = audit_pgs_inventory(
+    [Path("analysis/sample/results.json")], selection,
+    Path("analysis/sample/pgs_all_strict"),
+)
+```
+
+Les poids et VCF sont vérifiés par SHA avant calcul. Le filtre original reste
+la règle par défaut. `site_filter_policy="gatk_hard_filter_2025"` est un essai
+séparé, non une qualification clinique. Le moteur actuel accepte GRCh37 et
+les modèles autosomiques additifs simples. Les dosages absents restent inconnus ;
+seuls des sous-sommes/bornes et éventuels scores bruts complets sont produits,
+jamais un percentile, z-score, risque absolu ou chiffre importé du fournisseur.
+Augmenter les budgets est possible, mais augmente surtout la mémoire et les
+sorties ; la liste des modèles différés permet de décider explicitement du
+prochain lot. Un nouveau dossier évite de mélanger personnes ou configurations.
+
+#### OpenCRAVAT local : annotations variant et gène
+
+`annotation_resources.py` inventorie la boutique et ses colonnes déclarées,
+puis prépare un moteur OpenCRAVAT versionné dans un cache dédié avec `uv`.
+Chaque base conserve sa version et ses conditions : la licence du logiciel
+n'autorise pas automatiquement toutes ses données.
+
+Les six annotateurs de cette première politique sont ClinVar, GWAS Catalog,
+PharmGKB, HPO, ClinGen et CGD. Les autres annotateurs restent inventoriés, pas
+prétendument installés ou exécutés. CADD/REVEL/SpliceAI et les termes contradictoires
+des fichiers AlphaMissense demandent une décision de licence distincte. Une
+erreur de module arrête le run, même si OpenCRAVAT retourne un succès global.
+
+`coding_variant_positions()` définit l'union de tous les CDS/start/stop
+GENCODE19 et leurs abords ±8 bases avant lecture du VCF. Une base GWAS publique
+validée peut y ajouter ses positions. Les lignes VCF sélectionnées sont copiées
+intactes dans un sous-VCF privé, puis annotées par lots de 5 000 allèles maximum
+via `annotate_vcf_positions()`. Le moteur prend seulement les appels diploïdes
+explicitement observés, avec REF vérifiée, projection réciproque et chaînes
+épinglées ; aucune absence n'est complétée. Les appels mal filtrés ou de qualité
+insuffisante n'acquièrent aucune validité clinique grâce à une annotation.
+Y/MT, SV symboliques et séquences de plus de 1 000 bases restent hors moteur.
+
+`annotate_coding_variants()` orchestre ces étapes dans un dossier neuf et
+conserve un résumé courant/final, les comptes et les empreintes des exports.
+Un résumé `running` ne signifie jamais que le panel entier a été analysé.
+
+```python
+from pathlib import Path
+from tools.jouvence_genomics.annotation_resources import (
+    prepare_annotation_runtime, annotate_coding_variants,
+)
+
+runtime = prepare_annotation_runtime(Path("data/reference/opencravat"))
+summary = annotate_coding_variants(
+    Path("analysis/sample/results.json"),
+    Path("data/reference/gencode.v19.annotation.gtf.gz"), runtime,
+    Path("analysis/sample/annotations_all"),
+    association_database=Path(catalogue["sqlite_path"]),  # Facultatif.
+)
+```
+
+Sur macOS, le réseau est interdit pendant l'annotation privée, la télémétrie
+est désactivée, et les sous-processus ne peuvent pas écrire dans la configuration
+OpenCRAVAT partagée préexistante. Cet adaptateur n'est pas encore portable à
+tous les hôtes. Les sorties officielles TSV/SQLite et l'audit JSON restent
+privés ; ni classification ACMG automatique, ni diplotype, ni diagnostic n'est
+produit. Utiliser `uv run --with pyyaml --with pyliftover --with twobitreader`.
+
+Le champ natif GWAS `risk_allele_match` décrit le variant envoyé au moteur,
+pas le dosage de la personne : OpenCRAVAT reçoit ici REF/ALT sans le GT.
+Pour vérifier le portage, utiliser les observations GT et
+`alternate_allele_present` du JSON audité. Ne pas convertir ce champ natif
+en résultat patient ou en score ; les TSV/SQLite sont des annotations brutes.
+
+Le moteur stock peut laisser des erreurs de mapper malgré un retour global
+normal, voire compenser une ligne perdue par un identifiant dupliqué. L'adaptateur
+contrôle donc stderr et l'ensemble exact des identifiants, pas seulement le
+nombre de lignes. Les connexions SQLite sont explicitement fermées.
+
+`derive_pharmgkb_runtime(original_runtime, new_directory)` est une option
+explicite pour le bug de catégorie vide du module PharmGKB 2026.07.01 : version
+et SHA du code fournisseur doivent correspondre exactement. Elle produit un
+runtime séparé avec un correctif d'une ligne, diff, licence et empreintes ;
+les données et le runtime d'origine restent inchangés. Aucun site personnel
+n'est inclus dans ce runtime réutilisable. Un échec de mapper démontré peut
+faire l'objet de `engine_exclusions` privées à l'appel `annotate_vcf_positions()`
+avec TSV/log/SHA/version. Le même job, l'UID et le tuple normalisé doivent
+correspondre exactement à INPUT/ERROR : l'allèle reste explicitement non annotable,
+jamais « normal ». Un nouvel échec inattendu interrompt toujours l'analyse.
+
+#### Référence d'ascendance AADR moderne, plus dense
+
+`aadr_reference.py` fournit `prepare_aadr_reference()` et
+`load_aadr_reference()` pour AADR v66.p1, Dataverse version 14, CC0. Les données
+anciennes/pseudo-haploïdes, représentations répétées et apparentés proches sont
+exclus. Les plages téléchargées portent des empreintes distinctes : elles ne
+sont jamais présentées comme une vérification MD5 du fichier complet.
+
+```python
+from pathlib import Path
+from tools.jouvence_genomics.aadr_reference import prepare_aadr_reference, load_aadr_reference
+from tools.jouvence_genomics.ancestry import analyze_ancestry
+
+prepare_aadr_reference(
+    Path("data/reference/ancestry_aadr"), Path("data/reference/ancestry_hgdp"),
+    Path("private/tools/plink2"),
+)
+outputs = analyze_ancestry(
+    [Path("analysis/sample/results.json")], Path("data/reference/ancestry_aadr"),
+    Path("analysis/sample/ancestry_aadr"), reference_loader=load_aadr_reference,
+)
+```
+
+La préparation exige les références HGDP déjà vérifiées et PLINK2 explicitement
+fourni. Le loader n'admet dans le classificateur que les labels publiés HGDP/1KG,
+jamais ceux dérivés du seul pays. Le nombre du cache public et celui de
+l'entraînement sont donc séparés. L'élagage LD, KING, le contrôle d'orientation
+par génotypes publics, les validations masquées et la sensibilité 4/8 axes sont
+des contrôles distincts. Une affinité de référence stable reste une affinité,
+pas une décomposition d'ascendance ou une origine française.
