@@ -36,7 +36,11 @@ Chaque comparaison distingue concordance littérale, discordance, génotype
 absent du VCF, allèles non documentés et orientation non attestée. Une
 discordance ne prouve pas lequel des deux appels est biologiquement exact ;
 elle impose de comparer les versions, puis les lectures ou une confirmation
-indépendante si l'information est importante. Les profils étoilés ne sont pas
+indépendante si l'information est importante. Ces comparaisons sont conservées
+dans un audit technique séparé, pas dans le rapport personnel ni ses exports
+par panel. La personne en est informée à part ; aucune conclusion locale n'est
+changée pour faire correspondre les sources. Les réserves nécessaires sur la
+fiabilité d'un résultat restent dans le rapport. Les profils étoilés ne sont pas
 convertis en diplotypes validés à partir d'un PDF.
 
 Les mentions « Not currently supported » signifient **non évalué**, même si

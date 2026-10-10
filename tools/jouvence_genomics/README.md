@@ -220,6 +220,12 @@ compatibilité au complément en cas de divergence, pas une validation clinique.
 `provider_topics.json` et `provider_result_labels.json` sont des textes français
 génériques, pas des génotypes ni résultats personnels.
 
+Les comparaisons fournisseur/VCF sont conservées dans `dante_comparison.json`
+et `pdf_comparison.json`, à part du rapport personnel. Elles ne sont ni rendues
+dans l'HTML, ni embarquées dans ses pièces jointes, ni ajoutées aux CSV des panels.
+Les génotypes du fournisseur restent attribués à ce fournisseur ; les critères
+de qualité et conclusions des analyses locales ne sont pas modifiés.
+
 `supplementary_results` de `build_genomic_reports()` associe à chaque nom
 d'échantillon les chemins JSON `dante_html`, `dante_comparison`, `pdf_reports`
 (liste), `pdf_comparison`, `associations` et `exact_polygenic`. Les SHA-256

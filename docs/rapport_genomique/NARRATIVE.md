@@ -42,12 +42,15 @@ de maladie. Les scores incomplets ou non qualifiés restent dans l'audit, sans
 classement inventé. La validation arithmétique d'un sous-score ne démontre pas
 sa performance prédictive clinique.
 
-## Panels et comparaison des rapports du fournisseur
+## Panels et audit séparé des rapports du fournisseur
 
 Les rapports PDF/HTML sont importés comme données non exécutées. Leurs résultats
 restent attribués au fournisseur et confrontés aux génotypes explicitement
-présents dans les VCF, avec provenance par document et par page. La vue traduit
-les explications, signale les discordances et offre un export CSV par panel.
+présents dans les VCF, avec provenance par document et par page. Cette comparaison
+reste dans un audit technique séparé, communiqué à part. Le rapport personnel
+traduit les explications et offre un export CSV par panel, sans tableau de
+discordances ni mélange des génotypes de deux sources. Les réserves cliniques
+et techniques qui changent la fiabilité d'une observation locale restent visibles.
 Elle distingue le périmètre annoncé par un fournisseur du contenu réellement
 extractible : une page blanche ou un test non pris en charge n'est pas un négatif.
 

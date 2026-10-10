@@ -561,7 +561,7 @@ def build_genomic_reports(
         (folder / "report.md").write_text(md, encoding="utf-8")
         _save_variant_table(records, folder / "variants.csv")
         metadata = {"title": f"Vos résultats — {name}", "subtitle": "Ce qui compte pour vous, puis les détails pour comprendre et vérifier.",
-                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4 · panels et comparaison des sources",
+                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4.1 · panels et sources distinctes",
                     "references": references, "analysis_input_sha256": frozen_hashes,
                     "clinical_cards_sha256": hashlib.sha256(json.dumps(catalog, sort_keys=True).encode()).hexdigest(),
                     "counts": counts, "patient_signals": {"clinical": len(signals["clinical"]), "validation": len(signals["validation"]), "profiles": signals["profiles"]},
@@ -570,10 +570,11 @@ def build_genomic_reports(
         structural_data = json.dumps(result.get("structural_candidates", []), ensure_ascii=False, indent=2).encode()
         for key, value in extras.items():
             (folder / (key + ".json")).write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
-        # Les audits volumineux restent à côté de l'HTML. Le dashboard embarque
-        # les lignes exportables ; pas trois copies de tout le catalogue brut.
+        # Les audits volumineux et comparaisons fournisseur/VCF restent séparés.
+        # Les panels présentent chaque source sans afficher ces comparaisons.
         embedded_extras = {key: value for key, value in extras.items()
-                           if key not in {"associations", "exact_polygenic", "pdf_reports", "ancestry_sensitivity"}}
+                           if key not in {"associations", "exact_polygenic", "pdf_reports", "ancestry_sensitivity",
+                                          "dante_comparison", "pdf_comparison"}}
         attachments = {"variants.csv": (folder / "variants.csv").read_bytes(), "traits.json": cache.read_bytes(),
                        "structural_candidates.json": structural_data,
                        **{key + ".json": json.dumps(value, ensure_ascii=False, indent=2).encode() for key, value in embedded_extras.items()}}
@@ -605,7 +606,7 @@ def build_genomic_reports(
     outputs["couple"] = write_french_html(folder, folder / "rapport.html", {
         "title": f"Rapport de couple — {couple['first_name']} et {couple['second_name']}",
         "subtitle": "Une comparaison par maladie et niveau de preuve, avec les limites de phase explicites.",
-        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4 · panels et comparaison des sources",
+        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4.1 · panels et sources distinctes",
         "references": references, "analysis_input_sha256": frozen_hashes,
     }, skill_scripts)
     return outputs
@@ -652,12 +653,12 @@ def _ancestry_sensitivity_section(audit: dict | None) -> str:
 
 
 def _external_coverage_section(extras: dict, records: list[dict]) -> str:
-    """Expliquer les écarts commerciaux avec comptes et limites source explicites."""
+    """Décrire les documents importés et leurs limites, sans comparaison de GT."""
     if not extras.get("dante_html") and not extras.get("pdf_reports"):
         return ""
-    html = ['<section id="comparaison-fournisseur"><h2>Pourquoi certains résultats diffèrent de Dante</h2>',
-            '<p class="takeaway">Un résultat absent, un appel écarté et une prédiction non reproduite sont trois situations différentes.</p>',
-            '<div class="prose"><h3>Ce que les fichiers nous permettent réellement de vérifier</h3>']
+    html = ['<section id="sources-fournisseur"><h2>Documents du fournisseur et périmètre des résultats</h2>',
+            '<p class="takeaway">Les résultats importés restent attribués à leur source ; ils ne deviennent pas des calculs locaux validés.</p>',
+            '<div class="prose"><h3>Ce que les documents renseignent</h3>']
     reports = extras.get("dante_html", {}).get("panels", [])
     if reports:
         available = [row for row in reports if row["pgs_id"]]
@@ -671,7 +672,7 @@ def _external_coverage_section(extras: dict, records: list[dict]) -> str:
                         'équilibre de Hardy–Weinberg et indépendance des loci. Cette approximation ne remplace pas une distribution '
                         'empirique adaptée à l’ascendance et ne tient pas nécessairement compte des corrélations entre variants.</p>')
         html.append('<p>Un percentile 94 signifie un rang de score, pas 94 % de probabilité de maladie. '
-                    'Lorsque la méthode n’est pas attestée dans le document, elle reste non documentée dans cette comparaison.</p>')
+                    'Lorsque la méthode n’est pas attestée dans le document, elle reste non documentée dans cet import.</p>')
         unavailable = [row["title"] for row in reports if not row["pgs_id"]]
         if unavailable:
             html.append('<p>Panels sans résultat dans les sauvegardes : ' + escape(", ".join(unavailable)) + '.</p>')
@@ -691,23 +692,9 @@ def _external_coverage_section(extras: dict, records: list[dict]) -> str:
             html.append(f'<p>{len(carriers)} cartes de portage sont lisibles dans les PDF ; le nombre annoncé en couverture '
                         'n’atteste pas leur extraction complète. Le syndrome de l’X fragile et les délétions de SMN1 '
                         'demandent des tests spécialisés. Le badge « CLEAR » ne démontre pas leur exclusion par ce VCF.</p>')
-    for key, label in (("dante_comparison", "HTML"), ("pdf_comparison", "PDF")):
-        comparison = extras.get(key)
-        if not comparison:
-            continue
-        counts = comparison["counts"]
-        html.append(f'<h3>Concordance des génotypes des {label}</h3><p>'
-                    f'{counts.get("concordant", 0)} lignes concordantes ; {counts.get("discordant", 0)} discordantes ; '
-                    f'{counts.get("absent_unknown", 0)} sans génotype explicite. Les répétitions d’un même marqueur '
-                    'dans plusieurs panels sont comptées comme des lignes, pas comme des mutations distinctes.</p><ul>')
-        for row in comparison["comparisons"]:
-            if row["comparison_status"] == "discordant":
-                html.append(f'<li>{escape(str(row.get("rsid") or "marqueur sans rsID affiché"))} · chr{row["chrom"]}:{row["pos"]} : '
-                            f'Dante {escape(row["reported_genotype"])} ; VCF {escape(row["vcf_genotype"])}.</li>')
-        html.append('</ul>')
     if any(row["gene"] == "TUBB8" and row["report_tier"] == "technical" for row in records):
         html.append('<h3>La maturation des ovocytes : signal trouvé, mais à confirmer</h3>'
-                '<p>TUBB8 n’a pas été omis du catalogue. L’appel est visible dans le VCF, mais un ou plusieurs '
+                '<p>Un appel TUBB8 est visible dans le VCF, mais un ou plusieurs '
                 'contrôles de qualité ne sont pas satisfaits : il n’est pas retenu comme génotype fiable avec nos filtres. '
                 'Le panel technique et la fiche du gène expliquent les métriques, le phénotype et la confirmation nécessaire. '
                     'Cette observation ne diagnostique pas une infertilité.</p>')
@@ -719,7 +706,7 @@ def _external_coverage_section(extras: dict, records: list[dict]) -> str:
                     'Ces unités ne sont pas interchangeables : ce ne sont pas autant de maladies détectées chez vous. '
                     'Les associations présentes figurent par domaine ; les inconnus et exclusions demeurent dans l’audit.</p>')
     html.append('<details class="audit-details"><summary>Audits sources complets dans ce dossier privé</summary><ul>')
-    for key in ("associations", "exact_polygenic", "pdf_reports", "pdf_comparison", "dante_html", "dante_comparison"):
+    for key in ("associations", "exact_polygenic", "pdf_reports", "dante_html"):
         if key in extras:
             html.append(f'<li><a id="audit-download-{key}" href="#audit-download-{key}" '
                         f'data-companion-file="{key}.json" download>{key}.json</a></li>')

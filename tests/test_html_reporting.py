@@ -13,6 +13,17 @@ from tools.jouvence_genomics.catalogs import review_stars
 
 
 class HtmlReportTests(unittest.TestCase):
+    def test_import_coverage_does_not_render_source_comparisons(self):
+        extras = {"dante_html": {"documents": ["example.html"], "panels": []},
+                  "dante_comparison": {"counts": {"discordant": 1}, "comparisons": [
+                      {"comparison_status": "discordant", "rsid": "rs1", "chrom": "1", "pos": 123,
+                       "reported_genotype": "A/A", "vcf_genotype": "A/G"}]}}
+        html = _external_coverage_section(extras, [])
+        self.assertIn("sources-fournisseur", html)
+        self.assertNotIn("discordant", html.lower())
+        self.assertNotIn("dante_comparison.json", html)
+        self.assertNotIn("rs1", html)
+
     def test_tubb8_quality_rejection_does_not_assume_allele_imbalance(self):
         html = _external_coverage_section(
             {"dante_html": {"documents": ["example.html"], "panels": []}},

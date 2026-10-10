@@ -24,10 +24,11 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
     dosage retenu produit une contribution locale. Les résultats Dante restent
     attribués à leur document et ne deviennent pas des scores locaux qualifiés.
     Les associations GWAS sont un catalogue de recherche, pas des diagnostics.
+    Les comparaisons entre fournisseurs et VCF restent dans leurs audits séparés,
+    jamais dans les panels ni leurs exports destinés à la personne.
     """
     supplementary = supplementary or {}
     external = supplementary.get("dante_html")
-    comparisons = supplementary.get("dante_comparison")
     associations = supplementary.get("associations")
     panels = []
     signals = select_patient_signals(records, traits)
@@ -57,7 +58,7 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
         panels.append({"id": f"review-{row['gene']}-{allele_id}", "title": card.get("title", row["gene"]),
             "category": "Signaux à vérifier techniquement", "kind": "technical", "status": "rejected",
             "summary": f"Appel {row['gene']} trouvé, mais non retenu pour qualité insuffisante.",
-            "interpretation_fr": "Ce signal est conservé pour expliquer la différence avec un rapport commercial. "
+            "interpretation_fr": "Ce signal est conservé parce qu’il mérite une vérification technique. "
                 "Il ne démontre ni une maladie ni une indication de traitement. Les lectures et une confirmation indépendante peuvent permettre de trancher.",
             "sources": card.get("sources", []), "variants": [{"gene": row["gene"], "chrom": row["chrom"],
                 "pos": row["pos"], "ref": row["ref"], "alt": row["alt"], "genotype": row["genotype"],
@@ -107,6 +108,7 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
             "sources": [{"url": url} for url in score["sources"]], "variants": variants})
     # Imports externes : les valeurs déclarées ne remplacent aucune inconnue locale.
     score_titles = {"alzheimer": "Maladie d’Alzheimer : score du fournisseur",
+        "alzheimers-disease": "Maladie d’Alzheimer : score du fournisseur",
         "migraine": "Migraine : score du fournisseur",
         "abdominal-aortic-aneurysm": "Anévrisme de l’aorte abdominale : score du fournisseur",
         "coronary-artery-disease": "Maladie coronarienne : score du fournisseur"}
@@ -119,33 +121,21 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
             raise ValueError("Percentile externe invalide")
         if z is None or abs(z) <= 1:
             continue
-        rows = [r for r in (comparisons or {}).get("comparisons", []) if r["panel_id"] == panel["id"]]
         panels.append({"id": "dante-" + panel["id"], "title": score_titles.get(panel["id"], panel["title"]),
-            "category": "Comparaison avec les rapports Dante", "kind": "external", "status": "provisional",
+            "category": "Scores rapportés par le fournisseur", "kind": "external", "status": "provisional",
             "summary": f"Dante rapporte un rang au percentile {panel['reported_percentile']} et un écart de {panel['reported_z']:+.2f} σ ; ce n’est pas une probabilité de maladie.",
             "interpretation_fr": ("La méthode déclarée emploie des fréquences publiées sous Hardy-Weinberg et indépendance des loci, "
                 "pas une distribution empirique d'une population. " if panel.get("theoretical_reference") else
                 "La méthode de référence n’est pas attestée par ce document importé ; consulter sa méthode originale avant d’interpréter le classement. ")
-                + "Les génotypes visibles sont confrontés au VCF sans compléter les sites absents.",
+                + "Les génotypes ci-dessous sont ceux du document source ; ce score n’a pas été reproduit localement.",
             "provenance_fr": f"Document : {panel['source_document']} ; SHA-256 : {panel['source_sha256']}",
             "sources": [{"url": f"https://www.pgscatalog.org/score/{panel['pgs_id']}/"}],
             "variants": [{"chrom": r["chrom"], "pos": r["pos"], "rsid": r["rsid"],
                 "effect_allele": r["effect_allele"], "reported_genotype": r["reported_genotype"],
-                "vcf_genotype": r["vcf_genotype"], "comparison_status": r["comparison_status"],
-                "status": r["comparison_status"], "source_document": r["source_document"]} for r in rows]})
-    if comparisons:
-        counts = comparisons["counts"]
-        rows = comparisons["comparisons"]
-        panels.append({"id": "source-concordance", "title": "Dante et le VCF : les génotypes concordent-ils ?",
-            "category": "Qualité et concordance des sources", "kind": "technical", "status": "provisional",
-            "summary": f"{counts.get('concordant', 0)} lignes concordantes, {counts.get('discordant', 0)} discordantes, {counts.get('absent_unknown', 0)} sans appel explicite dans le VCF.",
-            "interpretation_fr": "Ces comptes portent sur les lignes visibles des HTML, pas sur tous les variants des scores. "
-                "Une discordance doit être expliquée par le fournisseur : profil, version d’appel, assemblage et orientation des allèles. "
-                "La concordance seule ne valide pas le génotype. Les sources sont conservées sans les corriger arbitrairement.",
-            "variants": [{key: row.get(key) for key in ("panel_id", "rsid", "chrom", "pos", "reported_genotype", "vcf_genotype", "comparison_status", "source_document")}
-                         for row in sorted(rows, key=lambda r: r["comparison_status"] != "discordant")]})
+                "status": "Rapporté par le fournisseur, non reproduit localement",
+                "source_document": r["source_document"]} for r in panel.get("variants", [])]})
     if supplementary.get("pdf_reports"):
-        panels.extend(_provider_pdf_panels(supplementary["pdf_reports"], supplementary.get("pdf_comparison")))
+        panels.extend(_provider_pdf_panels(supplementary["pdf_reports"]))
     if associations:
         grouped_associations = defaultdict(list)
         for row in associations["associations"]:
@@ -184,7 +174,7 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
     return panels
 
 
-def _provider_pdf_panels(documents: list[dict], comparison: dict | None) -> list[dict]:
+def _provider_pdf_panels(documents: list[dict]) -> list[dict]:
     """Organiser les PDF en français sans adopter les prédictions du fournisseur.
 
     Les GT et statuts source restent littéraux. Les profils étoilés non
@@ -194,7 +184,6 @@ def _provider_pdf_panels(documents: list[dict], comparison: dict | None) -> list
     topics = json.loads((Path(__file__).parent / "provider_topics.json").read_text())
     labels = json.loads((Path(__file__).parent / "provider_result_labels.json").read_text())
     panels = []
-    comparison_rows = (comparison or {}).get("comparisons", [])
     for document in documents:
         grouped = defaultdict(list)
         for finding in document["findings"]:
@@ -209,21 +198,11 @@ def _provider_pdf_panels(documents: list[dict], comparison: dict | None) -> list
                 continue
             if topic is None:
                 raise ValueError(f"Description française manquante : {finding['title']}")
-            matching = [row for row in comparison_rows if row.get("source_document") == document["filename"]
-                        and row.get("source_page") == finding["page"] and row.get("rsid") in finding["rsids_reported"]]
             for rsid in finding["rsids_reported"] or [None]:
-                row = next((row for row in matching if row.get("rsid") == rsid), {})
-                calls = row.get("vcf_observations", [])
-                call = calls[0] if len(calls) == 1 else {}
-                quality = ("Profondeur inférieure à 10 : appel techniquement faible. "
-                           if str(call.get("dp", "")).isdigit() and int(call["dp"]) < 10 else "")
-                quality += "Concordance de texte seulement ; le filtrage clinique n’est pas attesté."
                 grouped[topic["category"]].append({"gene": finding.get("gene_reported"), "rsid": rsid,
                     "phenotype": topic["title_fr"], "reported_genotype": finding.get("genotype_reported"),
-                    "vcf_genotype": row.get("vcf_genotype"), "chrom": row.get("chrom"), "pos": row.get("pos"),
-                    "comparison_status": row.get("comparison_status", "Diplotype ou orientation non reconstruits"),
                     "status": "Rapporté par Dante, non validé localement", "explanation_fr": topic["meaning_fr"],
-                    "dp": call.get("dp"), "gq": call.get("gq"), "ad": call.get("ad"), "quality_issues": [quality],
+                    "quality_issues": ["Profil attribué au fournisseur ; sa fiabilité clinique n’est pas attestée par l’import du document."],
                     "next_steps_fr": topic["action_fr"], "source_page": finding["page"],
                     "source_document": document["filename"], "source_sha256": document["sha256"],
                     "provider_label": finding["result_label_reported"],

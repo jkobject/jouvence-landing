@@ -33,17 +33,39 @@ class ReportPanelsTests(unittest.TestCase):
             {"title": "CYP2D6", "page": 3, "gene_reported": "CYP2D6", "status": "not_evaluated_by_provider",
              "finding_reported": "Not currently supported"}]}
         original = deepcopy(document)
-        result = build_report_panels([], {"markers": []}, {}, supplementary={"pdf_reports": [document]})
+        result = build_report_panels([], {"markers": []}, {}, supplementary={"pdf_reports": [document],
+            "pdf_comparison": {"comparisons": [{"source_document": "example.pdf", "source_page": 2,
+                "rsid": "rs1815739", "vcf_genotype": "C/T", "comparison_status": "discordant"}]}})
         self.assertEqual(len(result), 2)
         self.assertEqual(result[1]["status"], "not_evaluated")
         row = result[0]["variants"][0]
-        self.assertIsNone(row["vcf_genotype"])
+        self.assertNotIn("vcf_genotype", row)
+        self.assertNotIn("comparison_status", row)
         self.assertIn("puissance", row["phenotype"])
         self.assertIn("fournisseur", row["provider_label_fr"].lower())
         html = render_panel_dashboard(result)
         self.assertIn("Comprendre chaque marqueur", html)
         self.assertIn("Résultat du fournisseur", html)
+        self.assertNotIn("<strong>VCF :</strong>", html)
         self.assertEqual(document, original)
+
+    def test_source_discrepancies_stay_out_of_panels_and_exports(self):
+        variant = {"chrom": "1", "pos": 123, "rsid": "rs1", "effect_allele": "G",
+                   "reported_genotype": "G/G", "source_document": "example.html"}
+        panel = {"id": "migraine", "title": "Migraine", "reported_z": 1.5,
+                 "reported_percentile": 94, "source_document": "example.html",
+                 "source_sha256": "test", "pgs_id": "PGS004797", "variants": [variant]}
+        comparison = {"counts": {"discordant": 1}, "comparisons": [
+            {**variant, "panel_id": "migraine", "vcf_genotype": "A/G", "comparison_status": "discordant"}]}
+        result = build_report_panels([], {"markers": []}, {}, supplementary={
+            "dante_html": {"panels": [panel]}, "dante_comparison": comparison})
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["variants"][0]["reported_genotype"], "G/G")
+        self.assertNotIn("vcf_genotype", result[0]["variants"][0])
+        self.assertNotIn("comparison_status", result[0]["variants"][0])
+        html = render_panel_dashboard(result)
+        self.assertNotIn("discordant", html.lower())
+        self.assertNotIn("source-concordance", html)
 
     def test_multiple_alleles_at_one_gene_site_have_distinct_panel_ids(self):
         records = [{"gene": "TEST", "chrom": "1", "pos": 123, "ref": "A", "alt": alt,
@@ -53,11 +75,12 @@ class ReportPanelsTests(unittest.TestCase):
         render_panel_dashboard(result)
 
     def test_external_alzheimer_title_does_not_assume_protective_direction(self):
-        panel = {"id": "alzheimer", "title": "Alzheimer", "reported_z": 2.2,
+        panel = {"id": "alzheimers-disease", "title": "Alzheimer's Disease", "reported_z": 2.2,
                  "reported_percentile": 98.5, "source_document": "example.html",
                  "source_sha256": "test", "pgs_id": "PGS000823"}
         result = build_report_panels([], {"markers": []}, {}, supplementary={"dante_html": {"panels": [panel]}})
         self.assertNotIn("plus bas", result[0]["title"])
+        self.assertEqual(result[0]["title"], "Maladie d’Alzheimer : score du fournisseur")
         self.assertIn("+2.20", result[0]["summary"])
         self.assertIn("n’est pas attestée", result[0]["interpretation_fr"])
         self.assertNotIn("Hardy-Weinberg", result[0]["interpretation_fr"])

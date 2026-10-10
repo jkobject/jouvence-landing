@@ -217,8 +217,7 @@ def _render_panel(panel: dict) -> str:
         for row in explanatory:
             fragments.append('<details class="explanation prose"><summary>'
                 f'{escape(str(row.get("phenotype") or row.get("gene") or "Marqueur"))}</summary>'
-                f'<p><strong>Résultat du fournisseur :</strong> {escape(str(row.get("reported_genotype") or "non renseigné"))}. '
-                f'<strong>VCF :</strong> {escape(str(row.get("vcf_genotype") or "indéterminé"))}.</p>'
+                f'<p><strong>Résultat du fournisseur :</strong> {escape(str(row.get("reported_genotype") or "non renseigné"))}.</p>'
                 f'<p class="jp-attribution">{escape(str(row.get("provider_label_fr") or "Interprétation attribuée au fournisseur, non validée localement."))}</p>'
                 f'<p class="jp-evidence-note">{escape(_display_value(row.get("quality_issues")))}</p>'
                 f'<p>{escape(row["explanation_fr"])}</p>'
