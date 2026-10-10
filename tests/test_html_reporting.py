@@ -1,15 +1,43 @@
 """Garanties de lecture : une observation incertaine ne devient pas un diagnostic."""
 
 import unittest
+import tempfile
+from pathlib import Path
 
 from tools.jouvence_genomics.html_reporting import (
     collect_variant_records, render_couple_section, render_trait_sections, _structural_section,
+    write_french_html, _external_coverage_section,
 )
 from tools.jouvence_genomics.traits import load_trait_markers
 from tools.jouvence_genomics.catalogs import review_stars
 
 
 class HtmlReportTests(unittest.TestCase):
+    def test_tubb8_quality_rejection_does_not_assume_allele_imbalance(self):
+        html = _external_coverage_section(
+            {"dante_html": {"documents": ["example.html"], "panels": []}},
+            [{"gene": "TUBB8", "report_tier": "technical", "quality_flags": ["low_depth"]}])
+        self.assertIn("contrôles de qualité ne sont pas satisfaits", html)
+        self.assertNotIn("alternatives est trop faible", html)
+
+    @unittest.skipUnless((Path.home() / ".codex/plugins/cache/ci-skills/core-skills/1.1.376/skills/html-report/scripts").is_dir(),
+                         "Le test de rendu nécessite le renderer HTML local documenté.")
+    def test_companion_csv_is_not_embedded_by_the_real_renderer(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "example.csv").write_text("rsid,value\nrs1,1\n")
+            (root / "report.md").write_text('<section id="one"><h2>Exemple</h2><a id="download-one" href="#download-one" '
+                'data-companion-file="example.csv" download>CSV</a></section>')
+            output = root / "report.html"
+            scripts = Path.home() / ".codex/plugins/cache/ci-skills/core-skills/1.1.376/skills/html-report/scripts"
+            write_french_html(root, output, {"title": "Exemple", "author": "Test", "date": "2026-10-10", "references": {}}, scripts)
+            from bs4 import BeautifulSoup
+            document = BeautifulSoup(output.read_text(), "html.parser")
+            link = document.select_one("[data-companion-file]")
+            self.assertEqual(link["href"], "example.csv")
+            self.assertEqual(link["download"], "example.csv")
+            self.assertNotIn("data:text/csv", str(link))
+
     def test_no_assertion_criteria_is_zero_stars_and_not_promoted_from_frozen_result(self):
         self.assertEqual(review_stars("no_assertion_criteria_provided"), 0)
         self.assertEqual(review_stars("no assertion criteria provided"), 0)

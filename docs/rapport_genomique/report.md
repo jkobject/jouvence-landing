@@ -21,6 +21,44 @@ réellement testé, jamais présentée comme une garantie de santé.
 
 </section>
 
+<section id="sources-fournisseur" markdown="1">
+
+## Comparer un rapport commercial sans recopier ses conclusions
+
+Les documents PDF et HTML sont des sources attribuées au fournisseur, pas une
+validation indépendante. Lire les tableaux des méthodes et les valeurs source,
+pas des compteurs animés sauvegardés ou la longueur des barres. Conserver
+assemblage, modèle PGS exact, page, texte original et empreinte du document.
+Un modèle public ressemblant à celui du fournisseur n'est pas nécessairement
+le même : mêmes loci et noms de maladie ne suffisent pas.
+
+Chaque comparaison distingue concordance littérale, discordance, génotype
+absent du VCF, allèles non documentés et orientation non attestée. Une
+discordance ne prouve pas lequel des deux appels est biologiquement exact ;
+elle impose de comparer les versions, puis les lectures ou une confirmation
+indépendante si l'information est importante. Les profils étoilés ne sont pas
+convertis en diplotypes validés à partir d'un PDF.
+
+Les mentions « Not currently supported » signifient **non évalué**, même si
+une carte les étiquette « NOT DETECTED ». Un panel annoncé de plusieurs dizaines
+de conditions n'est pas entièrement vérifié si seules quelques cartes sont
+lisibles ou si plusieurs pages sont blanches.
+
+Un percentile théorique fondé sur Hardy–Weinberg et indépendance des loci est
+explicitement distingué d'une calibration empirique adaptée à la population.
+Même une calibration empirique ne constitue pas, seule, une probabilité absolue
+de maladie. Les scores du fournisseur hors ±1 sigma peuvent être consultés dans
+un espace attribué, sans passer dans la synthèse des scores locaux qualifiés.
+
+La navigation par panels propose un export CSV complet de ses lignes source,
+avec protection contre les formules de tableur. Pour un grand modèle, annoncer
+le nombre de lignes de l'aperçu, celui des observations dans le CSV et celui
+des sites ciblés par le modèle. Ne pas confondre ces trois périmètres.
+
+<p class="caveat">Un catalogue de milliers d'associations GWAS ne teste pas des milliers de maladies causales : les études, phénotypes, loci et observations sont des unités différentes. Les associations gardent leurs publications et ne sont pas additionnées pour fabriquer un score.</p>
+
+</section>
+
 <section id="vocabulaire" data-document-only markdown="1">
 
 ## Des mots qui empêchent les mauvaises interprétations

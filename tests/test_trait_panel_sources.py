@@ -33,6 +33,7 @@ class TraitPanelDefinitionTests(unittest.TestCase):
             "rs6025": ("1", 169519049, "T", "C", "T"),
             "rs8176058": ("7", 142655008, "G", "A", "A"),
             "rs1050828": ("X", 153764217, "C", "T", "T"),
+            "rs1815739": ("11", 66328095, "T", "C", "T"),
         }
         for rsid, expected in verified.items():
             with self.subTest(rsid=rsid):

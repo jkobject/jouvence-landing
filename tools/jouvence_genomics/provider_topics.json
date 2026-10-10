@@ -1,0 +1,296 @@
+{
+  "Diurnal Preference": {
+    "title_fr": "Préférence pour le matin ou le soir",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "CLOCK participe à l'horloge circadienne. Ce marqueur a été associé à des différences moyennes de préférence horaire ; son effet individuel est modeste et ne fixe pas une heure de coucher idéale.",
+    "action_fr": "Comparer avec vos horaires spontanés et votre sommeil réel. Un agenda de sommeil et des horaires réguliers sont plus informatifs qu'un SNP isolé."
+  },
+  "Morningness Tendency": {
+    "title_fr": "Tendance à préférer les matinées",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "Le marqueur présenté à RASD1 appartient aux signaux d'association du chronotype. Une association de population ne détermine ni votre rythme personnel ni vos besoins de sommeil.",
+    "action_fr": "Observer vos horaires quand ils ne sont pas contraints ; tenir compte de l'âge, de la lumière, du travail et des habitudes avant de changer votre routine."
+  },
+  "Morningness": {
+    "title_fr": "Chronotype : un autre marqueur de préférence matinale",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "Ce SNP est présenté comme un signal de chronotype près de RGS16, avec une annotation génique RNASEL dans le document fournisseur. La proximité d'un gène ne démontre pas quel gène explique l'association ni un effet causal individuel.",
+    "action_fr": "Lire ce résultat comme une observation de recherche ; confronter aux habitudes réelles et ne pas choisir un horaire sur ce seul marqueur."
+  },
+  "Melatonin Timing": {
+    "title_fr": "Signalisation de la mélatonine et horloge biologique",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "MTNR1B code un récepteur de la mélatonine ; rs10830963 est également associé à de petites différences moyennes de glycémie. Il ne mesure pas votre mélatonine et ne diagnostique ni trouble du sommeil ni diabète.",
+    "action_fr": "Ne pas commencer de mélatonine à partir de ce SNP. Si sommeil ou glycémie posent problème, discuter des symptômes et des mesures cliniques pertinentes avec un professionnel."
+  },
+  "Deep-Sleep Depth": {
+    "title_fr": "Adénosine et sommeil profond",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "ADA participe au métabolisme de l'adénosine, impliquée dans la pression de sommeil. L'association d'un marqueur à certains paramètres de sommeil ne mesure pas votre durée de sommeil profond.",
+    "action_fr": "Privilégier le ressenti, la durée réelle et la régularité du sommeil. Une somnolence persistante ou un sommeil non réparateur mérite une évaluation clinique plutôt qu'une interprétation génétique seule."
+  },
+  "Caffeine & Sleep": {
+    "title_fr": "Sensibilité aux effets de la caféine sur le sommeil",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "ADORA2A code un récepteur de l'adénosine. Des études ont associé ce locus à des différences de réponse à la caféine ; cela ne définit pas une tolérance personnelle ni une dose sûre.",
+    "action_fr": "Observer le sommeil et les symptômes après caféine, en tenant compte de la quantité et de l'heure. Adapter vos habitudes au ressenti, pas à une étiquette génétique isolée."
+  },
+  "Sleep Duration": {
+    "title_fr": "Durée de sommeil : un signal d'association",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "ABCC9 participe au fonctionnement de canaux sensibles à l'état énergétique des cellules. Ce marqueur a été associé à la durée moyenne de sommeil ; il ne calcule pas combien d'heures vous devez dormir.",
+    "action_fr": "Évaluer votre récupération et votre vigilance au quotidien. Ne pas raccourcir le sommeil parce qu'un rapport décrit une préférence de durée."
+  },
+  "Natural Short Sleep": {
+    "title_fr": "Sommeil naturellement court : ce que le marqueur ne prouve pas",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "Certains variants rares de BHLHE41, aussi appelé DEC2, ont été décrits dans des familles au sommeil naturellement court. Cette carte n'établit pas à elle seule que l'on peut dormir peu sans conséquences.",
+    "action_fr": "Ne pas réduire volontairement votre sommeil. Si vous dormez très peu, examiner la vigilance, le contexte familial et les symptômes avec un professionnel avant toute conclusion."
+  },
+  "Restless-Legs Risk": {
+    "title_fr": "Prédisposition aux jambes sans repos",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "MEIS1 est un locus d'association aux jambes sans repos. Ce signal statistique ne diagnostique pas le syndrome et n'exclut pas des symptômes chez une personne sans allèle associé.",
+    "action_fr": "En cas d'envie irrépressible de bouger les jambes au repos, surtout le soir, décrire les symptômes au médecin. Une évaluation clinique et, si indiquée, du statut en fer est plus utile qu'un SNP seul."
+  },
+  "Advanced Sleep Phase": {
+    "title_fr": "Horaire de sommeil précoce",
+    "category": "Sommeil et chronotype",
+    "meaning_fr": "Le fournisseur présente rs55694368 comme un marqueur de chronotype proche de PER2. Un signal d'association près d'un gène de l'horloge n'est pas un diagnostic de syndrome familial d'avance de phase.",
+    "action_fr": "Comparer avec votre horaire réel et sa stabilité. Consulter si un endormissement et un réveil très précoces deviennent gênants, sans en attribuer automatiquement la cause à ce marqueur."
+  },
+  "Sprint vs. Endurance": {
+    "title_fr": "Muscle : puissance et endurance",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "ACTN3 influence la présence d'alpha-actinine-3 dans certaines fibres musculaires. Les associations observées chez des groupes de sportifs ne permettent pas de prédire votre performance ni une supériorité individuelle en endurance.",
+    "action_fr": "Vérifier d'abord le génotype si le fournisseur et le VCF divergent. Choisir les activités selon vos capacités mesurées, préférences et entraînement, pas selon ce seul SNP."
+  },
+  "Hypoxia & Power Response": {
+    "title_fr": "Réponse musculaire à l'effort et au manque d'oxygène",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "HIF1A participe à la réponse cellulaire à un faible apport d'oxygène. Un polymorphisme étudié chez certains groupes de sportifs ne classe pas une personne comme athlète de puissance ou d'endurance.",
+    "action_fr": "Utiliser les résultats d'entraînement et les mesures physiologiques réelles. Ne pas limiter un type d'activité sur la seule base de cette association."
+  },
+  "Muscle Energy Metabolism": {
+    "title_fr": "Métabolisme énergétique du muscle",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "AMPD1 code une enzyme du métabolisme musculaire. Certains variants peuvent réduire son activité, mais le génotype seul n'explique pas nécessairement fatigue ou douleurs à l'effort et un site absent ne confirme pas une fonction normale.",
+    "action_fr": "Si l'intolérance à l'effort est réelle et persistante, demander une évaluation clinique. Ne pas conclure à un déficit enzymatique ni modifier l'activité à partir d'un appel non confirmé."
+  },
+  "Aerobic Response (Gly16)": {
+    "title_fr": "Réponse à l'effort : récepteur adrénergique, site 16",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "ADRB2 code un récepteur impliqué dans les réponses cardiovasculaire et bronchique. Les associations de ce site aux capacités sportives sont contextuelles ; elles ne prédisent pas votre capacité aérobie.",
+    "action_fr": "Lire avec les autres sites ADRB2 et leurs limites de phase, sans inventer un haplotype. Les performances et symptômes mesurés doivent guider l'entraînement."
+  },
+  "Aerobic Response (Gln27)": {
+    "title_fr": "Réponse à l'effort : récepteur adrénergique, site 27",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "Ce second site ADRB2 peut contribuer aux différences de fonctionnement du récepteur. Deux SNP hétérozygotes ne suffisent pas à reconstituer leur organisation sur les chromosomes ni une réponse individuelle à l'effort.",
+    "action_fr": "Ne pas additionner les sites comme un score sportif. Privilégier l'évolution des performances, la récupération et un entraînement adapté au contexte clinique."
+  },
+  "Mitochondrial Biogenesis": {
+    "title_fr": "Adaptation mitochondriale à l'entraînement",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "PPARGC1A participe à la régulation du métabolisme énergétique et de la biogenèse mitochondriale. Un marqueur commun ne mesure ni vos mitochondries ni votre capacité à progresser avec l'entraînement.",
+    "action_fr": "Suivre votre progression réelle et adapter progressivement l'activité. Ce résultat n'indique pas de traitement ou de complément mitochondrial."
+  },
+  "Blood-Flow Signalling": {
+    "title_fr": "Signalisation vasculaire et effort",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "NOS3 participe à la production d'oxyde nitrique vasculaire. Une association à ce locus ne mesure pas votre débit sanguin et ne prouve pas un avantage sportif ou une maladie cardiovasculaire.",
+    "action_fr": "Utiliser les mesures cliniques et physiques pertinentes. Ne pas prendre de produits destinés à augmenter l'oxyde nitrique sur la base de ce marqueur."
+  },
+  "Capillary Angiogenesis": {
+    "title_fr": "Adaptation des vaisseaux à l'activité",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "VEGFA intervient dans la formation et la régulation des vaisseaux. Les associations étudiées pour un polymorphisme ne permettent pas de quantifier votre réseau capillaire ni votre réponse à l'entraînement.",
+    "action_fr": "Évaluer l'endurance avec des mesures et un suivi de l'entraînement. Ne pas tirer de conclusion médicale à partir de ce seul signal."
+  },
+  "Tendon Injury Risk": {
+    "title_fr": "Tendons et risque de blessure",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "COL5A1 participe au collagène. Un SNP commun d'association aux blessures ne prédit pas à lui seul une rupture tendineuse et n'est pas un diagnostic de maladie monogénique du collagène.",
+    "action_fr": "Adapter les charges progressivement et tenir compte des blessures précédentes. En cas de douleur persistante ou d'hyperlaxité inhabituelle, privilégier l'examen clinique."
+  },
+  "Bone & Ligament Strength": {
+    "title_fr": "Os, ligaments et collagène",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "COL1A1 code une chaîne du collagène de type I. Le marqueur commun présenté dans ce panel ne mesure pas la densité osseuse et ne doit pas être confondu avec les variants responsables de maladies du collagène.",
+    "action_fr": "Vérifier la qualité de l'appel et les facteurs cliniques. Une mesure de densité osseuse se discute selon les indications habituelles, pas sur ce SNP isolé."
+  },
+  "Inflammatory Recovery": {
+    "title_fr": "Inflammation et récupération après l'effort",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "IL6 intervient dans des voies inflammatoires et la réponse à l'exercice. Un polymorphisme ne mesure pas votre inflammation et ne détermine pas combien de temps vous devez récupérer.",
+    "action_fr": "Observer fatigue, sommeil, douleurs et progression. Ne pas prescrire d'anti-inflammatoire, de complément ou de temps de repos à partir de ce marqueur."
+  },
+  "Lactate Transport": {
+    "title_fr": "Transport du lactate pendant l'effort",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "SLC16A1 code un transporteur, également nommé MCT1, impliqué dans les échanges de lactate. Une association génétique ne démontre pas une élimination lente du lactate ni un seuil d'effort personnel.",
+    "action_fr": "Utiliser les performances observées et, si utile, des mesures physiologiques encadrées. Ne pas déduire un programme d'entraînement précis de ce seul SNP."
+  },
+  "Exercise & Neuroplasticity": {
+    "title_fr": "Exercice et plasticité cérébrale",
+    "category": "Sport et capacités physiques",
+    "meaning_fr": "BDNF participe à la plasticité du système nerveux. Ce marqueur ne mesure pas votre BDNF et ne permet pas de promettre un bénéfice cognitif particulier de l'exercice.",
+    "action_fr": "Faire vérifier un génotype discordant avant d'interpréter le marqueur. Les bénéfices généraux de l'activité physique ne dépendent pas d'une étiquette à ce locus."
+  },
+  "Appetite & Fat Response": {
+    "title_fr": "Appétit et régulation du poids",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "FTO est un locus d'association à l'adiposité ; l'effet d'un SNP commun est limité et dépend du contexte. Il ne prédit pas votre poids et ne permet pas de choisir un régime idéal.",
+    "action_fr": "Se fonder sur vos habitudes, votre état de santé et l'évolution réelle du poids. Ne pas attribuer une difficulté alimentaire ou un succès de régime à ce marqueur seul."
+  },
+  "Caffeine Metabolism": {
+    "title_fr": "Métabolisme de la caféine",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "CYP1A2 participe à l'élimination de la caféine. Son activité dépend aussi des médicaments, du tabac, des hormones et d'autres facteurs ; ce SNP ne fournit pas une durée personnelle d'élimination fiable.",
+    "action_fr": "Observer les effets réels de la caféine sur sommeil, palpitations et bien-être. Ne pas calculer une dose ou une heure limite universelle à partir du génotype."
+  },
+  "Acetaldehyde Clearance": {
+    "title_fr": "Élimination de l'acétaldéhyde après alcool",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "ALDH2 participe à l'élimination de l'acétaldéhyde, un métabolite toxique de l'alcool. Un variant fonctionnel confirmé peut modifier cette étape, mais un résultat usuel ne rend pas la consommation d'alcool sans risque.",
+    "action_fr": "Ne pas augmenter la consommation sur la base de ce résultat. Une rougeur, un malaise ou des palpitations après alcool justifient de limiter l'exposition et de discuter du contexte clinique."
+  },
+  "Alcohol Breakdown Rate": {
+    "title_fr": "Première étape du métabolisme de l'alcool",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "ADH1B contribue à transformer l'éthanol en acétaldéhyde. Les étiquettes rapide ou lent nécessitent une orientation et un allèle correctement identifiés ; elles ne définissent pas votre tolérance ni une protection personnelle contre les effets de l'alcool.",
+    "action_fr": "Faire revoir le sens de l'allèle avant toute interprétation fonctionnelle. Ne pas utiliser ce marqueur pour justifier une consommation ou ignorer une réaction désagréable."
+  },
+  "Vitamin D Response": {
+    "title_fr": "Récepteur de la vitamine D",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "VDR code le récepteur de la vitamine D. Le SNP commun du panel ne mesure pas son activité chez vous et ne démontre ni carence ni besoin particulier de supplémentation.",
+    "action_fr": "Une évaluation de la vitamine D ou une supplémentation doit reposer sur le contexte clinique et les recommandations habituelles, pas sur ce seul marqueur."
+  },
+  "Vitamin D Transport": {
+    "title_fr": "Transport de la vitamine D",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "GC code une protéine de transport de la vitamine D. Des associations à certains dosages sanguins n'établissent pas votre statut en vitamine D ni la dose dont vous auriez besoin.",
+    "action_fr": "Si une indication clinique existe, interpréter les mesures biologiques avec un professionnel. Ne pas modifier les compléments uniquement sur ce SNP."
+  },
+  "Folate & Homocysteine": {
+    "title_fr": "Métabolisme des folates et homocystéine",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "Le polymorphisme commun MTHFR C677T peut contribuer aux différences de métabolisme des folates et d'homocystéine. Ce marqueur n'est pas un diagnostic de maladie récessive sévère, de thrombophilie ou de trouble de fertilité.",
+    "action_fr": "Appliquer les recommandations nutritionnelles et préconceptionnelles habituelles. Ne pas commencer une supplémentation spéciale ou un traitement à partir de ce seul génotype."
+  },
+  "Iron Overload (C282Y)": {
+    "title_fr": "HFE C282Y et surcharge en fer",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "C282Y est un variant HFE pertinent pour certaines formes d'hémochromatose, avec une pénétrance incomplète. La maladie dépend du génotype complet et du bilan en fer ; l'absence de ligne dans un VCF ne démontre pas son absence.",
+    "action_fr": "Si le variant est réellement observé et confirmé, interpréter le génotype avec ferritine et saturation de la transferrine selon le contexte. Ne pas entreprendre de saignée ou de restriction à partir du rapport seul."
+  },
+  "Iron Absorption (H63D)": {
+    "title_fr": "HFE H63D et interprétation du bilan en fer",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "H63D n'a pas la même portée clinique que C282Y. Sa présence isolée ne diagnostique pas une surcharge en fer et sa lecture nécessite les autres allèles HFE ainsi que les mesures biologiques.",
+    "action_fr": "Si le bilan en fer est anormal, demander une interprétation médicale complète. Ne pas exclure les aliments riches en fer ou prendre des compléments selon ce seul marqueur."
+  },
+  "Lactose Tolerance": {
+    "title_fr": "Digestion du lactose à l'âge adulte",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "Un marqueur régulateur près de LCT dans MCM6 est associé à la persistance de la lactase dans certaines populations. Il ne prédit pas tous les symptômes digestifs et un seul locus ne couvre pas toutes les causes de persistance ou de déficit en lactase.",
+    "action_fr": "Confronter le résultat aux symptômes et à la quantité tolérée. Si nécessaire, discuter d'une évaluation digestive ; ne pas supprimer tous les produits laitiers sur la base du SNP seul."
+  },
+  "Omega-3 Conversion": {
+    "title_fr": "Métabolisme des acides gras : signal de la région FADS",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "Ce marqueur de la région FADS/MYRF a été associé à des différences de composition en acides gras. Il ne mesure pas votre conversion des oméga-3 et ne définit pas une dose de poisson ou de complément.",
+    "action_fr": "Faire revoir un génotype discordant avant d'interpréter le signal. Utiliser les recommandations alimentaires générales et les indications cliniques, pas une étiquette de convertisseur rapide ou lent."
+  },
+  "Bitter Taste Sensitivity": {
+    "title_fr": "Perception des goûts amers",
+    "category": "Nutrition et métabolisme",
+    "meaning_fr": "TAS2R38 participe à la perception de certaines molécules amères. Plusieurs sites forment des haplotypes ; un SNP isolé ne reconstitue pas tout le profil de perception ni les préférences alimentaires.",
+    "action_fr": "Comparer avec votre perception réelle et adapter les préparations alimentaires à vos goûts. Ce résultat n'est pas une raison médicale d'éviter les légumes amers."
+  },
+  "Fluoropyrimidine toxicity": {
+    "title_fr": "DPYD et sécurité de certains anticancéreux",
+    "category": "Médicaments",
+    "meaning_fr": "La DPD, codée par DPYD, élimine les fluoropyrimidines. Certains variants peuvent accroître leur toxicité, mais un panel partiel ou des sites absents du VCF ne certifient pas une activité normale.",
+    "action_fr": "Avant 5-FU ou capécitabine, communiquer un résultat confirmé au prescripteur et réaliser le dépistage clinique DPD approprié. Ne pas déduire de dose depuis ce rapport."
+  },
+  "Thiopurine methylation": {
+    "title_fr": "TPMT et tolérance des thiopurines",
+    "category": "Médicaments",
+    "meaning_fr": "TPMT contribue au métabolisme des thiopurines. Le diplotype doit être établi avec un panel adapté ; plusieurs variants hétérozygotes peuvent être sur le même chromosome et ne s'additionnent pas sans phase.",
+    "action_fr": "Avant une thiopurine concernée, faire confirmer les allèles et lire avec NUDT15. Le prescripteur décide de la stratégie et de la surveillance ; ne pas modifier seul le traitement."
+  },
+  "Thiopurine tolerance": {
+    "title_fr": "NUDT15 et toxicité des thiopurines",
+    "category": "Médicaments",
+    "meaning_fr": "NUDT15 intervient dans l'inactivation de métabolites des thiopurines. Des variants fonctionnels confirmés peuvent augmenter leur toxicité sanguine ; un SNP usuel absent ne démontre pas un diplotype normal complet.",
+    "action_fr": "Si azathioprine, mercaptopurine ou thioguanine sont envisagées, faire confirmer le panel pertinent et le lire avec TPMT. Conserver la surveillance prescrite."
+  },
+  "Tacrolimus clearance": {
+    "title_fr": "CYP3A5 et exposition au tacrolimus",
+    "category": "Médicaments",
+    "meaning_fr": "CYP3A5 participe à l'élimination du tacrolimus. Un marqueur ciblé peut être pertinent, mais les autres allèles, interactions et concentrations sanguines restent nécessaires pour l'interprétation.",
+    "action_fr": "Si tacrolimus prescrit, confirmer le diplotype et transmettre le résultat au spécialiste. Les concentrations sanguines guident le suivi ; ne pas calculer une dose à partir de ce panel seul."
+  },
+  "Statin myopathy risk": {
+    "title_fr": "SLCO1B1 et tolérance de certaines statines",
+    "category": "Médicaments",
+    "meaning_fr": "SLCO1B1 code un transporteur hépatique. Certains variants peuvent modifier l'exposition à certaines statines et contribuer aux symptômes musculaires ; l'effet dépend de la molécule, de la dose et du contexte.",
+    "action_fr": "Si une statine concernée est envisagée ou provoque des symptômes, faire confirmer les allèles et discuter des options avec le prescripteur. Ne pas interrompre seul le médicament."
+  },
+  "Rosuvastatin exposure": {
+    "title_fr": "ABCG2 et exposition à la rosuvastatine",
+    "category": "Médicaments",
+    "meaning_fr": "ABCG2 code un transporteur pouvant influencer l'exposition à la rosuvastatine. Un appel à un site ne résume pas tous les facteurs pharmacologiques et ne prédit pas un effet indésirable certain.",
+    "action_fr": "Communiquer un génotype confirmé si la rosuvastatine est envisagée. Le choix du traitement dépend aussi des autres médicaments, des facteurs cliniques et de la recommandation pertinente."
+  },
+  "Warfarin & NSAID metabolism": {
+    "title_fr": "CYP2C9 : warfarine et certains anti-inflammatoires",
+    "category": "Médicaments",
+    "meaning_fr": "CYP2C9 participe au métabolisme de plusieurs médicaments. Les effets dépendent du diplotype complet et de la molécule ; un même résultat ne signifie pas la même adaptation pour tous les traitements.",
+    "action_fr": "Confirmer les allèles pertinents avant une décision pharmacogénétique. Pour la warfarine, intégrer les autres gènes, les facteurs cliniques et le suivi de l'INR ; aucune dose n'est fournie ici."
+  },
+  "Warfarin sensitivity": {
+    "title_fr": "VKORC1 et sensibilité à la warfarine",
+    "category": "Médicaments",
+    "meaning_fr": "VKORC1 intervient dans le cycle de la vitamine K et constitue une cible de la warfarine. Ce marqueur peut contribuer à la sensibilité au médicament ; il n'annonce pas une maladie spontanée de la coagulation.",
+    "action_fr": "Si warfarine envisagée, faire interpréter le résultat confirmé avec CYP2C9 et les données cliniques. Le suivi de l'INR reste indispensable."
+  },
+  "Warfarin dose requirement": {
+    "title_fr": "CYP4F2 : un contributeur à la réponse à la warfarine",
+    "category": "Médicaments",
+    "meaning_fr": "Certaines variations de CYP4F2 peuvent contribuer modestement aux différences de réponse à la warfarine. Elles ne suffisent pas à calculer une dose ni à remplacer les facteurs cliniques et les autres gènes.",
+    "action_fr": "Utiliser seulement un résultat confirmé dans une évaluation pharmacogénétique complète si ce traitement est concerné. Ne pas changer un anticoagulant ou sa dose soi-même."
+  },
+  "Antidepressant, stomach-acid & clopidogrel response": {
+    "title_fr": "CYP2C19 : certains psychotropes, traitements gastriques et clopidogrel",
+    "category": "Médicaments",
+    "meaning_fr": "CYP2C19 intervient dans l'élimination ou l'activation de plusieurs médicaments. Un même diplotype n'a pas les mêmes conséquences pour le clopidogrel, un inhibiteur de la pompe à protons ou un psychotrope.",
+    "action_fr": "Établir le diplotype clinique et discuter de la recommandation propre au médicament avec le prescripteur. Ne pas conclure normal parce que quelques SNP sont absents."
+  },
+  "Irinotecan, atazanavir & bilirubin handling": {
+    "title_fr": "UGT1A1 : bilirubine et certains traitements",
+    "category": "Médicaments",
+    "meaning_fr": "UGT1A1 participe à la conjugaison de la bilirubine et de certains médicaments. Un modèle SNV limité ne caractérise pas les répétitions *28/*37 ni le diplotype complet ; il ne confirme ou n'exclut pas à lui seul un syndrome de Gilbert.",
+    "action_fr": "Si irinotécan ou atazanavir sont concernés, demander un test adapté incluant les allèles pertinents. Une bilirubine anormale s'interprète cliniquement avec les autres causes possibles, sans traitement déduit de ce rapport."
+  },
+  "Acetylator status": {
+    "title_fr": "NAT2 et acétylation de certains médicaments",
+    "category": "Médicaments",
+    "meaning_fr": "NAT2 influence l'acétylation de certains médicaments. Plusieurs sites composent les allèles ; leur présence ne suffit pas toujours à établir les deux haplotypes et un statut d'acétylation complet.",
+    "action_fr": "Si un médicament associé est envisagé, confirmer les haplotypes et appliquer la recommandation pertinente avec le prescripteur. Ne pas additionner deux SNP hétérozygotes comme deux allèles déficients sans phase."
+  },
+  "Efavirenz metabolism": {
+    "title_fr": "CYP2B6 et exposition à l'éfavirenz",
+    "category": "Médicaments",
+    "meaning_fr": "CYP2B6 participe au métabolisme de l'éfavirenz. Certains marqueurs peuvent modifier son exposition, mais plusieurs sites et leur organisation sont nécessaires pour établir les allèles complets.",
+    "action_fr": "Si l'éfavirenz est concerné, faire confirmer le diplotype puis en discuter avec le spécialiste. Ne pas déduire une dose ni une intolérance certaine de ce seul résultat."
+  },
+  "Ivacaftor response": {
+    "title_fr": "CFTR et indication d'un modulateur",
+    "category": "Médicaments",
+    "meaning_fr": "L'efficacité de l'ivacaftor dépend de variants CFTR précis et d'un contexte de mucoviscidose établi. Une étiquette non répondeur dans un panel limité ne diagnostique pas la maladie et ne caractérise pas tout le gène.",
+    "action_fr": "Ce thème est pertinent seulement si un diagnostic ou une évaluation CFTR le justifie. Le centre spécialisé confirme les variants et l'indication thérapeutique ; aucune décision de traitement ne vient de cette carte seule."
+  }
+}

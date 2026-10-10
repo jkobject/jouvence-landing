@@ -41,3 +41,20 @@ la synthèse. Un percentile classe un score ; il ne mesure pas une probabilité
 de maladie. Les scores incomplets ou non qualifiés restent dans l'audit, sans
 classement inventé. La validation arithmétique d'un sous-score ne démontre pas
 sa performance prédictive clinique.
+
+## Panels et comparaison des rapports du fournisseur
+
+Les rapports PDF/HTML sont importés comme données non exécutées. Leurs résultats
+restent attribués au fournisseur et confrontés aux génotypes explicitement
+présents dans les VCF, avec provenance par document et par page. La vue traduit
+les explications, signale les discordances et offre un export CSV par panel.
+Elle distingue le périmètre annoncé par un fournisseur du contenu réellement
+extractible : une page blanche ou un test non pris en charge n'est pas un négatif.
+
+L'enrichissement GWAS sépare associations, rsID, publications, mesures étudiées
+et appels explicites. Il ne transforme pas des milliers d'associations en
+milliers de maladies détectées. Les scores externes hors ±1 sigma peuvent être
+inspectés dans une rubrique attribuée et non reproduite ; ils ne deviennent pas
+des scores locaux qualifiés. Les gros modèles disposent d'une table limitée et
+d'un CSV complet des observations, sans alourdir l'HTML par des copies du
+catalogue entier.

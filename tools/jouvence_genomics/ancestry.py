@@ -22,7 +22,7 @@ import time
 from collections import Counter
 from importlib.metadata import version
 from pathlib import Path
-from typing import Sequence
+from typing import Sequence, Callable
 from urllib.request import urlopen
 
 import numpy as np
@@ -47,6 +47,9 @@ POPULATION_LABELS_FR = {
     "EAS": "références d'Asie de l'Est",
     "EUR": "références européennes",
     "SAS": "références d'Asie du Sud",
+    "CSA": "références d'Asie centrale et du Sud",
+    "MID": "références du Moyen-Orient",
+    "OCE": "références d'Océanie",
 }
 SOURCES = [
     {"title": "Pedersen et Quinlan — méthode Peddy, 2017", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5339084/"},
@@ -244,6 +247,8 @@ def _ancestry_model_sha256(pca: PCA, imputation_mean: np.ndarray, train_indices:
 def analyze_ancestry(
     result_paths: Sequence[Path], reference_directory: Path, output_directory: Path,
     *, random_seed: int = 42, validation_repeats: int = 3, null_repeats: int = 100,
+    reference_loader: Callable | None = None,
+    pca_components: int = 4,
 ) -> dict[str, Path]:
     """Calculer une affinité descriptive validée pour des analyses GRCh37 figées.
 
@@ -254,6 +259,14 @@ def analyze_ancestry(
     Des tests avec 80 % des appels et 100 permutations des labels complètent
     l'audit. Ces métriques évaluent une classification, pas des proportions.
 
+    ``reference_loader`` permet une référence publique alternative déjà préparée.
+    Elle retourne (sites GRCh37, matrice personnes × sites 0/1/2/NaN,
+    labels, panel), avec ``panel['reference_manifest']`` et ``panel['sources']``.
+    Les groupes sont dérivés des labels ; les critères de validation ne changent pas.
+    ``pca_components`` permet un nombre d'axes prescrit pour une analyse de
+    sensibilité. Comparer les configurations, sans masquer un échec antérieur
+    ni choisir un nombre d'axes pour forcer la population d'une personne.
+
     Returns
     -------
     dict[str, Path]
@@ -263,8 +276,26 @@ def analyze_ancestry(
     started = time.perf_counter()
     if validation_repeats < 1 or null_repeats < 10:
         raise ValueError("Au moins une séparation et dix permutations sont requises")
-    reference_manifest = prepare_ancestry_reference(reference_directory)
-    sites, reference, labels, panel = load_ancestry_reference(reference_directory)
+    if type(pca_components) is not int or pca_components < 2:
+        raise ValueError("Au moins deux axes PCA entiers sont requis")
+    if reference_loader is None:
+        reference_manifest = prepare_ancestry_reference(reference_directory)
+        sites, reference, labels, panel = load_ancestry_reference(reference_directory)
+        sources = SOURCES
+    else:
+        sites, reference, labels, panel = reference_loader(reference_directory)
+        reference_manifest = panel["reference_manifest"]
+        sources = panel["sources"]
+    populations = sorted(set(labels))
+    if set(populations) - set(POPULATION_LABELS_FR):
+        raise ValueError("Labels de population non documentés")
+    if (reference.shape != (len(labels), len(sites)) or len(set(sites)) != len(sites)
+        or len(populations) < 2 or min(Counter(labels).values()) < 10
+        or np.any(np.isinf(reference))
+        or np.any(~np.isin(reference[np.isfinite(reference)], [0, 1, 2]))):
+        raise ValueError("Matrice, dosages ou effectifs de référence invalides")
+    if pca_components > min(reference.shape[1], int(.75 * len(labels))):
+        raise ValueError("Trop d'axes PCA pour la référence")
     samples = [extract_ancestry_markers(path, sites) for path in result_paths]
     if not samples or len({info["sample_name"] for _, info in samples}) != len(samples):
         raise ValueError("Fournir au moins une analyse et des noms d'échantillons distincts")
@@ -278,7 +309,7 @@ def analyze_ancestry(
         if np.any(~np.isfinite(mean)):
             raise ValueError("Marqueur entièrement inconnu dans l'entraînement")
         complete_train = np.where(np.isnan(reference[train]), mean, reference[train])
-        pca = PCA(n_components=4, whiten=True, svd_solver="randomized", random_state=random_seed + fold)
+        pca = PCA(n_components=pca_components, whiten=True, svd_solver="randomized", random_state=random_seed + fold)
         train_complete_pc = pca.fit_transform(complete_train)
         train_masked_pc = _project_variant_only(pca, mean, reference[train])
         test_masked_pc = _project_variant_only(pca, mean, reference[test])
@@ -295,8 +326,8 @@ def analyze_ancestry(
                       "variant_only_balanced_accuracy": float(balanced_accuracy_score(labels[test], predicted)),
                       "naive_complete_training_balanced_accuracy": float(balanced_accuracy_score(labels[test], naive.predict(test_masked_pc))),
                       "masked_plus_80_percent_calls_balanced_accuracy": float(balanced_accuracy_score(labels[test], thinned_prediction)),
-                      "population_order": POPULATIONS,
-                      "confusion_matrix": confusion_matrix(labels[test], predicted, labels=POPULATIONS).tolist()})
+                      "population_order": populations,
+                      "confusion_matrix": confusion_matrix(labels[test], predicted, labels=populations).tolist()})
         print(f"Validation {fold + 1}/{validation_repeats} : équilibrée masquée={folds[-1]['variant_only_balanced_accuracy']:.3f}, naïve={folds[-1]['naive_complete_training_balanced_accuracy']:.3f}", flush=True)
         for dosage, info in samples:
             projected = _project_variant_only(pca, mean, dosage, mask_reference=False)
@@ -310,19 +341,19 @@ def analyze_ancestry(
     pca, mean, classifier, reference_pc, train, test, predicted = last_model
     model_sha256 = _ancestry_model_sha256(pca, mean, train)
     validation = {"schema_version": 1, "method": "PCA référence + SVM calibré variant-only, affinité de référence",
-                  "random_seed": random_seed, "panel": panel, "reference_manifest": reference_manifest,
+                  "random_seed": random_seed, "pca_components": pca_components, "panel": panel, "reference_manifest": reference_manifest,
                   "model_sha256": model_sha256,
                   "dependency_versions": {name: version(name) for name in ("numpy", "scikit-learn")},
                   "folds": folds, "null_balanced_accuracy": {"repeats": null_repeats,
                       "mean": float(np.mean(null_accuracies)), "maximum": float(np.max(null_accuracies)),
-                      "all_values": null_accuracies}, "sources": SOURCES}
+                      "all_values": null_accuracies}, "sources": sources}
     output_directory.mkdir(parents=True, exist_ok=True)
     outputs = {}
     for index, (dosage, info) in enumerate(samples, 1):
         projected = _project_variant_only(pca, mean, dosage, mask_reference=False)
         prediction = str(classifier.predict(projected)[0])
         distances = {population: float(np.linalg.norm(projected[0] - np.mean(reference_pc[labels[train] == population], axis=0)))
-                     for population in POPULATIONS}
+                     for population in populations}
         # Un classificateur attribue toujours un groupe, même loin des références.
         # Contrôle d'extrapolation : comparer au même groupe dans le test indépendant.
         held_out_pc = _project_variant_only(pca, mean, reference[test])
@@ -361,7 +392,7 @@ def analyze_ancestry(
                      and min(subsample_validation_accuracies) >= 0.9
                      and min(chromosome_validation.values()) >= 0.9
                      and stability >= 0.9 and stable and within_reference)
-        result = {"schema_version": 1, **info, "panel": panel, "model_sha256": model_sha256,
+        result = {"schema_version": 1, **info, "panel": panel, "model_sha256": model_sha256, "pca_components": pca_components,
                   "method": validation["method"], "status": "reference_affinity_supported" if validated else "reference_affinity_unresolved",
                   "closest_reference_group": prediction if validated else None,
                   "closest_reference_group_label_fr": POPULATION_LABELS_FR[prediction] if validated else "affinité non résolue par les contrôles",
@@ -381,11 +412,11 @@ def analyze_ancestry(
                   "limitations_fr": ["Les sites absents restent inconnus : ils ne sont pas transformés en 0/0.",
                       "Le masquage des vrais 0/0 de référence simule l'export variant-only ; il ne reproduit pas tous les biais de qualité ou de couverture d'un laboratoire.",
                       "Les SNP du panel ont été espacés, pas entièrement élagués selon le déséquilibre de liaison ; les contrôles par chromosomes et sous-échantillonnage vérifient une partie de cette sensibilité.",
-                      "Les cinq groupes 1000 Genomes ne représentent pas toutes les histoires d'ascendance ; une proximité EUR ne démontre pas une origine française.",
+                      "Les groupes de référence ne représentent pas toutes les histoires d'ascendance ; une proximité EUR ne démontre pas une origine française.",
                       "Les résultats FILTER=. demeurent descriptifs et provisoires ; aucun filtre clinique PGT n'a été modifié."],
                   "validation": {"folds": folds, "null_mean_balanced_accuracy": validation["null_balanced_accuracy"]["mean"],
                       "null_maximum_balanced_accuracy": validation["null_balanced_accuracy"]["maximum"]},
-                  "sources": SOURCES, "reference_manifest": reference_manifest,
+                  "sources": sources, "reference_manifest": reference_manifest,
                   "dependency_versions": validation["dependency_versions"],
                   "elapsed_seconds": time.perf_counter() - started}
         path = output_directory / f"personne_{index}_ancestry.json"
@@ -400,9 +431,10 @@ def analyze_ancestry(
         "schema_version": 1, "method": validation["method"],
         "model_sha256": model_sha256,
         "pca_training_people": int(len(train)), "independent_test_people": int(len(test)),
-        "pca_components": 4, "pca_explained_variance_ratio": pca.explained_variance_ratio_.astype(float).tolist(),
+        "pca_components": pca_components, "pca_explained_variance_ratio": pca.explained_variance_ratio_.astype(float).tolist(),
         "reference_panel": panel, "reference_manifest": reference_manifest,
         "points": [{"reference_index": i, "group": str(labels[i]),
+                    **({"population_label": panel["population_labels"][i]} if panel.get("population_labels") else {}),
                     "validation_role": "held_out" if i in held_out_indices else "training",
                     "pc": all_reference_pc[i].astype(float).tolist()} for i in range(len(labels))],
         "interpretation_fr": "Nuage des références après masquage de leurs vrais 0/0 ; les coordonnées ont la même calibration que les échantillons. Aucun dosage personnel n'est inclus.",

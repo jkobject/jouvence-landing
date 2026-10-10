@@ -12,6 +12,7 @@ import csv
 import hashlib
 import io
 import json
+import shutil
 import sys
 from base64 import b64encode
 from collections import defaultdict
@@ -24,7 +25,10 @@ from urllib.parse import urlsplit
 from .traits import audit_traits
 from .catalogs import review_stars
 from .vcf import normalize_allele
-from .patient_view import select_patient_signals, render_patient_sections, render_population_results, ancestry_plot_spec
+from .patient_view import (select_patient_signals, render_patient_sections,
+                          render_population_results, ancestry_plot_spec)
+from .report_panels import build_report_panels
+from .panel_view import render_panel_dashboard
 
 
 HERE = Path(__file__).parent
@@ -232,6 +236,7 @@ def render_trait_sections(traits: dict, references: dict) -> str:
         ("nutrition", "Nutrition et métabolisme", "Les marqueurs se confrontent aux symptômes et à la biologie. Ils ne définissent pas un régime idéal ni des compléments à prendre."),
         ("coherence", "Traits et contrôles de concordance", "Ces traits peuvent être comparés à une information connue. Ils ne certifient pas l'identité de l'échantillon ni un groupe sanguin pour une transfusion."),
         ("predisposition", "Autres prédispositions : limites de l'interprétation", "Un marqueur isolé de prédisposition n'est ni une maladie future annoncée ni un diagnostic."),
+        ("performance", "Performance physique", "Un marqueur isolé ne classe pas une personne en endurance ou puissance et ne dicte aucun entraînement."),
     ):
         markers = [m for m in traits["markers"] if m["category"] == category]
         called = [m for m in markers if m["observations"]]
@@ -374,6 +379,7 @@ def build_genomic_reports(
     ancestry_results: dict[str, Path] | None = None,
     polygenic_results: dict[str, Path] | None = None,
     ancestry_reference_projection: Path | None = None,
+    supplementary_results: dict[str, dict[str, Path | list[Path]]] | None = None,
 ) -> dict[str, Path]:
     """Générer deux rapports individuels et un rapport de couple français.
 
@@ -397,6 +403,12 @@ def build_genomic_reports(
     ancestry_reference_projection : Path | None
         Nuage public des références, issu du même modèle que les résultats
         d'ascendance. Nécessaire pour leur représentation graphique.
+    supplementary_results : dict[str, dict[str, Path | list[Path]]] | None
+        Audits privés, indexés par personne puis par type : associations,
+        exact_polygenic, dante_html, dante_comparison, pdf_reports (liste),
+        pdf_comparison, ancestry_sensitivity. Les audits VCF doivent porter les mêmes empreintes.
+        Les documents externes restent attribués au fournisseur, sans les
+        transformer en résultats locaux ou compléter les génotypes absents.
 
     Returns
     -------
@@ -453,6 +465,44 @@ def build_genomic_reports(
                 if value.get("analysis_result_sha256") and value["analysis_result_sha256"] != hashlib.sha256(source_paths[index-1].read_bytes()).hexdigest():
                     raise ValueError("Résultat d'ascendance lié à une autre révision d'analyse")
                 extras[key] = value
+        for key, paths in (supplementary_results or {}).get(name, {}).items():
+            if key not in {"associations", "exact_polygenic", "dante_html", "dante_comparison", "pdf_reports", "pdf_comparison", "ancestry_sensitivity"}:
+                raise ValueError(f"Résultat complémentaire non pris en charge : {key}")
+            if key == "pdf_reports":
+                if not isinstance(paths, list):
+                    raise ValueError("pdf_reports doit être une liste de chemins JSON")
+                value = [json.loads(Path(path).read_text()) for path in paths]
+                for document in value:
+                    original = Path(document["path"])
+                    with original.open("rb") as handle:
+                        current = hashlib.file_digest(handle, "sha256").hexdigest()
+                    if current != document["sha256"]:
+                        raise ValueError("PDF modifié depuis l'extraction")
+            else:
+                value = json.loads(Path(paths).read_text())
+                if key in {"associations", "exact_polygenic", "dante_comparison", "pdf_comparison", "ancestry_sensitivity"}:
+                    if [entry["sha256"] for entry in value.get("input_files", [])] != identities:
+                        raise ValueError(f"Empreintes d'entrées incompatibles dans {key}")
+                    if key in {"associations", "exact_polygenic", "ancestry_sensitivity"} and value.get("sample_name") != name:
+                        raise ValueError(f"Résultat complémentaire attribué à une autre personne : {key}")
+                    if key == "ancestry_sensitivity":
+                        for configuration in value["configurations"]:
+                            if (configuration["sample_name"] != name or
+                                [entry["sha256"] for entry in configuration["inputs"]] != identities):
+                                raise ValueError("Configuration de sensibilité attribuée à d'autres entrées")
+            extras[key] = value
+        if extras.get("dante_html") or extras.get("dante_comparison"):
+            if not extras.get("dante_html") or not extras.get("dante_comparison"):
+                raise ValueError("Le rapport HTML externe doit accompagner son audit de concordance")
+            documents = {(doc["name"], doc["sha256"]) for doc in extras["dante_html"]["documents"]}
+            if any((row["source_document"], row["source_sha256"]) not in documents
+                   for row in extras["dante_comparison"]["comparisons"]):
+                raise ValueError("Comparaison liée à une autre révision de document HTML")
+        if extras.get("pdf_comparison"):
+            documents = {(doc["filename"], doc["sha256"]) for doc in extras.get("pdf_reports", [])}
+            if any((row["source_document"], row["source_sha256"]) not in documents
+                   for row in extras["pdf_comparison"]["comparisons"]):
+                raise ValueError("Comparaison liée à une autre révision de PDF")
         plots = {}
         if extras.get("ancestry", {}).get("status") == "reference_affinity_supported":
             if ancestry_reference_projection is None:
@@ -460,6 +510,27 @@ def build_genomic_reports(
             projection = json.loads(Path(ancestry_reference_projection).read_text())
             plots["ancestry-space"] = ancestry_plot_spec(extras["ancestry"], projection)
         signals = select_patient_signals(records, traits)
+        for score in extras.get("exact_polygenic", {}).get("scores", []):
+            if score.get("trace_csv_path"):
+                source_csv = Path(score["trace_csv_path"])
+                with source_csv.open("rb") as handle:
+                    fingerprint = hashlib.file_digest(handle, "sha256").hexdigest()
+                if fingerprint != score["trace_csv_sha256"]:
+                    raise ValueError("CSV de score modifié depuis son audit")
+                pgs_id = score["pgs_id"]
+                if len(pgs_id) != 9 or not pgs_id.startswith("PGS") or not pgs_id[3:].isdigit():
+                    raise ValueError("Identifiant PGS invalide pour l'export")
+                shutil.copyfile(source_csv, folder / (pgs_id + ".csv"))
+        for domain, export in extras.get("associations", {}).get("domain_exports", {}).items():
+            from .association_catalog import TRAIT_DOMAINS
+            if domain not in TRAIT_DOMAINS:
+                raise ValueError("Domaine GWAS inconnu pour l'export")
+            source_csv = Path(export["csv_path"])
+            with source_csv.open("rb") as handle:
+                fingerprint = hashlib.file_digest(handle, "sha256").hexdigest()
+            if fingerprint != export["sha256"]:
+                raise ValueError("CSV d'associations modifié depuis son audit")
+            shutil.copyfile(source_csv, folder / ("GWAS-" + domain + ".csv"))
         description = (f'{len(signals["clinical"])} résultat(s) de portage ou santé à confirmer, '
                        f'{signals["profiles"]} sujet(s) de médicaments, nutrition ou traits avec une observation utile.')
         sections = ['<section id="synthese"><h2>Vos informations clés</h2>'
@@ -468,8 +539,12 @@ def build_genomic_reports(
                     'Les détails complets sont accessibles sans encombrer cette première lecture.</p>'
                     '<p class="caveat">Ce rapport n’est pas un diagnostic. Les observations provisoires demandent une confirmation ; '
                     'les traitements et antécédents n’ont pas été renseignés.</p></section>',
+                    render_panel_dashboard(build_report_panels(records, traits, catalog,
+                        polygenic=extras.get("exact_polygenic") or extras.get("polygenic"), supplementary=extras)),
+                    _external_coverage_section(extras, records),
                     render_patient_sections(signals, catalog, references),
-                    render_population_results(extras.get("ancestry"), extras.get("polygenic"), references)]
+                    render_population_results(extras.get("ancestry"), extras.get("polygenic"), references),
+                    _ancestry_sensitivity_section(extras.get("ancestry_sensitivity"))]
         sections.append('<section id="annexes" data-document-only><h2>Détails et transparence de l’analyse</h2>'
                         f'<details class="audit-details"><summary>Ouvrir l’annexe : {len(records)} observations, qualité, VUS et sites non évalués</summary>'
                         '<p class="caveat">Les VUS et appels techniques sont conservés pour audit, pas présentés comme des maladies. '
@@ -486,16 +561,22 @@ def build_genomic_reports(
         (folder / "report.md").write_text(md, encoding="utf-8")
         _save_variant_table(records, folder / "variants.csv")
         metadata = {"title": f"Vos résultats — {name}", "subtitle": "Ce qui compte pour vous, puis les détails pour comprendre et vérifier.",
-                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v3 · lecture utile",
+                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4 · panels et comparaison des sources",
                     "references": references, "analysis_input_sha256": frozen_hashes,
                     "clinical_cards_sha256": hashlib.sha256(json.dumps(catalog, sort_keys=True).encode()).hexdigest(),
                     "counts": counts, "patient_signals": {"clinical": len(signals["clinical"]), "validation": len(signals["validation"]), "profiles": signals["profiles"]},
                     "additional_results_sha256": {key: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest() for key, value in extras.items()},
                     "clinical_history": "non renseignée"}
         structural_data = json.dumps(result.get("structural_candidates", []), ensure_ascii=False, indent=2).encode()
+        for key, value in extras.items():
+            (folder / (key + ".json")).write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
+        # Les audits volumineux restent à côté de l'HTML. Le dashboard embarque
+        # les lignes exportables ; pas trois copies de tout le catalogue brut.
+        embedded_extras = {key: value for key, value in extras.items()
+                           if key not in {"associations", "exact_polygenic", "pdf_reports", "ancestry_sensitivity"}}
         attachments = {"variants.csv": (folder / "variants.csv").read_bytes(), "traits.json": cache.read_bytes(),
                        "structural_candidates.json": structural_data,
-                       **{key + ".json": json.dumps(value, ensure_ascii=False, indent=2).encode() for key, value in extras.items()}}
+                       **{key + ".json": json.dumps(value, ensure_ascii=False, indent=2).encode() for key, value in embedded_extras.items()}}
         outputs[f"personne_{index}"] = write_french_html(folder, folder / "rapport.html", metadata, skill_scripts,
                                                         attachments=attachments, plots=plots)
     couple = json.loads(couple_result.read_text())
@@ -524,10 +605,127 @@ def build_genomic_reports(
     outputs["couple"] = write_french_html(folder, folder / "rapport.html", {
         "title": f"Rapport de couple — {couple['first_name']} et {couple['second_name']}",
         "subtitle": "Une comparaison par maladie et niveau de preuve, avec les limites de phase explicites.",
-        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v3 · lecture utile",
+        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4 · panels et comparaison des sources",
         "references": references, "analysis_input_sha256": frozen_hashes,
     }, skill_scripts)
     return outputs
+
+
+def _ancestry_sensitivity_section(audit: dict | None) -> str:
+    """Montrer la sensibilité du modèle, jamais des proportions d'ascendance."""
+    if not audit:
+        return ""
+    panel = audit["configurations"][0]["panel"]
+    fine = panel.get("fine_population_counts", {})
+    html = ['<section id="ascendance-sensibilite"><h2>Ascendance : ce que change la référence enrichie</h2>',
+            f'<p>Le panel enrichi contient {panel["reference_people"]} références non apparentées, '
+            f'{len(fine)} populations documentées et {panel["selected_markers"]} SNP retenus. '
+            f'Les petits groupes French ({fine.get("French", 0)}) et Basque ({fine.get("Basque", 0)}) décrivent des références, '
+            'pas un échantillonnage représentatif de la France.</p>',
+            '<div class="table-wrap"><table><thead><tr><th>Modèle testé</th><th>Contrôle indépendant des références</th>'
+            '<th>Stabilité de votre classement</th><th>Contrôle par chromosomes</th><th>Conclusion autorisée</th></tr></thead><tbody>']
+    for result in audit["configurations"]:
+        prediction = result["provisional_model_assignment"]
+        assignments = result["subsample_80_percent_assignments"]
+        stable_count = assignments.get(prediction, 0)
+        total = sum(assignments.values())
+        folds = result["validation"]["folds"]
+        conclusion = ("Affinité descriptive soutenue : " + result["closest_reference_group_label_fr"]
+                      if result["status"] == "reference_affinity_supported" else "Affinité non résolue par ces contrôles")
+        chromosome_checks = "; ".join(f"{key.replace('_', ' ')} : {value}" for key, value in result["chromosome_split_assignments"].items())
+        html.append(f'<tr><td>{result["pca_components"]} axes PCA</td>'
+                    f'<td>{100*min(f["variant_only_balanced_accuracy"] for f in folds):.1f}–'
+                    f'{100*max(f["variant_only_balanced_accuracy"] for f in folds):.1f} % d’exactitude équilibrée</td>'
+                    f'<td>{stable_count}/{total} sous-panels classés {escape(prediction)}</td>'
+                    f'<td>{escape(chromosome_checks)}</td><td>{escape(conclusion)}</td></tr>')
+    html.append('</tbody></table></div><p class="caveat">Une fréquence d’assignation à EUR ou MID n’est pas un pourcentage '
+                'd’origine européenne ou moyen-orientale. Un échec de stabilité est conservé ; aucun seuil n’est abaissé '
+                'pour obtenir une population souhaitée. Le nombre d’axes est une analyse de sensibilité, pas un diagnostic.</p>'
+                '<p>Un classement qui change selon les chromosomes indique ici une instabilité du modèle et des données disponibles, '
+                'pas la découverte d’une autre origine. La réussite des contrôles sur les références ne suffit pas si les contrôles '
+                'propres à votre profil échouent.</p>'
+                '<p>Les références françaises plus denses comme FranceGenRef et PREGO nécessitent une procédure d’accès ; '
+                'aucun génome n’a été envoyé à un serveur d’ascendance ou d’imputation.</p>'
+                '<p><a id="ancestry-sensitivity-download" href="#ancestry-sensitivity-download" '
+                'data-companion-file="ancestry_sensitivity.json" download>Télécharger les contrôles complets (JSON)</a></p></section>')
+    return "\n".join(html)
+
+
+def _external_coverage_section(extras: dict, records: list[dict]) -> str:
+    """Expliquer les écarts commerciaux avec comptes et limites source explicites."""
+    if not extras.get("dante_html") and not extras.get("pdf_reports"):
+        return ""
+    html = ['<section id="comparaison-fournisseur"><h2>Pourquoi certains résultats diffèrent de Dante</h2>',
+            '<p class="takeaway">Un résultat absent, un appel écarté et une prédiction non reproduite sont trois situations différentes.</p>',
+            '<div class="prose"><h3>Ce que les fichiers nous permettent réellement de vérifier</h3>']
+    reports = extras.get("dante_html", {}).get("panels", [])
+    if reports:
+        available = [row for row in reports if row["pgs_id"]]
+        empty = len(reports) - len(available)
+        html.append(f'<p>Les {len(extras["dante_html"]["documents"])} HTML contiennent {len(available)} identifiants de scores et {empty} panels sans valeur ni modèle. '
+                    'Leurs résultats viennent du tableau des méthodes : les compteurs animés sauvegardés peuvent rester à « 1 ». '
+                    'Les scores hors ±1 σ figurent comme déclarations du fournisseur, jamais comme résultats locaux validés.</p>')
+        theoretical = sum(row.get("theoretical_reference") is True for row in available)
+        if theoretical:
+            html.append(f'<p>Pour {theoretical} modèles, le fournisseur indique une référence théorique : fréquences publiées, '
+                        'équilibre de Hardy–Weinberg et indépendance des loci. Cette approximation ne remplace pas une distribution '
+                        'empirique adaptée à l’ascendance et ne tient pas nécessairement compte des corrélations entre variants.</p>')
+        html.append('<p>Un percentile 94 signifie un rang de score, pas 94 % de probabilité de maladie. '
+                    'Lorsque la méthode n’est pas attestée dans le document, elle reste non documentée dans cette comparaison.</p>')
+        unavailable = [row["title"] for row in reports if not row["pgs_id"]]
+        if unavailable:
+            html.append('<p>Panels sans résultat dans les sauvegardes : ' + escape(", ".join(unavailable)) + '.</p>')
+        html.append('<p>Un classement aperçu sur une capture, sans identifiant de modèle ni poids '
+                    '(cancer colorectal, par exemple), ne suffit pas à reproduire un score. '
+                    'Un modèle public différent doit être étiqueté comme tel.</p>')
+    pdfs = extras.get("pdf_reports", [])
+    if pdfs:
+        profiles = sum(1 for doc in pdfs for row in doc["findings"] if row.get("section_kind") not in {"carrier_panel", "not_currently_supported"})
+        unsupported = sum(row.get("status") == "not_evaluated_by_provider" for doc in pdfs for row in doc["findings"])
+        html.append(f'<p>Les PDF décrivent {profiles} profils de sommeil, sport, nutrition et médicaments. '
+                    f'Le PDF pharmacogénomique présente aussi {unsupported} loci dans « Not currently supported » : '
+                    'leur libellé « NOT DETECTED » signifie ici non évalué, pas un test négatif. '
+                    'UGT1A1*28 et plusieurs loci HLA/CNV font notamment partie de ces limites.</p>')
+        carriers = [row for doc in pdfs for row in doc["findings"] if row.get("section_kind") == "carrier_panel"]
+        if carriers:
+            html.append(f'<p>{len(carriers)} cartes de portage sont lisibles dans les PDF ; le nombre annoncé en couverture '
+                        'n’atteste pas leur extraction complète. Le syndrome de l’X fragile et les délétions de SMN1 '
+                        'demandent des tests spécialisés. Le badge « CLEAR » ne démontre pas leur exclusion par ce VCF.</p>')
+    for key, label in (("dante_comparison", "HTML"), ("pdf_comparison", "PDF")):
+        comparison = extras.get(key)
+        if not comparison:
+            continue
+        counts = comparison["counts"]
+        html.append(f'<h3>Concordance des génotypes des {label}</h3><p>'
+                    f'{counts.get("concordant", 0)} lignes concordantes ; {counts.get("discordant", 0)} discordantes ; '
+                    f'{counts.get("absent_unknown", 0)} sans génotype explicite. Les répétitions d’un même marqueur '
+                    'dans plusieurs panels sont comptées comme des lignes, pas comme des mutations distinctes.</p><ul>')
+        for row in comparison["comparisons"]:
+            if row["comparison_status"] == "discordant":
+                html.append(f'<li>{escape(str(row.get("rsid") or "marqueur sans rsID affiché"))} · chr{row["chrom"]}:{row["pos"]} : '
+                            f'Dante {escape(row["reported_genotype"])} ; VCF {escape(row["vcf_genotype"])}.</li>')
+        html.append('</ul>')
+    if any(row["gene"] == "TUBB8" and row["report_tier"] == "technical" for row in records):
+        html.append('<h3>La maturation des ovocytes : signal trouvé, mais à confirmer</h3>'
+                '<p>TUBB8 n’a pas été omis du catalogue. L’appel est visible dans le VCF, mais un ou plusieurs '
+                'contrôles de qualité ne sont pas satisfaits : il n’est pas retenu comme génotype fiable avec nos filtres. '
+                'Le panel technique et la fiche du gène expliquent les métriques, le phénotype et la confirmation nécessaire. '
+                    'Cette observation ne diagnostique pas une infertilité.</p>')
+    if extras.get("associations"):
+        summary = extras["associations"]["summary"]
+        html.append(f'<h3>Le catalogue exploratoire a été élargi</h3><p>{summary["selected_associations"]:,} associations '
+                    f'publiées sélectionnées, {summary["selected_rsid_count"]:,} rsID ciblés, '
+                    f'{summary["reported_trait_count"]:,} mesures ou phénotypes source et {summary["study_count"]:,} études. '
+                    'Ces unités ne sont pas interchangeables : ce ne sont pas autant de maladies détectées chez vous. '
+                    'Les associations présentes figurent par domaine ; les inconnus et exclusions demeurent dans l’audit.</p>')
+    html.append('<details class="audit-details"><summary>Audits sources complets dans ce dossier privé</summary><ul>')
+    for key in ("associations", "exact_polygenic", "pdf_reports", "pdf_comparison", "dante_html", "dante_comparison"):
+        if key in extras:
+            html.append(f'<li><a id="audit-download-{key}" href="#audit-download-{key}" '
+                        f'data-companion-file="{key}.json" download>{key}.json</a></li>')
+    html.append('</ul><p>Conserver ces fichiers avec l’HTML pour l’audit complet. Les CSV des panels restent directement embarqués.</p>'
+                '</details></div></section>')
+    return "\n".join(html)
 
 
 def write_french_html(source: Path, output: Path, metadata: dict, skill_scripts: Path,
@@ -541,11 +739,13 @@ def write_french_html(source: Path, output: Path, metadata: dict, skill_scripts:
     sys.path.insert(0, str(skill_scripts))
     from report_builder import render_report
     base = skill_scripts.parent / "assets"
-    (source / "report.css").write_text((base / "report.css").read_text() + "\n" + (HERE / "report_assets.css").read_text())
+    (source / "report.css").write_text((base / "report.css").read_text() + "\n" +
+        (HERE / "report_assets.css").read_text() + "\n" + (HERE / "panel_assets.css").read_text())
     runtime = (base / "report.js").read_text().replace(
         "Full screen is blocked here. Open the file in its own browser tab and press F.",
         "Le plein écran est bloqué ici. Ouvrir le fichier dans un onglet dédié puis appuyer sur F.")
-    (source / "report.js").write_text(runtime + "\n" + (HERE / "report_assets.js").read_text())
+    (source / "report.js").write_text(runtime + "\n" + (HERE / "report_assets.js").read_text() +
+        "\n" + (HERE / "panel_assets.js").read_text())
     metadata["build_dependency_versions"] = {name: version(name) for name in ("Markdown", "beautifulsoup4")}
     metadata["presentation_build_utc"] = datetime.now(timezone.utc).isoformat()
     render_report(source, output, metadata=metadata, plots=plots or {}, attachments=attachments)
@@ -563,6 +763,17 @@ def write_french_html(source: Path, output: Path, metadata: dict, skill_scripts:
         html = html.replace(old, new)
     from bs4 import BeautifulSoup
     document = BeautifulSoup(html, "html.parser")
+    # Le renderer commun embarque automatiquement chaque href local. Les CSV
+    # de centaines de milliers de lignes restent volontairement des pièces
+    # compagnons : leur lien est rétabli seulement après ce rendu documenté.
+    for link in document.select("a[data-companion-file]"):
+        filename = link["data-companion-file"]
+        if Path(filename).name != filename or ".." in filename or not filename.endswith((".csv", ".json")):
+            raise ValueError("Nom de fichier compagnon non sûr")
+        if not (source / filename).is_file():
+            raise ValueError(f"Fichier compagnon absent : {filename}")
+        link["href"] = filename
+        link["download"] = filename
     bibliography = document.select_one("#bibliography > ol")
     if bibliography:
         disclosure = document.new_tag("details", attrs={"class": "audit-details bibliography-details"})

@@ -72,6 +72,17 @@ class PatientViewTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "non finie"):
             ancestry_plot_spec(ancestry, reference)
 
+    def test_pca_figure_keeps_all_seven_groups_and_actual_axis_count(self):
+        groups = ["AFR", "AMR", "CSA", "EAS", "EUR", "MID", "OCE"]
+        ancestry = {"reference_manifest": {}, "model_sha256": "same", "projection_pc": [0] * 8}
+        reference = {"reference_manifest": {}, "model_sha256": "same", "pca_components": 8,
+            "points": [{"reference_index": i, "group": group, "population_label": "Reference population",
+                        "pc": [i, -i, 0, 0, 0, 0, 0, 0]} for i, group in enumerate(groups)]}
+        result = ancestry_plot_spec(ancestry, reference)["reference"]
+        self.assertEqual(len(result["data"]), 8)
+        self.assertIn("8 axes", result["caption"])
+        self.assertTrue(any("Moyen-Orient" in row["name"] for row in result["data"]))
+
 
 if __name__ == "__main__":
     unittest.main()

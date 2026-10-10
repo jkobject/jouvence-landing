@@ -151,7 +151,10 @@ de l'analyse et de l'annexe exhaustive. Les VUS et les sites inconnus ne sont
 pas des cartes de maladie. Les marqueurs de qualité insuffisante sont écartés
 de la synthèse ; `FILTER=.` reste visible comme observation provisoire, même
 quand les autres contrôles disponibles sont satisfaisants. Le panel comprend
-57 sites et 27 profils sourcés, pas 57 diagnostics ou 27 diplotypes.
+58 sites et 28 profils sourcés, pas 58 diagnostics ou 28 diplotypes.
+ACTN3 est un marqueur de recherche sur les fibres musculaires, pas un test
+d'endurance individuelle. Le REF GRCh37 de rs1815739 est T ; ne pas lui appliquer
+le REF C de GRCh38.
 
 ### Ascendance et scores polygéniques : calculs facultatifs et explicites
 
@@ -184,4 +187,89 @@ Transmettre les JSON à `build_genomic_reports()` via `ancestry_results` et
 `polygenic_results`, indexés par le `sample_name` exact, et le nuage public via
 `ancestry_reference_projection`. Le constructeur vérifie les empreintes des
 VCF et de l'analyse pour empêcher une attribution à une autre personne. Les
-JSON complets restent téléchargeables dans l'HTML autonome.
+JSON volumineux restent dans le dossier privé de l'HTML ; les petits audits
+et les CSV des panels sont embarqués. Conserver le dossier complet pour partager
+un rapport avec toutes ses pièces, sans publier ces données dans Git.
+
+### Imports Dante et panels v4
+
+L'import compare des **sources**, il ne certifie pas les conclusions commerciales.
+`read_dante_html()` lit les tableaux des méthodes, pas les compteurs animés.
+`extract_dante_pdf_document()` conserve toutes les pages, les liens, les textes
+et leur SHA-256 ; `compare_dante_pdf_genotypes()` confronte les allèles explicites
+aux VCF à des positions GRCh37 vérifiées. Les seuls appels réseau concernent
+des rsID et références publics. Les génomes restent locaux.
+
+```python
+from tools.jouvence_genomics.dante_html import read_dante_html, compare_reported_genotypes
+from tools.jouvence_genomics.document_import import extract_dante_pdf_document, compare_dante_pdf_genotypes
+
+external = read_dante_html([Path("private/report.html")], expected_profile="Profil attendu")
+comparison = compare_reported_genotypes(external, [Path("private/sample.vcf.gz")])
+document = extract_dante_pdf_document(Path("private/sleep.pdf"), Path("analysis/imports"))
+pdf_comparison = compare_dante_pdf_genotypes(
+    [document], [Path("private/sample.vcf.gz")], Path("data/reference/pdf_coordinates"),
+)
+```
+
+Pour les PDF : `uv run --with pypdf==6.20.0 --with pdfplumber==0.11.10`.
+Un résultat absent, un profil étoilé non reconstruit ou une rubrique « Not
+currently supported » ne deviennent jamais « normal » ou « négatif ». Le brin
+des PDF n'est pas attesté : les concordances sont littérales, avec contrôle de
+compatibilité au complément en cas de divergence, pas une validation clinique.
+`provider_topics.json` et `provider_result_labels.json` sont des textes français
+génériques, pas des génotypes ni résultats personnels.
+
+`supplementary_results` de `build_genomic_reports()` associe à chaque nom
+d'échantillon les chemins JSON `dante_html`, `dante_comparison`, `pdf_reports`
+(liste), `pdf_comparison`, `associations` et `exact_polygenic`. Les SHA-256
+des VCF et documents sont contrôlés avant assemblage. Ne jamais associer un
+document externe à une personne par la simple proximité de son nom de fichier.
+
+Le dashboard offre filtres de catégories, recherche, explications françaises,
+animations respectant `prefers-reduced-motion`, tableaux progressifs et CSV UTF-8.
+Les champs supplémentaires restent dans le CSV ; les cellules pouvant être des
+formules sont neutralisées. Les panels sans score qualifié sont masqués par défaut,
+mais leur audit est accessible. Pour les gros modèles, un aperçu limité est séparé
+du CSV complet des observations explicites ; les sites inconnus restent dans
+l'audit du modèle. Aucun dosage manquant n'est complété.
+
+### Catalogue d'associations et références d'ascendance alternatives
+
+`association_catalog.py` télécharge le GWAS Catalog versionné, sélectionne des
+domaines annoncés, remappe les rsID GRCh38 vers GRCh37 et lit les VCF une seule
+fois. Chaque ligne garde PMID, étude GCST, phénotype, p-value, orientation,
+effet publié et qualité de l'appel. Une association n'est pas une mutation
+mendélienne, un résultat causal ou un score : ce module n'additionne aucun effet.
+Les associations, sites, études et phénotypes doivent être comptés séparément.
+Les codes et métadonnées de référence sont conservés pour vérifier la fraîcheur.
+
+`analyze_ancestry(..., reference_loader=...)` accepte une référence alternative
+déjà préparée avec matrice 0/1/2/NaN, sites GRCh37, labels, manifeste et sources.
+Les contrôles par données indépendantes, masques variant-only, sous-panels et
+chromosomes gardent les mêmes critères. Aucun groupe n'est déduit d'une nationalité,
+et une référence plus grande qui échoue aux contrôles ne remplace pas un résultat
+précédent par une conclusion plus précise non étayée.
+
+`hgdp_reference.py` fournit `prepare_hgdp_reference()` (à exécuter une fois)
+et `load_hgdp_reference()` (cache compact réutilisable). Les requêtes ciblent
+seulement les SNP publics, par plages BCF indexées ; BCF/CSI, chaîne d'assemblage,
+métadonnées et parenté sont liés par générations/empreintes. Les apparentés des
+auteurs sont exclus ; groupes larges et noms de populations fines restent séparés.
+Utiliser `uv run --with numpy==2.5.3 --with scikit-learn==1.9.1
+--with pysam==0.24.1 --with pyliftover==0.4.1 --with zstandard==0.25.0`.
+
+```python
+from tools.jouvence_genomics.hgdp_reference import prepare_hgdp_reference, load_hgdp_reference
+from tools.jouvence_genomics.ancestry import analyze_ancestry
+
+prepare_hgdp_reference(Path("data/reference/ancestry_hgdp"), Path("data/reference/ancestry"))
+outputs = analyze_ancestry(
+    [Path("analysis/sample/results.json")], Path("data/reference/ancestry_hgdp"),
+    Path("analysis/sample/ancestry"), reference_loader=load_hgdp_reference,
+)
+```
+
+La diversité géographique ne se résume pas au nombre de personnes. Les très grands
+panels français ou de biobanques peuvent demander un accord d'accès ; ils ne sont
+pas remplacés par une prétendue nationalité tirée d'un petit groupe French/Basque.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "panel_revision": "2026-10-10-expanded",
+  "panel_revision": "2026-10-10-performance",
   "assembly": "GRCh37",
   "strand": "+",
   "coordinates": "VCF, 1-based; GRCh37.p13 placements verified with NCBI dbSNP SPDI. MT sites require NC_012920.1.",
@@ -11,6 +11,22 @@
     {"item": "Régime optimal, besoins personnels en vitamines et caféine", "reason_fr": "Ce panel ne calcule pas ces besoins : les associations isolées ne fournissent pas une prescription alimentaire ou de supplémentation validée."}
   ],
   "profiles": {
+    "actn3": {
+      "category": "performance",
+      "gene": "ACTN3",
+      "titre_fr": "Muscle : un marqueur de puissance, pas un destin sportif",
+      "domaine_fr": "Performance physique — ACTN3 R577X",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Association avec certains profils de sportifs de puissance ; prédiction individuelle et avantage d'endurance non établis.",
+      "explanation_fr": "Le polymorphisme courant p.Arg577Ter modifie l'alpha-actinine-3 des fibres musculaires rapides. Deux copies T peuvent supprimer cette protéine sans constituer une maladie génétique. L'allèle C est plus fréquent dans certains groupes de sportifs de puissance, mais un seul marqueur ne classe pas une personne en endurance ou puissance, ni ne prédit ses performances.",
+      "next_steps_fr": "Confronter aux performances observées, à l'entraînement et aux préférences ; ne pas choisir ni limiter une activité sportive à partir de ce SNP. Un génotype absent reste inconnu.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Génotype C/C : deux allèles produisant l'alpha-actinine-3.", "meaning_fr": "Association de groupe avec certains sports de puissance ; aucun potentiel individuel de puissance démontré.", "action_fr": "Privilégier les performances mesurées et un programme d'entraînement adapté."},
+        "1": {"result_fr": "Génotype T/C : une copie du polymorphisme R577X.", "meaning_fr": "Profil moléculaire intermédiaire à ce site ; pas de classement fiable endurance/puissance.", "action_fr": "Ne pas changer l'entraînement uniquement pour ce résultat."},
+        "2": {"result_fr": "Génotype T/T : deux copies du polymorphisme R577X.", "meaning_fr": "Compatible avec l'absence d'alpha-actinine-3 ; ce n'est pas une maladie ni une preuve de supériorité en endurance.", "action_fr": "La capacité physique reste déterminée par de nombreux facteurs ; utiliser les mesures réelles."}
+      },
+      "sources": ["https://pubmed.ncbi.nlm.nih.gov/12879365/", "https://pmc.ncbi.nlm.nih.gov/articles/PMC3174315/"]
+    },
     "cyp2c19": {
       "category": "pharmacogenomique",
       "gene": "CYP2C19",
@@ -492,6 +508,7 @@
     {"rsid": "rs6025", "profile": "f5_leiden", "gene": "F5", "label": "p.Arg534Gln, Leiden ; cible REF GRCh37 T", "chrom": "1", "pos": 169519049, "ref": "T", "alt": "C", "effect_allele": "T", "refseq_accession": "NC_000001.10", "marker_caveat_fr": "L'allèle Leiden est la référence GRCh37 ; une ligne absente ne permet ni d'exclure ni de confirmer Leiden. L'ALT C correspond ici à l'allèle habituel non-Leiden."},
     {"rsid": "rs1799963", "profile": "f2", "gene": "F2", "label": "20210G>A", "chrom": "11", "pos": 46761055, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000011.9"},
     {"rsid": "rs2814778", "profile": "ackr1", "gene": "ACKR1", "label": "promoteur Duffy-null, T>C", "chrom": "1", "pos": 159174683, "ref": "T", "alt": "C", "effect_allele": "C", "refseq_accession": "NC_000001.10"},
-    {"rsid": "rs8176058", "profile": "kell", "gene": "KEL", "label": "KEL1/KEL2, p.Thr193Met ; génomique G>A", "chrom": "7", "pos": 142655008, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000007.13"}
+    {"rsid": "rs8176058", "profile": "kell", "gene": "KEL", "label": "KEL1/KEL2, p.Thr193Met ; génomique G>A", "chrom": "7", "pos": 142655008, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000007.13"},
+    {"rsid": "rs1815739", "profile": "actn3", "gene": "ACTN3", "label": "p.Arg577Ter R577X ; cible REF GRCh37 T", "chrom": "11", "pos": 66328095, "ref": "T", "alt": "C", "effect_allele": "T", "refseq_accession": "NC_000011.9", "marker_caveat_fr": "La référence GRCh37 est T, contrairement à GRCh38 C : une absence de ligne ne permet pas d'attribuer T/T. L'allèle rare A au même site exige une autre interprétation."}
   ]
 }

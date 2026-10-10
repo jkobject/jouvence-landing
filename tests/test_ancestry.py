@@ -12,10 +12,20 @@ import numpy as np
 from sklearn.decomposition import PCA
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from jouvence_genomics.ancestry import extract_ancestry_markers, load_ancestry_reference, _project_variant_only, _fit_masked_classifier, _ancestry_model_sha256
+from jouvence_genomics.ancestry import extract_ancestry_markers, load_ancestry_reference, _project_variant_only, _fit_masked_classifier, _ancestry_model_sha256, analyze_ancestry
 
 
 class AncestryTests(unittest.TestCase):
+    def test_alternative_loader_rejects_wrong_dosages_before_reading_private_data(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory = Path(folder)
+            def loader(path):
+                self.assertEqual(path, directory)
+                return [("1", 100, "A", "G")], np.full((20, 1), 3), np.array(["EUR"] * 10 + ["MID"] * 10), {
+                    "reference_manifest": {"version": "test"}, "sources": []}
+            with self.assertRaisesRegex(ValueError, "dosages"):
+                analyze_ancestry([], directory, directory, reference_loader=loader, null_repeats=10)
+
     def test_model_fingerprint_tracks_basis_imputation_and_training(self):
         training = np.array([[0, 0], [0, 1], [1, 0], [1, 2], [2, 1], [2, 2]], dtype=np.float32)
         mean = training.mean(axis=0)

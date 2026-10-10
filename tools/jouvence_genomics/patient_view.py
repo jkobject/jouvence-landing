@@ -13,6 +13,8 @@ from collections import defaultdict
 from html import escape
 
 
+
+
 def select_patient_signals(records: list[dict], traits: dict) -> dict:
     """Choisir les observations utiles en première lecture, sans les reclasser.
 
@@ -97,6 +99,7 @@ def render_patient_sections(signals: dict, catalog: dict, references: dict) -> s
         ("nutrition", "nutrition-utile", "Nutrition et métabolisme : vos informations utiles"),
         ("coherence", "traits-utiles", "Traits observés et concordance"),
         ("predisposition", "predispositions-utiles", "Autres informations de santé à discuter"),
+        ("performance", "performance-utile", "Sport : les marqueurs observés et leurs limites"),
     ):
         groups = defaultdict(list)
         for marker in signals["markers"]:
@@ -159,6 +162,10 @@ def render_population_results(ancestry: dict | None, polygenic: dict | None, ref
         group = ancestry["closest_reference_group"]
         label = ancestry["closest_reference_group_label_fr"]
         if group and label:
+            from .ancestry import POPULATION_LABELS_FR
+            legend = '<ul class="population-legend" aria-label="Légende du graphique">' + "".join(
+                f'<li data-population="{escape(code)}">{escape(POPULATION_LABELS_FR[code].capitalize())}</li>'
+                for code in ancestry["panel"]["population_counts"]) + '<li data-population="sample">Votre profil</li></ul>'
             subsample_count = sum(ancestry["subsample_80_percent_assignments"].values())
             summary = f"Votre profil est le plus proche des {label} ({group}) dans ce panel."
             sections.append('<section id="ascendance"><h2>Vos affinités d’ascendance génétique</h2>'
@@ -167,10 +174,7 @@ def render_population_results(ancestry: dict | None, polygenic: dict | None, ref
                             f'{ancestry["panel"]["reference_people"]} références. Les sites absents restent inconnus ; '
                             'les références ont été masquées de façon comparable pour contrôler ce biais.</p>'
                             '<div data-plot="ancestry-space"></div>'
-                            '<ul class="population-legend" aria-label="Légende du graphique">'
-                            '<li data-population="AFR">Références africaines</li><li data-population="AMR">Références américaines</li>'
-                            '<li data-population="EAS">Références d’Asie de l’Est</li><li data-population="EUR">Références européennes</li>'
-                            '<li data-population="SAS">Références d’Asie du Sud</li><li data-population="sample">Votre profil</li></ul>'
+                            + legend
                             + ('<p class="caveat">Le fichier brut porte FILTER=. : le filtrage du fournisseur '
                                'n’est pas attesté. Les contrôles disponibles ont été évalués pour cette affinité descriptive, '
                                'pas pour certifier un génotype clinique.</p>' if ancestry.get("provisional_filter_unapplied") else '')
@@ -235,7 +239,7 @@ def ancestry_plot_spec(ancestry: dict, reference: dict) -> dict:
     """Nuage PCA inspectable, mêmes axes et données pour toutes les vues.
 
     Les coordonnées viennent du modèle figé. PC1/PC2 ne servent qu'à visualiser
-    les données ; la décision d'affinité et ses contrôles utilisent quatre PC.
+    les données ; la décision d'affinité utilise le nombre d'axes du modèle.
     Aucun dosage génétique ni fond de carte externe n'est embarqué.
     """
 
@@ -243,16 +247,22 @@ def ancestry_plot_spec(ancestry: dict, reference: dict) -> dict:
         raise ValueError("Nuage et résultat d'ascendance issus de références différentes")
     if not ancestry.get("model_sha256") or ancestry["model_sha256"] != reference.get("model_sha256"):
         raise ValueError("Nuage et résultat d'ascendance issus de modèles PCA différents")
-    palette = {"AFR": "#a65d43", "AMR": "#b89b36", "EAS": "#34836b", "EUR": "#8b6ba4", "SAS": "#6688a8"}
+    palette = {"AFR": "#a65d43", "AMR": "#b89b36", "EAS": "#34836b", "EUR": "#8b6ba4", "SAS": "#6688a8",
+               "CSA": "#6688a8", "MID": "#c17c97", "OCE": "#50784a"}
     names = {"AFR": "Références africaines", "AMR": "Références américaines", "EAS": "Références d'Asie de l'Est",
-             "EUR": "Références européennes", "SAS": "Références d'Asie du Sud"}
+             "EUR": "Références européennes", "SAS": "Références d'Asie du Sud",
+             "CSA": "Références d'Asie centrale et du Sud", "MID": "Références du Moyen-Orient", "OCE": "Références d'Océanie"}
     traces = []
-    for group, color in palette.items():
+    groups = sorted({point["group"] for point in reference["points"]})
+    if set(groups) - set(palette):
+        raise ValueError("Groupe de référence sans légende documentée")
+    for group in groups:
+        color = palette[group]
         points = [point for point in reference["points"] if point["group"] == group]
         traces.append({"type": "scatter", "mode": "markers", "name": names[group],
                        "x": [point["pc"][0] for point in points], "y": [point["pc"][1] for point in points],
                        "marker": {"color": color, "size": 5, "opacity": .45},
-                       "hovertext": [f"{group} · référence publique {point['reference_index']}" for point in points]})
+                       "hovertext": [f"{group} · {point.get('population_label', 'groupe large')} · référence publique {point['reference_index']}" for point in points]})
     position = ancestry["projection_pc"]
     if not all(math.isfinite(value) for value in position):
         raise ValueError("Projection d'ascendance non finie")
@@ -270,7 +280,7 @@ def ancestry_plot_spec(ancestry: dict, reference: dict) -> dict:
                        "yaxis": {"title": {"text": "Axe génétique 2 (PC2)", "font": {"size": 16}}, "range": [min(ys)-.15, max(ys)+.15]},
                        "showlegend": False,
                        "margin": {"l": 65, "r": 25, "t": 15, "b": 65}},
-            "caption": f"Le losange situe votre profil parmi {len(reference['points'])} références publiques. La proximité est descriptive ; le modèle utilise quatre axes, pas seulement les deux affichés."}}
+            "caption": f"Le losange situe votre profil parmi {len(reference['points'])} références publiques. La proximité est descriptive ; le modèle utilise {reference.get('pca_components', 4)} axes, pas seulement les deux affichés."}}
 
 
 def _clinical_detail(card: dict) -> str:
