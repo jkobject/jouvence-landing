@@ -5,6 +5,33 @@ const frenchLabels={
   'previous':'← Précédent','next':'Suivant →'
 };
 Object.entries(frenchLabels).forEach(([id,label])=>{const el=document.getElementById(id);if(el)el.textContent=label});
+document.querySelectorAll('.plot-tools label').forEach(el=>el.textContent='Vue');
+document.querySelectorAll('.plot-shell a[download]').forEach(el=>el.textContent='Télécharger les données affichées');
+document.querySelectorAll('.plot-shell > details > summary').forEach(el=>el.textContent='Voir les valeurs et télécharger le tableau');
+document.querySelectorAll('.plot-canvas').forEach(el=>el.setAttribute('aria-label','Profil génétique et références publiques ; valeurs exactes disponibles dans le tableau'));
+// Open every enclosing detail when following a finding or a source citation.
+const revealAnchor=()=>{
+  const target=document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if(!target)return;
+  if(target.tagName==='DETAILS')target.open=true;
+  for(let parent=target.parentElement;parent;parent=parent.parentElement){
+    if(parent.tagName==='DETAILS')parent.open=true;
+  }
+  requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));
+};
+addEventListener('hashchange',revealAnchor);revealAnchor();
+const countReferences=()=>{
+  const details=document.querySelector('.bibliography-details');
+  if(details){
+    details.querySelector('summary').textContent=`Consulter les ${details.querySelectorAll('li:not([hidden])').length} références de cette vue`;
+    if(document.body.classList.contains('presentation'))details.open=true;
+  }
+};
+document.getElementById('presentation-mode')?.addEventListener('click',()=>{
+  document.querySelectorAll('.bibliography-details').forEach(el=>el.open=true);
+  countReferences();
+});
+document.getElementById('document-mode')?.addEventListener('click',countReferences);countReferences();
 document.querySelectorAll('[data-filter-scope]').forEach(scope=>{
   const input=scope.querySelector('[data-gene-search]');
   const select=scope.querySelector('[data-tier-select]');

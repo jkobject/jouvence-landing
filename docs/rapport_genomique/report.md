@@ -210,6 +210,12 @@ pas mélangés aux résultats validés. Une information éducative peut être in
 avec sa limite ; elle ne devient pas une recommandation personnalisée en
 l'absence de bénéfice démontré et de contexte clinique.
 
+La première lecture n'affiche pas de fiche « rien détecté » ni de VUS comme
+information de santé. Elle présente seulement les génotypes pertinents
+explicitement observés, avec « votre résultat / ce que cela signifie / ce que
+vous pouvez faire ». Les associations de faible effet, comme certains marqueurs
+de glycémie, sont étiquetées comme telles et ne justifient pas de supplément.
+
 </section>
 
 <section id="qualite" data-document-only markdown="1">
@@ -255,6 +261,39 @@ référence, pas une estimation d'ascendance de la personne. Les fréquences
 globales, les fréquences par population et les bornes entre populations ont
 des dénominateurs différents. Une comparaison française doit distinguer une
 cohorte française spécifique d'un proxy européen non finlandais.
+
+La méthode sans BAM compare des marqueurs autosomiques explicites à des
+références publiques GRCh37. Le biais d'un VCF de variants est reproduit sur
+les références d'entraînement et de validation : un site absent n'est jamais
+transformé en 0/0. La PCA, les contrôles indépendants, les sous-panels et les
+contrôles par chromosomes sont enregistrés. Le résultat décrit une affinité,
+pas une décomposition en pourcentages ancestraux. Le graphique doit utiliser
+exactement le modèle PCA ayant produit le résultat, vérifié par empreinte.
+
+</section>
+
+<section id="scores-polygeniques" markdown="1">
+
+## Scores polygéniques : classement qualifié, pas probabilité de maladie
+
+Les poids et métadonnées proviennent de PGS Catalog ; les distributions de
+référence sont identifiées par modèle, variantes réellement utilisées et
+population. Les allèles, le brin, la référence génomique et la ploïdie sont
+harmonisés. Les génotypes inconnus produisent des bornes, pas des dosages nuls.
+<a data-cite="pgs-catalog"></a> <a data-cite="1000g"></a>
+
+Le filtre éditorial est **strictement au-delà de ±1 sigma** : `abs(z) > 1`,
+ou un intervalle entièrement au-dessus de +1 ou au-dessous de −1. Il ne suffit
+pas à rendre un score valide. Un sous-score dont les sommes ont été vérifiées
+contre un logiciel indépendant n'est pas automatiquement un substitut validé
+du PGS publié. Ces résultats de recherche restent en annexe sans percentile
+personnel en synthèse tant que leur performance prédictive n'est pas validée.
+
+Un percentile signifie « position du score dans la population de référence ».
+Ce n'est ni une probabilité de développer une maladie ni un risque à vie.
+L'âge, le contexte clinique et les autres facteurs exigent un modèle de risque
+absolu distinct, calibré et validé. Les captures d'un autre rapport ne sont
+jamais une source de poids, de génotypes ou de résultats personnels.
 
 </section>
 

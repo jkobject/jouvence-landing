@@ -1,13 +1,28 @@
 {
   "schema_version": 1,
+  "panel_revision": "2026-10-10-expanded",
   "assembly": "GRCh37",
   "strand": "+",
   "coordinates": "VCF, 1-based; GRCh37.p13 placements verified with NCBI dbSNP SPDI. MT sites require NC_012920.1.",
   "verified_at": "2026-10-10",
+  "not_evaluated": [
+    {"item": "UGT1A1 *28 / *37 : nombre de répétitions TA", "reason_fr": "Les SNP *6 et *80 sont examinés séparément ; ce module n'appelle pas la longueur des répétitions rs8175347 ni leur phase. La répétition reste inconnue sans analyse dédiée ou appel validé/normalisé."},
+    {"item": "CYP3A5 *7 et CYP2C9 *6 : indels complexes", "reason_fr": "Une normalisation avec référence et un appel de pharmacogénétique adaptés sont nécessaires ; ces allèles ne sont pas exclus par les SNP du panel."},
+    {"item": "Régime optimal, besoins personnels en vitamines et caféine", "reason_fr": "Ce panel ne calcule pas ces besoins : les associations isolées ne fournissent pas une prescription alimentaire ou de supplémentation validée."}
+  ],
   "profiles": {
     "cyp2c19": {
       "category": "pharmacogenomique",
       "gene": "CYP2C19",
+      "titre_fr": "Clopidogrel, traitements gastriques et certains psychotropes",
+      "domaine_fr": "Réponse aux médicaments — CYP2C19",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandations CPIC ; fonction du diplotype à confirmer.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Marqueur ciblé non observé à ce site appelé.", "meaning_fr": "Les autres allèles de CYP2C19 restent à examiner ; aucun statut métabolique normal n'est déduit.", "action_fr": "Utiliser un panel clinique complet si un médicament concerné est envisagé."},
+        "1": {"result_fr": "Une copie d'un marqueur CYP2C19 de perte de fonction (*2 ou *3).", "meaning_fr": "Une copie du gène peut fonctionner moins bien : l'activation du clopidogrel ou l'élimination de certains autres médicaments peuvent être modifiées. L'autre chromosome reste à caractériser.", "action_fr": "Confirmer le diplotype avant une décision concernant clopidogrel ou autre médicament associé."},
+        "2": {"result_fr": "Deux copies d'un marqueur CYP2C19 de perte de fonction (*2 ou *3).", "meaning_fr": "Compatible avec une activité fortement réduite pour ces allèles ; le panel ne reconstitue pas tous les autres sites.", "action_fr": "Faire établir le diplotype clinique et appliquer la recommandation propre au médicament."}
+      },
       "explanation_fr": "CYP2C19 transforme notamment le clopidogrel en métabolite actif et participe à l'élimination de certains inhibiteurs de la pompe à protons et psychotropes. *2 et *3 diminuent fortement la fonction; *17 est associé à une fonction augmentée. La présence de ces marqueurs ne suffit pas à établir tout le diplotype.",
       "next_steps_fr": "Avant une prescription concernée, faire confirmer le génotype dans un laboratoire de pharmacogénétique, reconstruire les allèles et discuter du choix du médicament avec le prescripteur selon la recommandation propre au médicament. Ne pas modifier seul un traitement.",
       "sources": ["https://cpicpgx.org/guidelines/guideline-for-clopidogrel-and-cyp2c19/", "https://www.pharmvar.org/gene/CYP2C19"]
@@ -15,6 +30,15 @@
     "warfarin": {
       "category": "pharmacogenomique",
       "gene": "CYP2C9 / VKORC1",
+      "titre_fr": "Sensibilité et élimination de la warfarine",
+      "domaine_fr": "Réponse aux anticoagulants — CYP2C9 / VKORC1",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandations CPIC ; dose non calculée par ce panel partiel.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle ciblé non observé au site appelé.", "meaning_fr": "Ce site seul n'établit pas une dose habituelle ni une activité CYP2C9 normale.", "action_fr": "Si warfarine prévue, intégrer un panel complet et les données cliniques."},
+        "1": {"result_fr": "Un marqueur influençant la warfarine est présent en une copie.", "meaning_fr": "Il peut contribuer à une élimination réduite ou à une sensibilité accrue selon le gène, sans déterminer seul la dose.", "action_fr": "Signaler un résultat confirmé au prescripteur ; l'INR guide le suivi."},
+        "2": {"result_fr": "Un marqueur influençant la warfarine est présent en deux copies.", "meaning_fr": "L'effet peut être plus marqué, mais dépend du marqueur, des autres allèles et du contexte clinique.", "action_fr": "Confirmation pharmacogénétique avant adaptation ; ne pas modifier seul un anticoagulant."}
+      },
       "explanation_fr": "CYP2C9 *2 et *3 diminuent le métabolisme de la warfarine; le marqueur VKORC1 est associé à sa sensibilité. CYP2C9 influence aussi d'autres médicaments, dont certains anti-inflammatoires et la phénytoïne. Les deux marqueurs CYP2C9 ne couvrent pas tous les allèles, notamment ceux plus fréquents dans d'autres ascendances.",
       "next_steps_fr": "Si un médicament concerné est envisagé, confirmer le panel complet approprié et intégrer les autres facteurs cliniques, interactions et contrôles biologiques; pour la warfarine, la surveillance de l'INR reste indispensable. Ce rapport ne calcule aucune dose.",
       "sources": ["https://cpicpgx.org/guidelines/guideline-for-warfarin-and-cyp2c9-and-vkorc1/", "https://www.pharmvar.org/gene/CYP2C9"]
@@ -22,6 +46,15 @@
     "slco1b1": {
       "category": "pharmacogenomique",
       "gene": "SLCO1B1",
+      "titre_fr": "Tolérance musculaire de certaines statines",
+      "domaine_fr": "Réponse aux statines — SLCO1B1",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandation CPIC, effet dépendant de la statine et de sa dose.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Le marqueur c.521T>C n'est pas observé au site appelé.", "meaning_fr": "Cela n'exclut ni d'autres allèles SLCO1B1 ni des symptômes musculaires sous statine.", "action_fr": "Suivi clinique habituel et revue des autres facteurs si symptômes."},
+        "1": {"result_fr": "Une copie du marqueur c.521T>C.", "meaning_fr": "Signal de transport hépatique réduit pour certaines statines ; la tolérance dépend de la molécule, de la dose et des interactions.", "action_fr": "Si statine concernée, faire confirmer puis discuter du choix avec le prescripteur."},
+        "2": {"result_fr": "Deux copies du marqueur c.521T>C.", "meaning_fr": "Signal plus marqué de transport réduit ; aucun effet indésirable n'est certain ni déjà diagnostiqué.", "action_fr": "Confirmation clinique avant choix/adaptation de statine ; signaler toute douleur musculaire inhabituelle."}
+      },
       "explanation_fr": "Le variant c.521T>C peut réduire le transport hépatique de certaines statines et augmenter le risque de symptômes musculaires, avec un effet dépendant de la statine et de la dose. Un marqueur ne reconstitue pas tous les haplotypes SLCO1B1.",
       "next_steps_fr": "Avant ou pendant une statine, communiquer un résultat confirmé au prescripteur; discuter de la molécule, des interactions et des symptômes musculaires selon les recommandations CPIC. Ne pas interrompre seul une statine.",
       "sources": ["https://cpicpgx.org/guidelines/cpic-guideline-for-statins/"]
@@ -29,6 +62,15 @@
     "dpyd": {
       "category": "pharmacogenomique",
       "gene": "DPYD",
+      "titre_fr": "Sécurité des fluoropyrimidines",
+      "domaine_fr": "Réponse à certains anticancéreux — DPYD",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandations CPIC ; dépistage DPD clinique requis avant traitement concerné.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle ciblé non observé au site appelé.", "meaning_fr": "Un panel partiel négatif n'atteste pas une activité DPD normale.", "action_fr": "Réaliser le dépistage clinique DPD approprié avant fluoropyrimidines."},
+        "1": {"result_fr": "Une copie d'un marqueur DPYD ciblé.", "meaning_fr": "Selon l'allèle exact, ce signal peut annoncer une élimination réduite et une toxicité accrue ; un proxy seul est insuffisant.", "action_fr": "Confirmation spécialisée avant 5-FU/capécitabine, avec génotype et/ou phénotype DPD selon protocole."},
+        "2": {"result_fr": "Deux copies d'un marqueur DPYD ciblé.", "meaning_fr": "Un déficit plus important est possible pour un allèle fonctionnel confirmé ; la gravité dépend de l'allèle exact.", "action_fr": "Avis pharmacologique/oncologique avant toute fluoropyrimidine ; pas de dose proposée ici."}
+      },
       "explanation_fr": "La DPD élimine les fluoropyrimidines, dont 5-fluorouracile et capécitabine. Certains variants diminuent son activité et peuvent favoriser une toxicité sévère: diarrhée, mucite, chute des cellules sanguines et complications potentiellement graves. Un panel négatif ne garantit pas une activité DPD normale.",
       "next_steps_fr": "Avant une fluoropyrimidine, réaliser le dépistage clinique DPD prévu localement et faire confirmer tout variant signalé; un oncologue ou pharmacologue décide de la stratégie thérapeutique. La mesure phénotypique et le génotype peuvent être complémentaires.",
       "sources": ["https://cpicpgx.org/guidelines/guideline-for-fluoropyrimidines-and-dpyd/", "https://pmc.ncbi.nlm.nih.gov/articles/PMC10777430/"]
@@ -36,6 +78,15 @@
     "thiopurines": {
       "category": "pharmacogenomique",
       "gene": "TPMT / NUDT15",
+      "titre_fr": "Tolérance des thiopurines",
+      "domaine_fr": "Réponse à l'azathioprine et la mercaptopurine",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandations CPIC ; phase et diplotypes à établir.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Marqueur ciblé non observé au site appelé.", "meaning_fr": "D'autres allèles de TPMT/NUDT15 peuvent modifier la tolérance.", "action_fr": "Panel clinique adapté et surveillance habituelle si thiopurine prescrite."},
+        "1": {"result_fr": "Une copie d'un marqueur de fonction réduite.", "meaning_fr": "Signal pertinent pour certaines thiopurines ; plusieurs variants TPMT hétérozygotes peuvent être sur le même chromosome.", "action_fr": "Confirmer le diplotype et la phase si nécessaire avant choix thérapeutique."},
+        "2": {"result_fr": "Deux copies du marqueur ciblé.", "meaning_fr": "Signal compatible avec une fonction fortement réduite pour cet allèle, à valider cliniquement.", "action_fr": "Confirmation pharmacogénétique et décision spécialisée avant traitement ; surveiller la numération."}
+      },
       "explanation_fr": "Des variants TPMT et NUDT15 réduisent la tolérance aux thiopurines, dont azathioprine et mercaptopurine, et peuvent favoriser une myélosuppression sévère. Pour TPMT, deux variants dans un même chromosome peuvent former *3A; sans phase, on ne les additionne pas comme deux allèles inactivés.",
       "next_steps_fr": "Avant une thiopurine, confirmer le génotype et la phase si nécessaire, puis suivre la recommandation clinique actualisée. La surveillance de la numération sanguine et hépatique reste nécessaire. Aucune dose n'est déduite de ce panel partiel.",
       "sources": ["https://cpicpgx.org/guidelines/guideline-for-thiopurines-and-tpmt/"]
@@ -43,6 +94,15 @@
     "cyp3a5": {
       "category": "pharmacogenomique",
       "gene": "CYP3A5",
+      "titre_fr": "Exposition au tacrolimus",
+      "domaine_fr": "Réponse aux immunosuppresseurs — CYP3A5",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Recommandations CPIC ; un marqueur n'est pas tout le diplotype.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Ce marqueur de non-expression n'est pas observé au site appelé.", "meaning_fr": "Une expression CYP3A5 est possible ; d'autres allèles inactivants et le diplotype complet restent à vérifier.", "action_fr": "Si tacrolimus prévu, confirmer les allèles et suivre les concentrations sanguines."},
+        "1": {"result_fr": "Une copie du marqueur CYP3A5 ciblé.", "meaning_fr": "Une copie peut être inactivée ; l'expression globale dépend de l'autre allèle et des autres sites.", "action_fr": "Établir le diplotype avant une décision et conserver le suivi sanguin du tacrolimus."},
+        "2": {"result_fr": "Deux copies du marqueur CYP3A5 ciblé.", "meaning_fr": "Signal compatible avec une non-expression liée à cet allèle, sans déterminer seul l'exposition au tacrolimus.", "action_fr": "Confirmer et intégrer les concentrations, interactions et facteurs cliniques avec le prescripteur."}
+      },
       "explanation_fr": "Le marqueur d'épissage *3 est associé à une fonction diminuée de CYP3A5 et peut influencer l'exposition au tacrolimus. Particularité: l'allèle *3 correspond ici à la base de référence GRCh37 C; un site absent ne signifie donc pas *1.",
       "next_steps_fr": "Si un tacrolimus est prescrit, confirmer les allèles CYP3A5 et suivre les concentrations sanguines; le prescripteur intègre le génotype au contexte clinique. D'autres allèles et interactions restent à considérer.",
       "sources": ["https://cpicpgx.org/guidelines/guideline-for-tacrolimus-and-cyp3a5/", "https://www.pharmvar.org/gene/CYP3A5"]
@@ -50,6 +110,10 @@
     "mt_rnr1": {
       "category": "pharmacogenomique",
       "gene": "MT-RNR1",
+      "titre_fr": "Protection de l'audition avant certains antibiotiques",
+      "domaine_fr": "Aminosides — ADN mitochondrial",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandation CPIC ; hétéroplasmie et référence mitochondriale indispensables.",
       "explanation_fr": "Les variants mitochondriaux m.1555A>G et m.1494C>T peuvent augmenter fortement le risque de surdité après des aminosides. Le pourcentage d'hétéroplasmie et la référence mitochondriale doivent être validés; un GT diploïde seul est insuffisant.",
       "next_steps_fr": "Si un allèle ciblé est observé sur une référence mitochondriale compatible, demander une confirmation mitochondriale et prévenir le prescripteur avant un aminoside. L'alternative antibiotique dépend de l'infection et du contexte clinique.",
       "sources": ["https://cpicpgx.org/guidelines/cpic-guideline-for-aminoglycosides-and-mt-rnr1/"]
@@ -57,6 +121,15 @@
     "lactase": {
       "category": "nutrition",
       "gene": "MCM6 / LCT",
+      "titre_fr": "Digestion du lactose à l'âge adulte",
+      "domaine_fr": "Tolérance alimentaire — lactase",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Association fonctionnelle robuste, portée dépendante de l'ascendance et des autres variants régulateurs.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "L'allèle de persistance ciblé n'est pas observé au site appelé.", "meaning_fr": "Compatible avec une baisse de lactase à l'âge adulte dans les populations où ce site est informatif ; d'autres variants de persistance existent.", "action_fr": "Se fier à la tolérance réelle ; si symptômes, discuter d'un test respiratoire plutôt que supprimer automatiquement les laitages."},
+        "1": {"result_fr": "Une copie du marqueur de persistance de lactase.", "meaning_fr": "Compatible avec une digestion du lactose maintenue ; ne garantit pas l'absence de symptômes digestifs.", "action_fr": "Adapter la quantité consommée au ressenti ; rechercher d'autres causes si gêne."},
+        "2": {"result_fr": "Deux copies du marqueur de persistance de lactase.", "meaning_fr": "Signal de persistance de lactase ; ce n'est pas un test d'allergie au lait ni une garantie de tolérance digestive.", "action_fr": "Pas de changement alimentaire obligatoire ; consulter si symptômes persistants."}
+      },
       "explanation_fr": "Ces marqueurs régulateurs sont associés à la persistance de la lactase chez l'adulte, principalement dans les populations où ils ont été validés. La digestion du lactose dépend aussi de la quantité consommée et de maladies digestives; elle se distingue de l'allergie au lait. rs182549 est un marqueur lié, pas une seconde maladie.",
       "next_steps_fr": "Comparer au ressenti après ingestion. En cas de douleurs, ballonnements ou diarrhée, discuter d'un test respiratoire à l'hydrogène et des autres causes digestives. Adapter la quantité de lactose selon la tolérance, en maintenant les apports nutritionnels.",
       "sources": ["https://medlineplus.gov/genetics/condition/lactose-intolerance/", "https://medlineplus.gov/lab-tests/lactose-tolerance-tests/"]
@@ -64,6 +137,10 @@
     "hfe": {
       "category": "nutrition",
       "gene": "HFE",
+      "titre_fr": "Surcharge en fer : vérifier la biologie",
+      "domaine_fr": "Métabolisme du fer — HFE",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Association établie pour C282Y, pénétrance incomplète ; H63D beaucoup moins prédictif.",
       "explanation_fr": "C282Y est le principal variant de l'hémochromatose HFE, maladie de surcharge en fer à pénétrance incomplète. Deux copies C282Y augmentent le risque mais ne suffisent pas à diagnostiquer une surcharge. H63D, seul, est beaucoup moins prédictif. Deux variants hétérozygotes nécessitent une étude de phase avant de conclure à un génotype composite.",
       "next_steps_fr": "Si le génotype et le contexte justifient une évaluation, contrôler ferritine et saturation de la transferrine avec un médecin, puis rechercher les causes de surcharge. Les saignées sont un traitement d'une surcharge documentée; aucun régime restrictif ni supplément n'est recommandé sur le génotype seul.",
       "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK1440/"]
@@ -71,6 +148,15 @@
     "aldh2": {
       "category": "nutrition",
       "gene": "ALDH2",
+      "titre_fr": "Réaction à l'alcool",
+      "domaine_fr": "Élimination de l'acétaldéhyde — ALDH2",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Effet fonctionnel établi ; aucun risque individuel de cancer n'est calculé.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "L'allèle ALDH2*2 n'est pas observé au site appelé.", "meaning_fr": "Cela ne rend pas la consommation d'alcool sans risque.", "action_fr": "Suivre les recommandations générales concernant l'alcool."},
+        "1": {"result_fr": "Une copie du marqueur ALDH2*2.", "meaning_fr": "Élimination réduite de l'acétaldéhyde : rougeur, nausée ou palpitations possibles en buvant ; aucun cancer n'est diagnostiqué.", "action_fr": "Éviter ou limiter l'alcool et ne pas masquer la rougeur pour pouvoir boire."},
+        "2": {"result_fr": "Deux copies du marqueur ALDH2*2.", "meaning_fr": "Signal de fonction très réduite ; une réaction importante à l'alcool est possible.", "action_fr": "Éviter l'alcool ; avis clinique si réactions importantes ou inhabituelles."}
+      },
       "explanation_fr": "L'allèle *2 diminue l'élimination de l'acétaldéhyde après consommation d'alcool. Il peut entraîner rougeur du visage, nausée, palpitations et une exposition accrue à un composé cancérogène si la personne boit. Il ne mesure pas à lui seul un risque individuel de cancer.",
       "next_steps_fr": "En cas de variant confirmé ou de rougeur liée à l'alcool, éviter ou limiter l'alcool; ne pas masquer la rougeur avec des antihistaminiques pour pouvoir boire. Consulter si les réactions sont importantes ou inhabituelles.",
       "sources": ["https://www.niaaa.nih.gov/publications/alcohol-flush-reaction-does-drinking-alcohol-make-your-face-red"]
@@ -78,6 +164,15 @@
     "apoe": {
       "category": "predisposition",
       "gene": "APOE",
+      "titre_fr": "Isoformes APOE : deux sites à combiner",
+      "domaine_fr": "Transport des lipides — profil incomplet",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Sites définissant les isoformes usuelles ; pas de score de maladie ni de diplotype automatique.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle ciblé absent au site explicitement appelé.", "meaning_fr": "C'est une pièce du profil APOE ; le second site et leur combinaison restent nécessaires.", "action_fr": "Pour une question clinique, confirmer les deux sites et partir d'un bilan lipidique et de l'histoire familiale."},
+        "1": {"result_fr": "Une copie de l'allèle ciblé à l'un des sites APOE.", "meaning_fr": "Un site isolé ne définit ni ε2/ε3/ε4 ni un risque de maladie futur.", "action_fr": "Combiner les deux sites avec une interprétation clinique si souhaitée."},
+        "2": {"result_fr": "Deux copies de l'allèle ciblé à l'un des sites APOE.", "meaning_fr": "Le génotype de ce site est connu ; l'isoforme exige encore le second site.", "action_fr": "Aucune conclusion de maladie ni de traitement à partir de ce site seul."}
+      },
       "explanation_fr": "APOE participe au transport des lipides. Les isoformes usuelles résultent de la combinaison de rs429358 et rs7412 sur chaque chromosome. Elles modulent certaines prédispositions et n'établissent pas un diagnostic. Ce module affiche les deux sites mais n'attribue pas de diplotype ni de risque chiffré sans couverture et phase suffisantes.",
       "next_steps_fr": "Pour un objectif lipidique, partir d'un bilan lipidique et de l'histoire personnelle et familiale. Si une interprétation APOE est souhaitée, confirmer les deux sites et leur combinaison avec un professionnel; ne pas déduire une maladie future d'un site isolé.",
       "sources": ["https://medlineplus.gov/genetics/gene/apoe/"]
@@ -85,6 +180,15 @@
     "abo": {
       "category": "coherence",
       "gene": "ABO",
+      "titre_fr": "Repères du groupe sanguin ABO",
+      "domaine_fr": "Vérification descriptive — groupe sanguin",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Repères d'allèles courants ; panel partiel et phase insuffisants pour certifier ABO.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle ciblé non observé à un des sites ABO appelés.", "meaning_fr": "Un repère d'allèle est connu ; les autres sites, la phase et les allèles rares empêchent d'en déduire seuls A/B/AB/O.", "action_fr": "Comparer à un groupage sérologique, seul utilisable pour transfusion/grossesse."},
+        "1": {"result_fr": "Une copie d'un repère d'allèle ABO.", "meaning_fr": "Ce résultat renseigne un site discriminant ; il ne certifie pas votre groupe sanguin complet.", "action_fr": "Utiliser la sérologie ; vérifier une discordance avec le laboratoire."},
+        "2": {"result_fr": "Deux copies d'un repère d'allèle ABO.", "meaning_fr": "Le site est homozygote pour ce repère, sans exclusion des allèles rares ou autres variants du gène.", "action_fr": "Confirmation sérologique indispensable si usage médical."}
+      },
       "explanation_fr": "Ces sites distinguent certains allèles ABO courants. GRCh37 porte la délétion O courante comme référence à rs8176719; l'insertion C rétablit la base. Des allèles rares, la phase et FUT1 peuvent modifier l'interprétation. Trois marqueurs ne suffisent pas à certifier un groupe sanguin.",
       "next_steps_fr": "Comparer les marqueurs à un groupe ABO obtenu par sérologie. Pour une transfusion ou une grossesse, utiliser exclusivement le groupage et les examens immunohématologiques du laboratoire. Un désaccord demande une vérification d'identité et une étude spécialisée.",
       "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK2267/", "https://www.isbtweb.org/isbt-working-parties/rcibgt.html"]
@@ -92,20 +196,240 @@
     "fut2": {
       "category": "coherence",
       "gene": "FUT2",
+      "titre_fr": "Statut sécréteur d'antigènes sanguins",
+      "domaine_fr": "Trait descriptif — FUT2",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Trait biologique établi ; autres allèles et phase peuvent modifier la conclusion.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "L'allèle inactivant ciblé n'est pas observé au site appelé.", "meaning_fr": "Compatible avec un statut sécréteur si les autres sites sont fonctionnels ; ne détermine pas ABO.", "action_fr": "Aucun régime ou traitement ; confirmation spécialisée uniquement si une question clinique le nécessite."},
+        "1": {"result_fr": "Une copie du marqueur FUT2 ciblé.", "meaning_fr": "Une seconde copie fonctionnelle peut suffire à être sécréteur ; les autres allèles et leur phase restent à examiner.", "action_fr": "Trait descriptif, sans conseil alimentaire validé à en déduire."},
+        "2": {"result_fr": "Deux copies du marqueur FUT2 ciblé.", "meaning_fr": "Selon le marqueur exact, compatible avec un statut non-sécréteur ou faiblement sécréteur ; ce n'est pas une maladie.", "action_fr": "Pas de traitement ; ne pas en déduire le groupe ABO des globules rouges."}
+      },
       "explanation_fr": "rs601338 est un variant stop associé au statut non-sécréteur lorsqu'il inactive les deux copies; FUT2 influence la présence d'antigènes dans les sécrétions. Ce statut ne détermine pas le groupe ABO des globules rouges et aucun régime personnalisé validé n'en découle ici.",
       "next_steps_fr": "Ce marqueur sert à une vérification descriptive. Une caractérisation clinique du statut sécréteur, si nécessaire, demande des méthodes et un panel adaptés; aucun traitement n'est indiqué sur ce signal seul.",
-      "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK2267/"]
+      "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK2267/", "https://pubmed.ncbi.nlm.nih.gov/33835481/", "https://pubmed.ncbi.nlm.nih.gov/35271838/"]
     },
     "herc2": {
       "category": "coherence",
       "gene": "HERC2 / OCA2",
+      "titre_fr": "Repère de pigmentation de l'iris",
+      "domaine_fr": "Trait descriptif — couleur des yeux",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Association répliquée, particulièrement informative dans certaines populations européennes ; plusieurs gènes interviennent.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Génotype A/A au marqueur HERC2.", "meaning_fr": "Davantage associé à des iris pigmentés ; ne prédit pas une couleur certaine.", "action_fr": "Comparer au trait observé, sans l'utiliser comme test d'identité."},
+        "1": {"result_fr": "Génotype A/G au marqueur HERC2.", "meaning_fr": "Profil intermédiaire ; des yeux de différentes couleurs restent possibles.", "action_fr": "Une différence de couleur n'invalide pas l'échantillon ; trait descriptif uniquement."},
+        "2": {"result_fr": "Génotype G/G au marqueur HERC2.", "meaning_fr": "Souvent associé à des yeux plus clairs dans les populations étudiées, sans certitude individuelle.", "action_fr": "Repère descriptif à comparer au phénotype, pas une preuve d'identité."}
+      },
       "explanation_fr": "rs12913832 est un marqueur régulateur associé à la pigmentation de l'iris. L'allèle G est souvent associé à des yeux plus clairs, mais plusieurs gènes interviennent et ce marqueur n'est ni un test d'identité ni une prédiction certaine.",
       "next_steps_fr": "Comparer prudemment au phénotype observé. Une différence isolée n'invalide pas le séquençage; une vérification d'identité robuste nécessite des empreintes génétiques et des contrôles du laboratoire.",
       "sources": ["https://medlineplus.gov/genetics/understanding/traits/eyecolor/"]
     },
+    "mtnr1b": {
+      "category": "nutrition",
+      "gene": "MTNR1B",
+      "titre_fr": "Glycémie à jeun et récepteur de la mélatonine",
+      "domaine_fr": "Métabolisme glucidique — effet modeste",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Association répliquée ; faible pouvoir prédictif individuel et pas de prescription alimentaire validée par ce SNP seul.",
+      "explanation_fr": "L'allèle G de rs10830963 est associé à une réponse insulinique précoce moins efficace et à une glycémie à jeun légèrement plus élevée. Dans la méta-analyse initiale, l'augmentation moyenne était de 0,07 mmol/L par G (IC95 % 0,06–0,08), principalement dans des populations d'ascendance européenne. Cette moyenne n'est pas une estimation de votre glycémie ni un diagnostic de diabète.",
+      "next_steps_fr": "Interpréter avec la glycémie/HbA1c, les antécédents et les habitudes de vie. Aucun régime ou complément de mélatonine n'est choisi à partir de ce marqueur. Si des médicaments ou compléments sont utilisés, en discuter avec le professionnel qui connaît le contexte clinique.",
+      "association_effect": {"effect_allele": "G", "endpoint_fr": "glycémie à jeun", "model_fr": "différence moyenne par allèle dans les populations étudiées", "estimate": 0.07, "ci95": [0.06, 0.08], "unit": "mmol/L", "individual_prediction": false},
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Génotype C/C : allèle G ciblé non observé.", "meaning_fr": "Ce facteur génétique particulier n'est pas retrouvé ; le risque de diabète dépend de nombreux autres éléments.", "action_fr": "Suivi glycémique selon les indications habituelles, sans régime génétique spécifique."},
+        "1": {"result_fr": "Génotype C/G : une copie de l'allèle G.", "meaning_fr": "Petit effet moyen sur la glycémie dans les études ; ce résultat ne signifie pas que vous avez un diabète.", "action_fr": "Mettre en regard d'une glycémie/HbA1c réelle et du contexte familial ; pas de supplément ni de régime obligatoire."},
+        "2": {"result_fr": "Génotype G/G : deux copies de l'allèle G.", "meaning_fr": "Association moyenne plus marquée qu'avec une copie, mais largement insuffisante pour prédire une maladie individuelle.", "action_fr": "Utiliser les mesures biologiques et les facteurs cliniques ; aucune restriction alimentaire automatique."}
+      },
+      "sources": ["https://pubmed.ncbi.nlm.nih.gov/19060907/", "https://pubmed.ncbi.nlm.nih.gov/19324940/"]
+    },
+    "tcf7l2": {
+      "category": "predisposition",
+      "gene": "TCF7L2",
+      "titre_fr": "Un facteur génétique courant de diabète de type 2",
+      "domaine_fr": "Prédisposition métabolique — sans score individuel",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Association robuste répliquée dans plusieurs populations ; SNP isolé non diagnostique.",
+      "explanation_fr": "L'allèle T de rs7903146 est associé à une susceptibilité accrue au diabète de type 2, notamment via la régulation de la sécrétion d'insuline. Il est fréquent chez des personnes qui ne développeront jamais de diabète. Un seul site n'est pas un score polygénique et ne donne pas votre risque absolu ni votre réponse à un régime.",
+      "next_steps_fr": "Mettre en regard de la glycémie/HbA1c, de l'histoire familiale et des autres facteurs. Les mesures de prévention habituelles restent pertinentes indépendamment de ce SNP ; pas de choix de médicament ou de régime automatique.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Génotype C/C : allèle T ciblé non observé.", "meaning_fr": "Ce facteur particulier n'est pas retrouvé ; absence de cet allèle ne signifie pas risque nul.", "action_fr": "Suivre les indications cliniques usuelles de dépistage/prévention."},
+        "1": {"result_fr": "Génotype C/T : une copie du facteur de susceptibilité.", "meaning_fr": "Association statistique à la susceptibilité au diabète ; aucun diabète n'est diagnostiqué.", "action_fr": "S'appuyer sur les mesures biologiques et l'histoire personnelle ; pas de régime génétique imposé."},
+        "2": {"result_fr": "Génotype T/T : deux copies du facteur de susceptibilité.", "meaning_fr": "Association plus forte dans les études que C/T, mais pas une prédiction individuelle de maladie.", "action_fr": "Confronter au contexte clinique et au suivi glycémique ; aucun traitement à partir du génotype seul."}
+      },
+      "sources": ["https://pubmed.ncbi.nlm.nih.gov/16415884/", "https://pubmed.ncbi.nlm.nih.gov/17206141/", "https://www.nejm.org/doi/full/10.1056/NEJMoa062418"]
+    },
+    "ugt1a1": {
+      "category": "pharmacogenomique",
+      "gene": "UGT1A1",
+      "titre_fr": "Bilirubine, syndrome de Gilbert et certains médicaments",
+      "domaine_fr": "Élimination de la bilirubine — UGT1A1",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Effet de *6 établi ; *80 est un repère lié aux répétitions, pas leur appel direct.",
+      "explanation_fr": "UGT1A1 transforme la bilirubine et certains médicaments. Des allèles de fonction réduite peuvent contribuer à une hyperbilirubinémie indirecte de type Gilbert, souvent bénigne. Les deux SNP recherchés sont *6 (p.Gly71Arg) et *80 (rs887829, proxy régulateur). Les répétitions TA *28/*37 restent inconnues dans ce module. La réponse à l'atazanavir ou à l'irinotécan demande un génotypage complet et une interprétation propre au médicament.",
+      "next_steps_fr": "Si bilirubine élevée/ictère : bilan de bilirubine fractionnée, hémolyse et foie selon le médecin ; le génotype seul ne fait pas le diagnostic. Avant un médicament concerné, faire confirmer les allèles, y compris les répétitions TA si pertinentes ; ne pas modifier seul un traitement.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle ciblé non observé au site appelé.", "meaning_fr": "Cela n'exclut pas les répétitions TA ni d'autres allèles de fonction réduite.", "action_fr": "Bilan biologique si ictère/bilirubine élevée, panel clinique complet si médicament concerné."},
+        "1": {"result_fr": "Une copie d'un marqueur UGT1A1 ciblé.", "meaning_fr": "Peut contribuer à une activité moindre selon l'allèle ; la seconde copie et les répétitions ne sont pas entièrement connues.", "action_fr": "Confirmer si pertinent et confronter à la bilirubine réelle ; aucun diagnostic de Gilbert automatique."},
+        "2": {"result_fr": "Deux copies du marqueur UGT1A1 ciblé.", "meaning_fr": "Signal compatible avec une activité réduite pour *6 ; pour *80, le nombre de TA reste à confirmer.", "action_fr": "Si question clinique/médicament : dosages et génotypage complet, avec interprétation spécialisée."}
+      },
+      "sources": ["https://medlineplus.gov/genetics/condition/gilbert-syndrome/", "https://files.cpicpgx.org/data/guideline/publication/atazanavir/2015/26417955.pdf", "https://files.cpicpgx.org/data/guideline/publication/atazanavir/2015/26417955-supplement.pdf"]
+    },
+    "abcg2": {
+      "category": "pharmacogenomique",
+      "gene": "ABCG2",
+      "titre_fr": "Exposition à la rosuvastatine",
+      "domaine_fr": "Réponse aux statines — ABCG2",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandations CPIC ; intérêt propre à la rosuvastatine, pas à tous les médicaments.",
+      "explanation_fr": "Le marqueur c.421C>A (p.Gln141Lys ; allèle génomique GRCh37 T) peut réduire l'activité du transporteur ABCG2 et augmenter l'exposition à la rosuvastatine. L'effet se combine avec SLCO1B1, le médicament, la dose et les interactions. Il ne prouve pas une intolérance musculaire actuelle.",
+      "next_steps_fr": "Si rosuvastatine envisagée ou déjà prise, communiquer le résultat confirmé au prescripteur et discuter de sa pertinence selon CPIC. Ne pas arrêter seul la statine ; une décision intègre le contexte clinique.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Le marqueur p.Gln141Lys n'est pas observé au site appelé.", "meaning_fr": "Ce facteur d'exposition particulier n'est pas retrouvé ; d'autres causes d'intolérance existent.", "action_fr": "Suivi clinique habituel, avec revue des interactions si symptômes."},
+        "1": {"result_fr": "Une copie du marqueur ABCG2 p.Gln141Lys.", "meaning_fr": "Signal de fonction réduite du transporteur, pertinent surtout pour l'exposition à la rosuvastatine.", "action_fr": "Confirmer et discuter de la statine/dose avec le prescripteur si concerné."},
+        "2": {"result_fr": "Deux copies du marqueur ABCG2 p.Gln141Lys.", "meaning_fr": "Signal de fonction davantage réduite et d'exposition plus élevée dans les études.", "action_fr": "Confirmation clinique avant décision pharmacologique ; aucune dose calculée ici."}
+      },
+      "sources": ["https://cpicpgx.org/guidelines/cpic-guideline-for-statins/"]
+    },
+    "cyp2b6": {
+      "category": "pharmacogenomique",
+      "gene": "CYP2B6",
+      "titre_fr": "Élimination de l'éfavirenz",
+      "domaine_fr": "Réponse aux médicaments — CYP2B6",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandation CPIC pour l'éfavirenz ; allèles complets et phase nécessaires.",
+      "explanation_fr": "CYP2B6 élimine l'éfavirenz. Le marqueur c.516G>T participe à des allèles de fonction diminuée ; c.785A>G peut appartenir à *4 ou à *6 selon sa combinaison avec d'autres sites. Une élimination réduite peut accroître exposition et effets neurologiques, mais les SNP ne reconstituent pas seuls tout le diplotype.",
+      "next_steps_fr": "Avant un médicament concerné, faire établir le diplotype CYP2B6 par un laboratoire adapté. L'interprétation d'un marqueur partagé par plusieurs allèles exige les autres sites ; aucun traitement ou dose n'est modifié automatiquement.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Marqueur ciblé non observé au site appelé.", "meaning_fr": "Ne démontre pas une activité CYP2B6 normale : d'autres allèles et copies restent possibles.", "action_fr": "Panel clinique complet si besoin pharmacologique."},
+        "1": {"result_fr": "Une copie du marqueur CYP2B6 ciblé.", "meaning_fr": "La fonction dépend du marqueur exact et de son haplotype ; c.516G>T est un signal de fonction diminuée.", "action_fr": "Confirmer les allèles et la phase avant décision concernant l'éfavirenz."},
+        "2": {"result_fr": "Deux copies du marqueur CYP2B6 ciblé.", "meaning_fr": "Pour c.516G>T, signal compatible avec une élimination réduite ; c.785A>G seul n'a pas la même interprétation.", "action_fr": "Établir le diplotype complet et consulter la recommandation du médicament."}
+      },
+      "sources": ["https://cpicpgx.org/guidelines/cpic-guideline-for-efavirenz-based-on-cyp2b6-genotype/", "https://www.pharmvar.org/gene/CYP2B6"]
+    },
+    "nat2": {
+      "category": "pharmacogenomique",
+      "gene": "NAT2",
+      "titre_fr": "Métabolisme de l'hydralazine",
+      "domaine_fr": "Réponse à un antihypertenseur — NAT2",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandation CPIC 2025 ; panel partiel sans diplotype automatiquement attribué.",
+      "explanation_fr": "Les allèles de fonction réduite de NAT2 peuvent ralentir l'élimination de l'hydralazine et modifier son efficacité/tolérance. Les marqueurs des familles *5/*6/*7/*14 sont recherchés, mais plusieurs variants peuvent être en cis. Les recommandations CPIC concernent le phénotype complet, notamment dans l'hypertension résistante ; ce module ne choisit ni dose ni fréquence de prise.",
+      "next_steps_fr": "Si hydralazine envisagée, confirmer le génotype complet et la phase avec le prescripteur/pharmacologue. La tension, les effets indésirables, les interactions et l'indication clinique restent déterminants.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle ciblé non observé au site appelé.", "meaning_fr": "Ne prouve pas un métabolisme rapide : le panel n'examine pas tous les allèles.", "action_fr": "Panel clinique adapté si un traitement pertinent est envisagé."},
+        "1": {"result_fr": "Une copie d'un marqueur NAT2 de fonction réduite.", "meaning_fr": "Signal pouvant contribuer à une acétylation plus lente ; plusieurs sites hétérozygotes ne sont pas forcément sur deux chromosomes différents.", "action_fr": "Reconstruire le diplotype avant toute décision sur l'hydralazine."},
+        "2": {"result_fr": "Deux copies du marqueur NAT2 ciblé.", "meaning_fr": "Compatible avec deux allèles de fonction réduite pour ce site, à confirmer dans le diplotype complet.", "action_fr": "Confirmation spécialisée avant adaptation ; aucun dosage automatique."}
+      },
+      "sources": ["https://files.cpicpgx.org/data/guideline/publication/hydralazine/2025/40974042.pdf", "https://files.cpicpgx.org/data/guideline/publication/hydralazine/2025/40974042-supplement.pdf", "https://www.pharmvar.org/gene/NAT2"]
+    },
+    "g6pd": {
+      "category": "pharmacogenomique",
+      "gene": "G6PD",
+      "titre_fr": "Risque d'hémolyse avec certains médicaments",
+      "domaine_fr": "Médicaments oxydants — G6PD",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Recommandations CPIC ; chromosome X, phase et activité enzymatique importants.",
+      "explanation_fr": "Un déficit G6PD peut favoriser une hémolyse après certains médicaments ou une exposition oxydante. Des marqueurs A− et méditerranéens sont recherchés ; p.Asn126Asp seul peut être fonctionnel et ne démontre pas un déficit. Chez les personnes avec deux chromosomes X, l'inactivation du X rend l'activité variable. Le nombre d'allèles ne remplace donc pas un dosage enzymatique.",
+      "next_steps_fr": "Avant un médicament à risque tel que rasburicase, primaquine/tafenoquine ou dapsone, utiliser un dosage G6PD et/ou un test clinique approprié avec le prescripteur. Un panel négatif ou incomplet ne suffit pas à déclarer la fonction normale. Des symptômes aigus d'hémolyse nécessitent un avis clinique.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Marqueur ciblé non observé au site appelé.", "meaning_fr": "D'autres nombreux allèles G6PD peuvent provoquer un déficit ; le résultat n'est pas un bilan enzymatique.", "action_fr": "Dosage d'activité avant médicament à risque selon protocole."},
+        "1": {"result_fr": "Une copie du marqueur G6PD ciblé.", "meaning_fr": "Interprétation dépendante de l'allèle, de la phase et du nombre de chromosomes X ; certains marqueurs servent uniquement de contexte.", "action_fr": "Faire confirmer et mesurer l'activité si un médicament à risque ou un symptôme le justifie."},
+        "2": {"result_fr": "Deux copies du marqueur G6PD ciblé.", "meaning_fr": "Pour un allèle causal confirmé, compatible avec un déficit ; un marqueur de contexte seul reste insuffisant.", "action_fr": "Validation clinique/enzymatique avant médicament concerné ; aucun traitement automatique."}
+      },
+      "sources": ["https://files.cpicpgx.org/data/guideline/publication/G6PD/2022/36049896.pdf", "https://medlineplus.gov/genetics/condition/glucose-6-phosphate-dehydrogenase-deficiency/"]
+    },
+    "bche": {
+      "category": "pharmacogenomique",
+      "gene": "BCHE",
+      "titre_fr": "Précaution avant certains médicaments d'anesthésie",
+      "domaine_fr": "Succinylcholine et mivacurium — BCHE",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Effet pharmacologique établi du variant atypique ; panel BCHE partiel.",
+      "explanation_fr": "Le variant atypique p.Asp98Gly (anciennement Asp70Gly) réduit l'hydrolyse de la succinylcholine et du mivacurium. Deux allèles déficitaires peuvent prolonger fortement le bloc neuromusculaire/apnée après ces médicaments ; une copie peut aussi contribuer à une réponse modifiée. Les autres variants et les causes acquises de déficit ne sont pas évalués par ce seul site.",
+      "next_steps_fr": "Avant une anesthésie, communiquer un résultat confirmé à l'anesthésiste. Un dosage de butyrylcholinestérase et un test à la dibucaïne peuvent préciser le phénotype ; le choix des produits et la surveillance relèvent de l'équipe d'anesthésie.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Variant atypique non observé au site appelé.", "meaning_fr": "D'autres allèles BCHE ou causes acquises peuvent modifier la réponse anesthésique.", "action_fr": "Signaler toute histoire personnelle/familiale de réveil ou paralysie prolongés."},
+        "1": {"result_fr": "Une copie du variant atypique BCHE.", "meaning_fr": "Information pertinente avant succinylcholine/mivacurium ; ne signifie pas un risque pour toute anesthésie.", "action_fr": "Confirmer et informer l'anesthésiste ; bilan enzymatique selon indication."},
+        "2": {"result_fr": "Deux copies du variant atypique BCHE.", "meaning_fr": "Signal important de prolongation possible du bloc avec les médicaments concernés.", "action_fr": "Confirmation clinique, information préopératoire et choix/surveillance spécialisés."}
+      },
+      "sources": ["https://pubmed.ncbi.nlm.nih.gov/33061533/", "https://pubmed.ncbi.nlm.nih.gov/33774263/", "https://www.ncbi.nlm.nih.gov/clinvar/RCV000014102.27/"]
+    },
+    "f5_leiden": {
+      "category": "predisposition",
+      "gene": "F5",
+      "titre_fr": "Prédisposition aux thromboses : facteur V Leiden",
+      "domaine_fr": "Coagulation — pénétrance incomplète",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Association établie ; ne signifie pas qu'une thrombose surviendra.",
+      "explanation_fr": "L'allèle Leiden favorise une résistance à la protéine C activée et augmente la susceptibilité à une thrombose veineuse. Le contexte personnel, l'âge, la chirurgie, les œstrogènes, la grossesse et les autres facteurs restent essentiels. Particularité technique : GRCh37 porte déjà l'allèle génomique T de Leiden comme référence à ce site ; l'absence de ligne dans un VCF de variants ne permet pas d'exclure le signal.",
+      "next_steps_fr": "Si allèle confirmé : en parler au médecin, particulièrement avant œstrogènes, grossesse/AMP ou intervention. Un anticoagulant préventif permanent n'est pas prescrit sur le seul génotype ; les décisions dépendent de l'histoire clinique.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle Leiden T non observé au site explicitement appelé.", "meaning_fr": "Ce facteur particulier n'est pas retrouvé ; cela n'exclut pas les autres causes de thrombose.", "action_fr": "Interprétation des antécédents et facteurs cliniques habituels."},
+        "1": {"result_fr": "Une copie de l'allèle Leiden au site appelé.", "meaning_fr": "Prédisposition veineuse à pénétrance incomplète ; de nombreux porteurs n'ont jamais de thrombose.", "action_fr": "Confirmation médicale et discussion des situations à risque ; pas d'anticoagulant automatique."},
+        "2": {"result_fr": "Deux copies de l'allèle Leiden au site appelé.", "meaning_fr": "Signal de susceptibilité plus important que le portage d'une copie, sans prédiction individuelle certaine.", "action_fr": "Confirmation et évaluation spécialisée avant situations à risque, sans traitement décidé par ce rapport."}
+      },
+      "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK1368/", "https://www.ncbi.nlm.nih.gov/grc/human/issues/HG-1841"]
+    },
+    "f2": {
+      "category": "predisposition",
+      "gene": "F2",
+      "titre_fr": "Prédisposition aux thromboses : prothrombine 20210G>A",
+      "domaine_fr": "Coagulation — pénétrance incomplète",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Association établie ; contexte clinique nécessaire.",
+      "explanation_fr": "Le variant 20210G>A est associé à une concentration de prothrombine plus élevée et à une susceptibilité aux thromboses veineuses. Beaucoup de porteurs restent asymptomatiques. Une thrombophilie n'est pas synonyme de fausses couches ni d'indication à un traitement reproductif ; les associations obstétricales sont plus incertaines.",
+      "next_steps_fr": "Si signal confirmé, discuter avec le médecin des antécédents, œstrogènes, grossesse/AMP, chirurgie et autres facteurs. Pas d'anticoagulant ou de stratégie de grossesse automatique sur le génotype seul.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle 20210A non observé au site appelé.", "meaning_fr": "Ce facteur particulier n'est pas retrouvé, mais les autres causes de thrombose restent possibles.", "action_fr": "Suivi guidé par les antécédents et facteurs cliniques."},
+        "1": {"result_fr": "Une copie du variant prothrombine 20210G>A.", "meaning_fr": "Prédisposition veineuse ; une thrombose n'est pas certaine ni actuellement diagnostiquée.", "action_fr": "Confirmation et conseil clinique dans les situations à risque."},
+        "2": {"result_fr": "Deux copies du variant prothrombine 20210G>A.", "meaning_fr": "Signal plus important, à interpréter avec l'histoire personnelle/familiale et les autres facteurs.", "action_fr": "Faire confirmer puis discuter une évaluation spécialisée ; pas de traitement automatique."}
+      },
+      "sources": ["https://www.ncbi.nlm.nih.gov/books/NBK1148/"]
+    },
+    "ackr1": {
+      "category": "coherence",
+      "gene": "ACKR1",
+      "titre_fr": "Repère Duffy-null et numération des neutrophiles",
+      "domaine_fr": "Trait sanguin descriptif — ACKR1",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Association fonctionnelle établie ; ce marqueur ne détermine ni origine ethnique ni tous les antigènes Duffy.",
+      "explanation_fr": "Deux copies C de rs2814778 peuvent abolir l'expression érythrocytaire d'ACKR1 (Duffy-null) et être associées à des neutrophiles de base plus bas sans déficit immunitaire habituel. Le nombre de neutrophiles se mesure réellement ; un résultat génétique ne suffit pas à expliquer toute neutropénie et n'est pas une preuve d'ascendance.",
+      "next_steps_fr": "Comparer si nécessaire à une numération sanguine et à un typage Duffy validé. Une neutropénie nouvelle, profonde, symptomatique ou liée à un médicament nécessite une évaluation clinique, quel que soit ce marqueur.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Génotype T/T au principal site régulateur Duffy.", "meaning_fr": "Ce mécanisme Duffy-null n'est pas retrouvé ; les autres antigènes/allèles ne sont pas déterminés.", "action_fr": "Aucun traitement ; confirmer par typage si question transfusionnelle."},
+        "1": {"result_fr": "Génotype T/C au site régulateur Duffy.", "meaning_fr": "Une copie fonctionnelle est généralement conservée ; ne suffit pas au phénotype Duffy-null lié à C/C.", "action_fr": "Trait descriptif seulement ; numération/typage selon besoin clinique."},
+        "2": {"result_fr": "Génotype C/C au site régulateur Duffy.", "meaning_fr": "Compatible avec Duffy-null érythrocytaire et neutrophiles de base plus bas ; ce n'est pas automatiquement une immunodéficience.", "action_fr": "Confronter à une numération et au contexte ; ne pas attribuer sans examen une neutropénie à ce seul trait."}
+      },
+      "sources": ["https://pubmed.ncbi.nlm.nih.gov/19180233/", "https://pmc.ncbi.nlm.nih.gov/articles/PMC2628742/"]
+    },
+    "kell": {
+      "category": "coherence",
+      "gene": "KEL",
+      "titre_fr": "Repère d'antigène sanguin Kell K/k",
+      "domaine_fr": "Groupe sanguin étendu — Kell",
+      "report_effect_copies": [0, 1, 2],
+      "evidence_fr": "Polymorphisme K/k établi ; d'autres allèles dont null peuvent modifier l'expression.",
+      "explanation_fr": "Le site rs8176058 distingue les allèles Kell K et k les plus courants. L'allèle génomique A correspond généralement à K (KEL1). Il sert de repère de cohérence avec un phénotype sanguin, mais ne remplace pas la sérologie ni la recherche d'anticorps ; un antigène n'est pas une maladie.",
+      "next_steps_fr": "Si un phénotype Kell est déjà disponible, comparer. Pour transfusion ou grossesse, utiliser le typage et la recherche d'anticorps irréguliers du laboratoire ; les autres allèles rares ne sont pas exclus.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Allèle K génomique A non observé au site appelé.", "meaning_fr": "Compatible avec le phénotype courant K−/k+, sous réserve des autres allèles et de l'expression.", "action_fr": "Confirmation sérologique si usage transfusionnel/obstétrical."},
+        "1": {"result_fr": "Une copie de l'allèle Kell K ciblé.", "meaning_fr": "Compatible avec K+/k+ pour les allèles courants ; aucun anticorps ni maladie n'est déduit.", "action_fr": "Comparer au typage de laboratoire ; la RAI reste un examen distinct."},
+        "2": {"result_fr": "Deux copies de l'allèle Kell K ciblé.", "meaning_fr": "Compatible avec K+/k− pour les allèles courants ; nécessite un phénotypage validé si pertinent.", "action_fr": "Utiliser exclusivement les examens d'immunohématologie pour transfusion/grossesse."}
+      },
+      "sources": ["https://blooddatabase.isbtweb.org/system/KEL", "https://pubmed.ncbi.nlm.nih.gov/7849312/"]
+    },
     "mc1r": {
       "category": "coherence",
       "gene": "MC1R",
+      "titre_fr": "Contribution à la pigmentation claire ou rousse",
+      "domaine_fr": "Trait descriptif — MC1R",
+      "report_effect_copies": [1, 2],
+      "evidence_fr": "Association établie pour ces variants ; expression variable et plusieurs gènes impliqués.",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Variant ciblé non observé au site appelé.", "meaning_fr": "D'autres variants MC1R et gènes contribuent à la pigmentation.", "action_fr": "Utiliser le phénotype et les antécédents pour la photoprotection."},
+        "1": {"result_fr": "Une copie d'un marqueur MC1R ciblé.", "meaning_fr": "Peut contribuer à une pigmentation plus claire/rousse, sans prédire à lui seul les cheveux ni un risque cutané.", "action_fr": "Photoprotection selon la peau observée et suivi selon antécédents, sans test d'identité."},
+        "2": {"result_fr": "Deux copies du marqueur MC1R ciblé.", "meaning_fr": "Contribution potentiellement plus visible à la pigmentation ; plusieurs autres facteurs interviennent.", "action_fr": "Aucun traitement ; apprécier le phénotype réel pour la protection solaire."}
+      },
       "explanation_fr": "Ces variants contribuent à des cheveux roux ou une pigmentation plus claire, avec une expression variable et l'effet d'autres gènes. Un seul marqueur ne prédit pas fidèlement la couleur des cheveux ou un risque cutané individuel.",
       "next_steps_fr": "Utiliser la pigmentation observée et les antécédents pour discuter de la photoprotection ou d'un suivi dermatologique. Ces marqueurs descriptifs ne valident pas l'identité de l'échantillon.",
       "sources": ["https://medlineplus.gov/genetics/gene/mc1r/"]
@@ -114,16 +438,16 @@
   "markers": [
     {"rsid": "rs4244285", "profile": "cyp2c19", "gene": "CYP2C19", "label": "marqueur *2", "chrom": "10", "pos": 96541616, "ref": "G", "alt": "A", "effect_allele": "A"},
     {"rsid": "rs4986893", "profile": "cyp2c19", "gene": "CYP2C19", "label": "marqueur *3", "chrom": "10", "pos": 96540410, "ref": "G", "alt": "A", "effect_allele": "A"},
-    {"rsid": "rs12248560", "profile": "cyp2c19", "gene": "CYP2C19", "label": "marqueur *17", "chrom": "10", "pos": 96521657, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs12248560", "profile": "cyp2c19", "gene": "CYP2C19", "label": "marqueur *17", "chrom": "10", "pos": 96521657, "ref": "C", "alt": "T", "effect_allele": "T", "genotype_findings_fr": {"0": {"result_fr": "Marqueur *17 non observé au site appelé.", "meaning_fr": "Pas de signal *17 à ce site ; cela ne démontre pas une fonction normale.", "action_fr": "Panel clinique complet si besoin pharmacologique."}, "1": {"result_fr": "Une copie du marqueur CYP2C19*17.", "meaning_fr": "Associé à une fonction augmentée, contrairement à *2/*3 ; l'autre allèle et la phase doivent être examinés.", "action_fr": "Confirmer le diplotype et utiliser la recommandation propre au médicament."}, "2": {"result_fr": "Deux copies du marqueur CYP2C19*17.", "meaning_fr": "Signal compatible avec une fonction augmentée ; d'autres variants peuvent modifier le diplotype.", "action_fr": "Confirmation clinique avant décision concernant un médicament associé."}}},
     {"rsid": "rs1799853", "profile": "warfarin", "gene": "CYP2C9", "label": "marqueur *2", "chrom": "10", "pos": 96702047, "ref": "C", "alt": "T", "effect_allele": "T"},
-    {"rsid": "rs1057910", "profile": "warfarin", "gene": "CYP2C9", "label": "marqueur *3", "chrom": "10", "pos": 96741053, "ref": "A", "alt": "C", "effect_allele": "C"},
-    {"rsid": "rs9923231", "profile": "warfarin", "gene": "VKORC1", "label": "c.-1639G>A, brin génomique C>T", "chrom": "16", "pos": 31107689, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs1057910", "profile": "warfarin", "gene": "CYP2C9", "label": "marqueur *3", "chrom": "10", "pos": 96741053, "ref": "A", "alt": "C", "effect_allele": "C", "genotype_findings_fr": {"0": {"result_fr": "CYP2C9*3 non observé au site appelé.", "meaning_fr": "Les autres allèles CYP2C9 et les facteurs cliniques ne sont pas exclus.", "action_fr": "Panel adapté si besoin médicamenteux."}, "1": {"result_fr": "Une copie du marqueur CYP2C9*3.", "meaning_fr": "Cet allèle réduit fortement sa fonction ; la warfarine et certains autres médicaments peuvent être éliminés plus lentement. Ce n'est pas un déficit global confirmé du diplotype.", "action_fr": "Si médicament concerné, confirmer le panel puis revoir prescription/interactions ; INR pour warfarine."}, "2": {"result_fr": "Deux copies du marqueur CYP2C9*3.", "meaning_fr": "Signal de fonction CYP2C9 fortement réduite, pertinent pour certains médicaments, sous réserve de validation analytique.", "action_fr": "Interprétation pharmacogénétique spécialisée avant décision ; aucune dose calculée ici."}}},
+    {"rsid": "rs9923231", "profile": "warfarin", "gene": "VKORC1", "label": "c.-1639G>A, brin génomique C>T", "chrom": "16", "pos": 31107689, "ref": "C", "alt": "T", "effect_allele": "T", "genotype_findings_fr": {"0": {"result_fr": "Allèle génomique T ciblé non observé au site VKORC1 appelé.", "meaning_fr": "Ce facteur particulier de sensibilité n'est pas retrouvé ; aucune dose ne se déduit de ce site seul.", "action_fr": "Données cliniques, autres allèles et INR si warfarine."}, "1": {"result_fr": "Une copie du marqueur VKORC1 associé à la sensibilité à la warfarine.", "meaning_fr": "Peut contribuer à un besoin plus faible de warfarine, avec CYP2C9 et le contexte clinique ; pas un trouble de coagulation spontané.", "action_fr": "Communiquer un résultat confirmé au prescripteur et utiliser l'INR ; ne pas modifier seul la dose."}, "2": {"result_fr": "Deux copies du marqueur VKORC1 ciblé.", "meaning_fr": "Signal de sensibilité plus importante à la warfarine, sans dose personnelle ni effet pour tous les anticoagulants.", "action_fr": "Interprétation clinique avec CYP2C9 et surveillance de l'INR."}}},
     {"rsid": "rs4149056", "profile": "slco1b1", "gene": "SLCO1B1", "label": "c.521T>C", "chrom": "12", "pos": 21331549, "ref": "T", "alt": "C", "effect_allele": "C"},
     {"rsid": "rs3918290", "profile": "dpyd", "gene": "DPYD", "label": "*2A, c.1905+1G>A", "chrom": "1", "pos": 97915614, "ref": "C", "alt": "T", "effect_allele": "T"},
     {"rsid": "rs55886062", "profile": "dpyd", "gene": "DPYD", "label": "*13, p.Ile560Ser", "chrom": "1", "pos": 97981343, "ref": "A", "alt": "C", "effect_allele": "C"},
     {"rsid": "rs67376798", "profile": "dpyd", "gene": "DPYD", "label": "p.Asp949Val", "chrom": "1", "pos": 97547947, "ref": "T", "alt": "A", "effect_allele": "A"},
     {"rsid": "rs75017182", "profile": "dpyd", "gene": "DPYD", "label": "HapB3: variant causal d'épissage c.1129-5923C>G", "chrom": "1", "pos": 98045449, "ref": "G", "alt": "C", "effect_allele": "C"},
-    {"rsid": "rs56038477", "profile": "dpyd", "gene": "DPYD", "label": "c.1236G>A: proxy HapB3, pas variant causal", "chrom": "1", "pos": 98039419, "ref": "C", "alt": "T", "effect_allele": "T", "proxy": true, "marker_caveat_fr": "Ce variant synonyme sert de proxy, avec une liaison imparfaite: vérifier directement rs75017182 avant toute conclusion fonctionnelle."},
+    {"rsid": "rs56038477", "profile": "dpyd", "gene": "DPYD", "label": "c.1236G>A: proxy HapB3, pas variant causal", "chrom": "1", "pos": 98039419, "ref": "C", "alt": "T", "effect_allele": "T", "proxy": true, "context_only": true, "report_effect_copies": [], "marker_caveat_fr": "Ce variant synonyme sert de proxy, avec une liaison imparfaite: vérifier directement rs75017182 avant toute conclusion fonctionnelle."},
     {"rsid": "rs1800462", "profile": "thiopurines", "gene": "TPMT", "label": "marqueur *2", "chrom": "6", "pos": 18143955, "ref": "C", "alt": "G", "effect_allele": "G"},
     {"rsid": "rs1800460", "profile": "thiopurines", "gene": "TPMT", "label": "marqueur *3B ou *3A selon phase", "chrom": "6", "pos": 18139228, "ref": "C", "alt": "T", "effect_allele": "T"},
     {"rsid": "rs1142345", "profile": "thiopurines", "gene": "TPMT", "label": "marqueur *3C ou *3A selon phase", "chrom": "6", "pos": 18130918, "ref": "T", "alt": "C", "effect_allele": "C"},
@@ -132,9 +456,9 @@
     {"rsid": "rs267606617", "profile": "mt_rnr1", "gene": "MT-RNR1", "label": "m.1555A>G", "chrom": "MT", "pos": 1555, "ref": "A", "alt": "G", "effect_allele": "G", "required_reference": "NC_012920.1"},
     {"rsid": "rs267606619", "profile": "mt_rnr1", "gene": "MT-RNR1", "label": "m.1494C>T", "chrom": "MT", "pos": 1494, "ref": "C", "alt": "T", "effect_allele": "T", "required_reference": "NC_012920.1"},
     {"rsid": "rs4988235", "profile": "lactase", "gene": "MCM6 / LCT", "label": "-13910 C>T, brin génomique G>A", "chrom": "2", "pos": 136608646, "ref": "G", "alt": "A", "effect_allele": "A"},
-    {"rsid": "rs182549", "profile": "lactase", "gene": "MCM6 / LCT", "label": "marqueur lié à la persistance de lactase", "chrom": "2", "pos": 136616754, "ref": "C", "alt": "T", "effect_allele": "T", "proxy": true},
-    {"rsid": "rs1800562", "profile": "hfe", "gene": "HFE", "label": "p.Cys282Tyr (C282Y)", "chrom": "6", "pos": 26093141, "ref": "G", "alt": "A", "effect_allele": "A"},
-    {"rsid": "rs1799945", "profile": "hfe", "gene": "HFE", "label": "p.His63Asp (H63D)", "chrom": "6", "pos": 26091179, "ref": "C", "alt": "G", "effect_allele": "G"},
+    {"rsid": "rs182549", "profile": "lactase", "gene": "MCM6 / LCT", "label": "marqueur lié à la persistance de lactase", "chrom": "2", "pos": 136616754, "ref": "C", "alt": "T", "effect_allele": "T", "proxy": true, "context_only": true, "report_effect_copies": []},
+    {"rsid": "rs1800562", "profile": "hfe", "gene": "HFE", "label": "p.Cys282Tyr (C282Y)", "chrom": "6", "pos": 26093141, "ref": "G", "alt": "A", "effect_allele": "A", "genotype_findings_fr": {"0": {"result_fr": "C282Y non observé au site appelé.", "meaning_fr": "Ce variant principal n'est pas retrouvé ; autres causes génétiques ou acquises de surcharge restent possibles.", "action_fr": "Bilan martial si contexte clinique, sans se fier uniquement au génotype."}, "1": {"result_fr": "Une copie du variant HFE C282Y.", "meaning_fr": "Portage fréquent ; une copie seule n'est généralement pas une hémochromatose classique.", "action_fr": "Si pertinent, confronter à ferritine et saturation ; rechercher un second allèle seulement avec interprétation de phase."}, "2": {"result_fr": "Deux copies du variant HFE C282Y.", "meaning_fr": "Prédisposition à une surcharge en fer, à pénétrance incomplète : le génotype n'atteste pas une surcharge actuelle.", "action_fr": "Confirmation et bilan martial avec le médecin ; traitement seulement si surcharge documentée."}}},
+    {"rsid": "rs1799945", "profile": "hfe", "gene": "HFE", "label": "p.His63Asp (H63D)", "chrom": "6", "pos": 26091179, "ref": "C", "alt": "G", "effect_allele": "G", "genotype_findings_fr": {"0": {"result_fr": "H63D non observé au site appelé.", "meaning_fr": "Ne constitue pas un bilan complet du métabolisme du fer.", "action_fr": "Biologie selon le contexte clinique."}, "1": {"result_fr": "Une copie du variant HFE H63D.", "meaning_fr": "Signal très peu prédictif isolément ; ne démontre pas une hémochromatose.", "action_fr": "Pas de saignée, supplément ou régime sur ce variant seul ; bilan si besoin clinique."}, "2": {"result_fr": "Deux copies du variant HFE H63D.", "meaning_fr": "Association beaucoup moins prédictive que C282Y/C282Y ; la surcharge doit être vérifiée biologiquement.", "action_fr": "Confronter au bilan martial et aux causes acquises ; aucun traitement automatique."}}},
     {"rsid": "rs671", "profile": "aldh2", "gene": "ALDH2", "label": "*2, p.Glu504Lys", "chrom": "12", "pos": 112241766, "ref": "G", "alt": "A", "effect_allele": "A"},
     {"rsid": "rs429358", "profile": "apoe", "gene": "APOE", "label": "premier site définissant les isoformes usuelles", "chrom": "19", "pos": 45411941, "ref": "T", "alt": "C", "effect_allele": "C"},
     {"rsid": "rs7412", "profile": "apoe", "gene": "APOE", "label": "second site définissant les isoformes usuelles", "chrom": "19", "pos": 45412079, "ref": "C", "alt": "T", "effect_allele": "T"},
@@ -144,6 +468,30 @@
     {"rsid": "rs601338", "profile": "fut2", "gene": "FUT2", "label": "p.Trp143Ter", "chrom": "19", "pos": 49206674, "ref": "G", "alt": "A", "effect_allele": "A"},
     {"rsid": "rs12913832", "profile": "herc2", "gene": "HERC2", "label": "régulation de pigmentation de l'iris", "chrom": "15", "pos": 28365618, "ref": "A", "alt": "G", "effect_allele": "G"},
     {"rsid": "rs1805007", "profile": "mc1r", "gene": "MC1R", "label": "p.Arg151Cys", "chrom": "16", "pos": 89986117, "ref": "C", "alt": "T", "effect_allele": "T"},
-    {"rsid": "rs1805008", "profile": "mc1r", "gene": "MC1R", "label": "p.Arg160Trp", "chrom": "16", "pos": 89986144, "ref": "C", "alt": "T", "effect_allele": "T"}
+    {"rsid": "rs1805008", "profile": "mc1r", "gene": "MC1R", "label": "p.Arg160Trp", "chrom": "16", "pos": 89986144, "ref": "C", "alt": "T", "effect_allele": "T"},
+    {"rsid": "rs28371686", "profile": "warfarin", "gene": "CYP2C9", "label": "marqueur *5, p.Asp360Glu", "chrom": "10", "pos": 96741058, "ref": "C", "alt": "G", "effect_allele": "G", "refseq_accession": "NC_000010.10", "marker_caveat_fr": "Complément d'allèles de fonction diminuée ; le panel CYP2C9 reste incomplet."},
+    {"rsid": "rs7900194", "profile": "warfarin", "gene": "CYP2C9", "label": "marqueur *8, p.Arg150His", "chrom": "10", "pos": 96702066, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000010.10"},
+    {"rsid": "rs28371685", "profile": "warfarin", "gene": "CYP2C9", "label": "marqueur *11, p.Arg335Trp", "chrom": "10", "pos": 96740981, "ref": "C", "alt": "T", "effect_allele": "T", "refseq_accession": "NC_000010.10"},
+    {"rsid": "rs10264272", "profile": "cyp3a5", "gene": "CYP3A5", "label": "marqueur *6, défaut d'épissage", "chrom": "7", "pos": 99262835, "ref": "C", "alt": "T", "effect_allele": "T", "refseq_accession": "NC_000007.13", "report_effect_copies": [1, 2]},
+    {"rsid": "rs1047781", "profile": "fut2", "gene": "FUT2", "label": "p.Ile129Phe, allèle faiblement sécréteur", "chrom": "19", "pos": 49206631, "ref": "A", "alt": "T", "effect_allele": "T", "refseq_accession": "NC_000019.9", "marker_caveat_fr": "Allèle faiblement sécréteur, distinct du stop rs601338 ; les autres sites et leur phase restent nécessaires.", "genotype_findings_fr": {"0": {"result_fr": "Marqueur FUT2 p.Ile129Phe non observé au site appelé.", "meaning_fr": "Ce mécanisme de faible sécrétion n'est pas retrouvé ; rs601338 et les autres allèles restent à vérifier.", "action_fr": "Aucun traitement ; typage spécialisé uniquement si pertinent."}, "1": {"result_fr": "Une copie du marqueur FUT2 p.Ile129Phe.", "meaning_fr": "Une copie fonctionnelle peut maintenir la sécrétion ; la phase et les autres allèles restent importantes.", "action_fr": "Trait descriptif sans régime spécifique à déduire."}, "2": {"result_fr": "Deux copies du marqueur FUT2 p.Ile129Phe.", "meaning_fr": "Compatible avec une sécrétion faible d'antigènes selon les allèles usuels ; ce n'est pas une maladie.", "action_fr": "Pas de traitement ni de conseil alimentaire génétique validé."}}},
+    {"rsid": "rs10830963", "profile": "mtnr1b", "gene": "MTNR1B", "label": "allèle G, association modeste à la glycémie", "chrom": "11", "pos": 92708710, "ref": "C", "alt": "G", "effect_allele": "G", "refseq_accession": "NC_000011.9"},
+    {"rsid": "rs7903146", "profile": "tcf7l2", "gene": "TCF7L2", "label": "allèle T, susceptibilité courante au diabète", "chrom": "10", "pos": 114758349, "ref": "C", "alt": "T", "effect_allele": "T", "refseq_accession": "NC_000010.10"},
+    {"rsid": "rs4148323", "profile": "ugt1a1", "gene": "UGT1A1", "label": "*6, p.Gly71Arg", "chrom": "2", "pos": 234669144, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000002.11"},
+    {"rsid": "rs887829", "profile": "ugt1a1", "gene": "UGT1A1", "label": "*80, proxy associé à la bilirubine ; TA inconnus", "chrom": "2", "pos": 234668570, "ref": "C", "alt": "T", "effect_allele": "T", "refseq_accession": "NC_000002.11", "proxy": true, "marker_caveat_fr": "Ce SNP ne mesure pas rs8175347 : ne pas attribuer *28/*37 ou un nombre de TA. La phase avec *6 et les autres sites n'est pas reconstruite.", "genotype_findings_fr": {"0": {"result_fr": "Proxy UGT1A1*80 T non observé au site appelé.", "meaning_fr": "Les répétitions TA et les autres allèles ne sont pas exclus ; aucun diagnostic de fonction normale.", "action_fr": "Bilan de bilirubine/panel clinique si pertinent."}, "1": {"result_fr": "Une copie du proxy régulateur UGT1A1*80.", "meaning_fr": "Association à la bilirubine ; la répétition TA et le diplotype ne sont pas directement connus.", "action_fr": "Si ictère ou médicament concerné, vérifier biologie et allèles complets ; pas de diagnostic de Gilbert automatique."}, "2": {"result_fr": "Deux copies du proxy régulateur UGT1A1*80.", "meaning_fr": "Compatible dans plusieurs populations avec des allèles de fonction réduite, mais *28/*37 et leur nombre de TA restent inconnus.", "action_fr": "Confirmer la répétition si nécessaire et confronter à la bilirubine réelle avant conclusion."}}},
+    {"rsid": "rs2231142", "profile": "abcg2", "gene": "ABCG2", "label": "c.421C>A, p.Gln141Lys ; génomique G>T", "chrom": "4", "pos": 89052323, "ref": "G", "alt": "T", "effect_allele": "T", "refseq_accession": "NC_000004.11"},
+    {"rsid": "rs3745274", "profile": "cyp2b6", "gene": "CYP2B6", "label": "c.516G>T, marqueur *6/*9 selon haplotype", "chrom": "19", "pos": 41512841, "ref": "G", "alt": "T", "effect_allele": "T", "refseq_accession": "NC_000019.9"},
+    {"rsid": "rs2279343", "profile": "cyp2b6", "gene": "CYP2B6", "label": "c.785A>G, contexte *4/*6 selon combinaison", "chrom": "19", "pos": 41515263, "ref": "A", "alt": "G", "effect_allele": "G", "refseq_accession": "NC_000019.9", "context_only": true, "report_effect_copies": [], "marker_caveat_fr": "Marqueur partagé : *4 seul peut avoir une fonction augmentée ; associé à c.516G>T en cis, il peut définir *6 de fonction diminuée. Aucun effet clinique autonome attribué à ce site."},
+    {"rsid": "rs1801280", "profile": "nat2", "gene": "NAT2", "label": "c.341T>C, famille *5", "chrom": "8", "pos": 18257854, "ref": "T", "alt": "C", "effect_allele": "C", "refseq_accession": "NC_000008.10"},
+    {"rsid": "rs1799930", "profile": "nat2", "gene": "NAT2", "label": "c.590G>A, famille *6", "chrom": "8", "pos": 18258103, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000008.10"},
+    {"rsid": "rs1799931", "profile": "nat2", "gene": "NAT2", "label": "c.857G>A, famille *7", "chrom": "8", "pos": 18258370, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000008.10"},
+    {"rsid": "rs1801279", "profile": "nat2", "gene": "NAT2", "label": "c.191G>A, famille *14", "chrom": "8", "pos": 18257704, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000008.10"},
+    {"rsid": "rs1050828", "profile": "g6pd", "gene": "G6PD", "label": "p.Val68Met, composant d'allèles A−", "chrom": "X", "pos": 153764217, "ref": "C", "alt": "T", "effect_allele": "T", "refseq_accession": "NC_000023.10", "marker_caveat_fr": "À combiner avec les autres sites, notamment p.Asn126Asp, et avec l'activité enzymatique ; le statut X/hémizygote influence l'interprétation."},
+    {"rsid": "rs1050829", "profile": "g6pd", "gene": "G6PD", "label": "p.Asn126Asp, contexte A/A− ; pas déficit isolé", "chrom": "X", "pos": 153763492, "ref": "T", "alt": "C", "effect_allele": "C", "refseq_accession": "NC_000023.10", "context_only": true, "report_effect_copies": [], "marker_caveat_fr": "Ce variant seul correspond à un allèle A généralement fonctionnel ; ne pas le déclarer déficitaire ni appliquer une restriction médicamenteuse sur ce site seul."},
+    {"rsid": "rs5030868", "profile": "g6pd", "gene": "G6PD", "label": "p.Ser188Phe, allèle méditerranéen", "chrom": "X", "pos": 153762634, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000023.10"},
+    {"rsid": "rs1799807", "profile": "bche", "gene": "BCHE", "label": "p.Asp98Gly, variant atypique ; génomique T>C", "chrom": "3", "pos": 165548529, "ref": "T", "alt": "C", "effect_allele": "C", "refseq_accession": "NC_000003.11"},
+    {"rsid": "rs6025", "profile": "f5_leiden", "gene": "F5", "label": "p.Arg534Gln, Leiden ; cible REF GRCh37 T", "chrom": "1", "pos": 169519049, "ref": "T", "alt": "C", "effect_allele": "T", "refseq_accession": "NC_000001.10", "marker_caveat_fr": "L'allèle Leiden est la référence GRCh37 ; une ligne absente ne permet ni d'exclure ni de confirmer Leiden. L'ALT C correspond ici à l'allèle habituel non-Leiden."},
+    {"rsid": "rs1799963", "profile": "f2", "gene": "F2", "label": "20210G>A", "chrom": "11", "pos": 46761055, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000011.9"},
+    {"rsid": "rs2814778", "profile": "ackr1", "gene": "ACKR1", "label": "promoteur Duffy-null, T>C", "chrom": "1", "pos": 159174683, "ref": "T", "alt": "C", "effect_allele": "C", "refseq_accession": "NC_000001.10"},
+    {"rsid": "rs8176058", "profile": "kell", "gene": "KEL", "label": "KEL1/KEL2, p.Thr193Met ; génomique G>A", "chrom": "7", "pos": 142655008, "ref": "G", "alt": "A", "effect_allele": "A", "refseq_accession": "NC_000007.13"}
   ]
 }

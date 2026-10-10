@@ -19,9 +19,12 @@ from datetime import datetime, timezone
 from html import escape
 from importlib.metadata import version
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from .traits import audit_traits
+from .catalogs import review_stars
 from .vcf import normalize_allele
+from .patient_view import select_patient_signals, render_patient_sections, render_population_results, ancestry_plot_spec
 
 
 HERE = Path(__file__).parent
@@ -52,6 +55,9 @@ GENERAL_SOURCES = {
     "cpic": {"label": "CPIC : recommandations pharmacogénétiques", "url": "https://cpicpgx.org/guidelines/"},
     "gatk": {"label": "Broad GATK : qualité et filtrage des variants germinaux", "url": "https://gatk.broadinstitute.org/hc/en-us/articles/360035890471-Hard-filtering-germline-short-variants"},
     "ancestry": {"label": "NHGRI : descripteurs populationnels, ascendance et ethnicité", "url": "https://www.genome.gov/about-genomics/policy-issues/population-descriptors-in-genomics"},
+    "pgs-catalog": {"label": "PGS Catalog : poids et métadonnées publics des scores", "url": "https://www.pgscatalog.org/downloads/"},
+    "1000g": {"label": "1000 Genomes : populations et variations de référence", "url": "https://www.internationalgenome.org/data-portal/population"},
+    "clinvar-review": {"label": "ClinVar : niveaux de revue et critères des assertions", "url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/"},
 }
 
 
@@ -69,6 +75,8 @@ def collect_variant_records(result: dict) -> list[dict]:
         if not gene:
             continue  # Le phénotype XG est un trait sanguin, pas une maladie retenue.
         tier = "technical" if item["quality_flags"] else "plp"
+        if tier == "plp" and item["clinvar"].get("review_status") and review_stars(item["clinvar"]["review_status"]) == 0:
+            tier = "unassigned"  # Une ancienne étoile mal décodée ne promeut pas une assertion sans critères.
         if gene == "TRB":
             tier = "unassigned"
         records.append({**item, "gene": gene, "report_tier": tier})
@@ -151,9 +159,16 @@ def render_variant_catalog(records: list[dict], catalog: dict, references: dict)
             if classification:
                 html.append(f'<p><strong>Classement :</strong> {escape(_french_classification(classification))}.</p>')
             stars = clinical.get("stars", item.get("clinvar_review_stars"))
+            frozen_stars = stars
+            if clinical.get("review_status"):
+                stars = review_stars(clinical["review_status"])
             if stars is not None:
                 html.append(f'<p><strong>Revue ClinVar :</strong> {stars} étoile(s) dans la référence figée ; '
                             'ce niveau décrit la revue du catalogue, pas la validation de cet échantillon.</p>')
+                if stars != frozen_stars:
+                    html.append(f'<p class="inline-note">Correction de lecture du statut « {escape(clinical["review_status"])} » : '
+                                f'{stars} étoile(s), contre {frozen_stars} dans l’ancien décodage figé. '
+                                'Le fichier source est conservé inchangé. <a data-cite="clinvar-review"></a></p>')
             if "gnomad_global_af" in item or "gnomad_nfe_af" in item:
                 frequencies = []
                 for key, label in (("gnomad_global_af", "globale"), ("gnomad_nfe_af", "NFE")):
@@ -175,6 +190,12 @@ def render_variant_catalog(records: list[dict], catalog: dict, references: dict)
                 "splice_acceptor_variant", "splice_donor_variant", "frameshift_variant", "stop_gained"
             }:
                 html.append('<p class="caveat">La prédiction d’épissage/LoF est plausible, mais ni le transcript réellement produit ni la dégradation de l’ARN ne sont démontrés. Ce signal n’est pas un portage récessif établi.</p>')
+            if gene in {"TUBB8", "PRSS1"} and tier == "technical" and clinical:
+                html.append('<p class="caveat">Pourquoi ce résultat peut différer d’un rapport commercial : '
+                            'le variant est bien trouvé dans notre catalogue, mais l’appel de cet échantillon '
+                            'n’est pas retenu pour qualité insuffisante. Le classement ClinVar ne valide pas les lectures. '
+                            'Les métriques ci-dessus et les lectures d’un BAM, ou une confirmation indépendante, '
+                            'permettront de trancher.</p>')
             html.append("</div>")
         html.append('<div class="clinical-context">')
         if card.get("evidence"):
@@ -281,10 +302,16 @@ def render_couple_section(couple: dict, catalog: dict, references: dict) -> str:
                         f'<td>chr{str(item["chrom"]).removeprefix("chr")}:{item["pos"]}<br>{escape(change)}</td>'
                         f'<td>{escape(str(item["genotype"]))}</td><td>{escape(CONSEQUENCES.get(item.get("consequence"), "effet à préciser"))}</td>'
                         f'<td>{escape(_french_classification(classification))}</td><td>{"documentée" if item.get("phased") else "non résolue"}</td></tr>')
-    content = [f'<section id="couple-synthese"><h2>Ce que montre réellement la comparaison</h2>'
-               f'<p class="takeaway">{len(shared)} gène(s) commun(s) parmi les observations à revoir ; '
-               f'{len(established)} gène(s) avec paire causale P/LP compatible identifiée.</p>'
-               '<p class="caveat">Le nombre de gènes partagés à un niveau incertain ne constitue pas un nombre de maladies récessives communes. Le risque résiduel demeure non quantifié.</p>',
+    headline = ("Aucun portage récessif causal commun identifié dans cette analyse." if not established else
+                f"{len(established)} gène(s) avec une paire récessive compatible à discuter en génétique clinique.")
+    content = [f'<section id="couple-synthese"><h2>Vos résultats pour le couple</h2>'
+               f'<p class="takeaway">{headline}</p>'
+               '<p>Les résultats utiles de chaque personne sont expliqués plus bas. Un gène partagé avec des variants incertains '
+               'ne compte pas comme une maladie récessive commune.</p>'
+               '<p class="caveat">Ce résultat ne signifie pas un risque nul : la couverture et les variants non évalués laissent un risque résiduel non quantifié.</p>'
+               f'<details class="audit-details"{" open" if established else ""}><summary>Comprendre les recouvrements et leur niveau de preuve</summary>'
+               f'<p>{len(shared)} gène(s) commun(s) parmi les observations à revoir ; '
+               f'{len(established)} gène(s) avec paire causale P/LP compatible identifiée.</p>',
                '<div class="table-wrap"><table><thead><tr><th>Personne</th><th>Gène</th><th>Variant GRCh37</th><th>GT</th><th>Effet prédit</th><th>Preuve</th><th>Phase</th></tr></thead><tbody>' + "".join(rows) + '</tbody></table></div>']
     for group in established:
         for risk in group["disease_risks"]:
@@ -310,6 +337,7 @@ def render_couple_section(couple: dict, catalog: dict, references: dict) -> str:
                        'Une paire de VUS ne justifie aucun chiffre de risque de maladie de 25 %.</div>')
         content.append('<div class="prose">' + _paragraphs(catalog["TTN"]["interpretation"]) +
                        _source_links(catalog["TTN"]["sources"], references) + '</div>')
+    content.append('</details>')
     locus_rows = []
     for name, checks in couple.get("partner_locus_checks", {}).items():
         for check in checks:
@@ -343,6 +371,9 @@ def build_genomic_reports(
     skill_scripts: Path,
     refresh_traits: bool = True,
     report_date: str | None = None,
+    ancestry_results: dict[str, Path] | None = None,
+    polygenic_results: dict[str, Path] | None = None,
+    ancestry_reference_projection: Path | None = None,
 ) -> dict[str, Path]:
     """Générer deux rapports individuels et un rapport de couple français.
 
@@ -359,6 +390,13 @@ def build_genomic_reports(
         seulement si les empreintes des entrées, du panel et du décodeur sont identiques.
     report_date : str | None
         Date de revue au format ISO ; par défaut, date courante en UTC.
+    ancestry_results, polygenic_results : dict[str, Path] | None
+        JSON validés par personne, indexés par ``sample_name``. Les données
+        d'ascendance et de scores sont calculées séparément du rendu ; aucun
+        pourcentage n'est déduit d'une capture ou fabriqué par la présentation.
+    ancestry_reference_projection : Path | None
+        Nuage public des références, issu du même modèle que les résultats
+        d'ascendance. Nécessaire pour leur représentation graphique.
 
     Returns
     -------
@@ -376,7 +414,8 @@ def build_genomic_reports(
     frozen_hashes = {path.name + ":" + path.parent.name: hashlib.sha256(path.read_bytes()).hexdigest()
                      for path in [first_result, second_result, couple_result]}
     trait_signature = hashlib.sha256((HERE / "traits.py").read_bytes() +
-                                     (HERE / "trait_markers.json").read_bytes()).hexdigest()
+                                     (HERE / "trait_markers.json").read_bytes() +
+                                     (HERE / "vcf.py").read_bytes()).hexdigest()
     for index, result in enumerate(sources, 1):
         name = result["sample_name"]
         folder = output_directory / f"personne_{index}"
@@ -401,57 +440,64 @@ def build_genomic_reports(
         references = dict(GENERAL_SOURCES)
         records = collect_variant_records(result)
         counts = {tier: sum(item["report_tier"] == tier for item in records) for tier in TIERS}
-        unique_genes = len({item["gene"] for item in records})
-        plp_genes = sorted({x["gene"] for x in records if x["report_tier"] == "plp"})
-        description = ("Résultat(s) P/LP retenu(s) : " + ", ".join(plp_genes) + ". Validation clinique à compléter."
-                       if plp_genes else "Aucun résultat P/LP retenu avec les filtres de cette analyse.")
-        if any(x.get("clinvar", {}).get("variation_id") == "97608" and x["report_tier"] == "plp" for x in records):
-            description += " L’association dominante générique à la porokératose ne suffit pas à conclure pour p.Arg215Gln."
-        if result.get("classification_changes"):
-            changed = ", ".join(sorted({x["gene"] for x in result["classification_changes"]}))
-            description += f" Les changements de classification ({changed}) sont documentés dans les fiches."
-        explicit_traits = sum(bool(x["observations"]) for x in traits["markers"])
-        sections = [f'<section id="synthese"><h2>Les conclusions à retenir</h2>'
-                    f'<p class="takeaway">{escape(description)}</p><div class="cards">'
-                    f'<div class="card"><strong>{counts["plp"]}</strong><span>observation(s) P/LP de qualité suffisante dans l’analyse, à confirmer cliniquement</span></div>'
-                    f'<div class="card"><strong>{unique_genes}</strong><span>gènes documentés à tous les niveaux de preuve, sans diagnostic automatique</span></div>'
-                    f'<div class="card"><strong>{explicit_traits}/{len(traits["markers"])}</strong><span>sites du panel PGx/traits explicitement observés</span></div></div>'
-                    '<p>P/LP signifie « pathogène ou probablement pathogène » dans une interprétation donnée. '
-                    'Un VUS est un variant de signification incertaine ; pLoF désigne une perte de fonction prédite, non un diagnostic.</p>'
-                    '<p class="caveat">Les maladies décrites plus bas ne sont pas attribuées à cette personne par défaut. Les données cliniques, traitements et groupes sanguins connus ne sont pas encore renseignés.</p></section>']
-        sections.append(_quality_section(result, traits))
-        sections.append(_structural_section(result))
-        if any(x["gene"] == "SYNE1" for x in records):
-            syne = [x for x in records if x["gene"] == "SYNE1"]
-            nearby = [(a["pos"], b["pos"]) for n, a in enumerate(syne) for b in syne[n+1:]
-                      if 0 < abs(a["pos"]-b["pos"]) <= 20]
-            near_text = (" Des appels sont distants de " + ", ".join(str(abs(a-b)) for a,b in nearby) + " base(s) : leur haplotype doit être reconstitué conjointement."
-                         if nearby else " Aucun groupe de deux appels proches n'est signalé par cette sélection.")
-            rnf_note = (" RNF213 possède aussi une prédiction d’épissage à confirmer, avec des mécanismes de maladie variant-spécifiques."
-                        if any(x["gene"] == "RNF213" for x in records) else "")
-            sections.append(f'<section id="points-review"><h2>Les observations demandant une revue particulière</h2>'
-                            f'<p class="takeaway">SYNE1 : {len(syne)} appel(s) dans les observations à revoir.</p>'
-                            f'<p class="prose">La phase, l’effet combiné et la causalité doivent être examinés pour les appels pertinents.{escape(near_text)}{escape(rnf_note)}</p>'
-                            '<p class="caveat">Ces signaux ne démontrent pas une maladie personnelle ni une double atteinte récessive.</p></section>')
-        sections.append('<section id="variants" data-document-only><h2>Catalogue expliqué de chaque observation</h2>'
-                        '<p>Ouvrir une fiche pour consulter tous les variants, les maladies associées, leurs symptômes et les étapes diagnostiques possibles. '
-                        'Les traitements sont décrits seulement pour une maladie confirmée.</p>' +
-                        render_variant_catalog(records, catalog, references) + '</section>')
-        sections.append(render_trait_sections(traits, references))
+        extras = {}
+        for key, paths in (("ancestry", ancestry_results), ("polygenic", polygenic_results)):
+            if paths and name in paths:
+                path = Path(paths[name])
+                value = json.loads(path.read_text())
+                if value.get("sample_name") != name:
+                    raise ValueError(f"Résultat complémentaire attribué à une autre personne : {key}")
+                extra_inputs = value.get("inputs", value.get("input_files"))
+                if not extra_inputs or [entry["sha256"] for entry in extra_inputs] != identities:
+                    raise ValueError(f"Empreintes d'entrées incompatibles dans le résultat {key}")
+                if value.get("analysis_result_sha256") and value["analysis_result_sha256"] != hashlib.sha256(source_paths[index-1].read_bytes()).hexdigest():
+                    raise ValueError("Résultat d'ascendance lié à une autre révision d'analyse")
+                extras[key] = value
+        plots = {}
+        if extras.get("ancestry", {}).get("status") == "reference_affinity_supported":
+            if ancestry_reference_projection is None:
+                raise ValueError("Le nuage des références d'ascendance est requis")
+            projection = json.loads(Path(ancestry_reference_projection).read_text())
+            plots["ancestry-space"] = ancestry_plot_spec(extras["ancestry"], projection)
+        signals = select_patient_signals(records, traits)
+        description = (f'{len(signals["clinical"])} résultat(s) de portage ou santé à confirmer, '
+                       f'{signals["profiles"]} sujet(s) de médicaments, nutrition ou traits avec une observation utile.')
+        sections = ['<section id="synthese"><h2>Vos informations clés</h2>'
+                    f'<p class="takeaway">{escape(description)}</p>'
+                    '<p>Commencez par les cartes : votre résultat, ce qu’il signifie et la prochaine étape. '
+                    'Les détails complets sont accessibles sans encombrer cette première lecture.</p>'
+                    '<p class="caveat">Ce rapport n’est pas un diagnostic. Les observations provisoires demandent une confirmation ; '
+                    'les traitements et antécédents n’ont pas été renseignés.</p></section>',
+                    render_patient_sections(signals, catalog, references),
+                    render_population_results(extras.get("ancestry"), extras.get("polygenic"), references)]
+        sections.append('<section id="annexes" data-document-only><h2>Détails et transparence de l’analyse</h2>'
+                        f'<details class="audit-details"><summary>Ouvrir l’annexe : {len(records)} observations, qualité, VUS et sites non évalués</summary>'
+                        '<p class="caveat">Les VUS et appels techniques sont conservés pour audit, pas présentés comme des maladies. '
+                        'Une absence dans un VCF ne démontre pas un résultat négatif fiable.</p>'
+                        + _quality_section(result, traits, extras.get("ancestry"))
+                        + _structural_section(result)
+                        + '<section id="variants"><h2>Catalogue détaillé de chaque observation</h2>'
+                        + render_variant_catalog(records, catalog, references) + '</section>'
+                        + render_trait_sections(traits, references)
+                        + _population_audit(extras, references)
+                        + '</details></section>')
         sections.append(_provenance_section(result, source_paths[index - 1], frozen_hashes, traits, report_date))
         md = "\n".join(sections)
         (folder / "report.md").write_text(md, encoding="utf-8")
         _save_variant_table(records, folder / "variants.csv")
-        metadata = {"title": f"Rapport génomique — {name}", "subtitle": "Maladies, transmission, médicaments, nutrition et concordance : ce que les données permettent réellement de conclure.",
-                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v2 · français",
+        metadata = {"title": f"Vos résultats — {name}", "subtitle": "Ce qui compte pour vous, puis les détails pour comprendre et vérifier.",
+                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v3 · lecture utile",
                     "references": references, "analysis_input_sha256": frozen_hashes,
                     "clinical_cards_sha256": hashlib.sha256(json.dumps(catalog, sort_keys=True).encode()).hexdigest(),
-                    "counts": counts, "clinical_history": "non renseignée"}
+                    "counts": counts, "patient_signals": {"clinical": len(signals["clinical"]), "validation": len(signals["validation"]), "profiles": signals["profiles"]},
+                    "additional_results_sha256": {key: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest() for key, value in extras.items()},
+                    "clinical_history": "non renseignée"}
         structural_data = json.dumps(result.get("structural_candidates", []), ensure_ascii=False, indent=2).encode()
+        attachments = {"variants.csv": (folder / "variants.csv").read_bytes(), "traits.json": cache.read_bytes(),
+                       "structural_candidates.json": structural_data,
+                       **{key + ".json": json.dumps(value, ensure_ascii=False, indent=2).encode() for key, value in extras.items()}}
         outputs[f"personne_{index}"] = write_french_html(folder, folder / "rapport.html", metadata, skill_scripts,
-                                                        attachments={"variants.csv": (folder / "variants.csv").read_bytes(),
-                                                                     "traits.json": cache.read_bytes(),
-                                                                     "structural_candidates.json": structural_data})
+                                                        attachments=attachments, plots=plots)
     couple = json.loads(couple_result.read_text())
     folder = output_directory / "couple"
     folder.mkdir(exist_ok=True)
@@ -463,7 +509,9 @@ def build_genomic_reports(
             for item in collect_variant_records(result):
                 if item["gene"] == gene:
                     records.append({**item, "source_file": result["sample_name"] + " · " + item["source_file"]})
-        md += f'<section id="couple-contexte-{escape(gene)}" data-document-only><h2>{escape(gene)} : maladie, phénotype et validation</h2>' + render_variant_catalog(records, catalog, references) + '</section>'
+        md += f'<section id="couple-contexte-{escape(gene)}" data-document-only><h2>{escape(gene)} : détails de la comparaison</h2>' \
+              + '<details class="audit-details"><summary>Afficher les observations et les maladies associées, sans diagnostic</summary>' \
+              + render_variant_catalog(records, catalog, references) + '</details></section>'
     md += _couple_individual_context(sources, catalog, references)
     md += '<section id="couple-limites"><h2>Ce qui demeure non évalué</h2><p class="takeaway">Une absence de paire causale identifiée ne quantifie pas le risque résiduel.</p>'
     md += '<p class="prose">La couverture hors des sites variantés, les CNV/SV de la seconde personne, les expansions répétées et la phase distante demeurent incomplets. '
@@ -476,14 +524,14 @@ def build_genomic_reports(
     outputs["couple"] = write_french_html(folder, folder / "rapport.html", {
         "title": f"Rapport de couple — {couple['first_name']} et {couple['second_name']}",
         "subtitle": "Une comparaison par maladie et niveau de preuve, avec les limites de phase explicites.",
-        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v2 · français",
+        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v3 · lecture utile",
         "references": references, "analysis_input_sha256": frozen_hashes,
     }, skill_scripts)
     return outputs
 
 
 def write_french_html(source: Path, output: Path, metadata: dict, skill_scripts: Path,
-                      attachments: dict[str, bytes] | None = None) -> Path:
+                      attachments: dict[str, bytes] | None = None, plots: dict | None = None) -> Path:
     """Utiliser le renderer HTML documenté, puis franciser son interface.
 
     Le runtime partagé garde ses modes document/présentation. Les ajouts locaux
@@ -500,7 +548,7 @@ def write_french_html(source: Path, output: Path, metadata: dict, skill_scripts:
     (source / "report.js").write_text(runtime + "\n" + (HERE / "report_assets.js").read_text())
     metadata["build_dependency_versions"] = {name: version(name) for name in ("Markdown", "beautifulsoup4")}
     metadata["presentation_build_utc"] = datetime.now(timezone.utc).isoformat()
-    render_report(source, output, metadata=metadata, plots={}, attachments=attachments)
+    render_report(source, output, metadata=metadata, plots=plots or {}, attachments=attachments)
     html = output.read_text()
     replacements = {'<html lang="en">': '<html lang="fr">', 'Skip to report': 'Aller au rapport',
                     'CI <span>Research / Report</span>': 'Jouvence <span>Génomique / Rapport</span>',
@@ -513,6 +561,16 @@ def write_french_html(source: Path, output: Path, metadata: dict, skill_scripts:
                     'Activer JavaScript pour les filtres et la présentation. Le texte et les téléchargements intégrés restent disponibles.'}
     for old, new in replacements.items():
         html = html.replace(old, new)
+    from bs4 import BeautifulSoup
+    document = BeautifulSoup(html, "html.parser")
+    bibliography = document.select_one("#bibliography > ol")
+    if bibliography:
+        disclosure = document.new_tag("details", attrs={"class": "audit-details bibliography-details"})
+        summary = document.new_tag("summary")
+        summary.string = f"Consulter les {len(bibliography.find_all('li', recursive=False))} références"
+        bibliography.wrap(disclosure)
+        disclosure.insert(0, summary)
+    html = str(document)
     icon = HERE.parents[1] / "assets/brand/jouvence-icon-192.png"
     if icon.exists():
         favicon = b64encode(icon.read_bytes()).decode("ascii")
@@ -524,6 +582,8 @@ def write_french_html(source: Path, output: Path, metadata: dict, skill_scripts:
 def _source_links(sources: list, references: dict) -> str:
     links = []
     for source in sources:
+        if isinstance(source, str):
+            source = {"url": source, "label": urlsplit(source).netloc + " — " + urlsplit(source).path.rstrip("/").split("/")[-1]}
         url = source["url"]
         key = "src-" + hashlib.sha256(url.encode()).hexdigest()[:12]
         label = source.get("title") or source.get("label") or url
@@ -563,7 +623,7 @@ def _filter_controls() -> str:
             '<button data-close-cards>Tout replier</button><span class="filter-count" data-filter-count aria-live="polite"></span></div>')
 
 
-def _quality_section(result: dict, traits: dict) -> str:
+def _quality_section(result: dict, traits: dict, ancestry: dict | None = None) -> str:
     rows = []
     for qc in result["qc"]:
         counts = qc["counts"]
@@ -571,7 +631,10 @@ def _quality_section(result: dict, traits: dict) -> str:
                     f'<td>{qc["depth"]["median"]}</td><td>{qc["genotype_quality"]["median"]}</td>'
                     f'<td>{counts.get("phase_block", 0):,}</td><td>{counts.get("filter_pass", 0):,} PASS / '
                     f'{counts.get("filter_not_applied", 0):,} sans filtre déclaré</td></tr>')
-    unavailable = "".join(f'<li><strong>{escape(item["item"])}</strong> : {escape(item["reason_fr"])}</li>' for item in traits["not_evaluated"])
+    unavailable = "".join(f'<li><strong>{escape(item["item"])}</strong> : {escape(item["reason_fr"])}</li>'
+                          for item in traits["not_evaluated"] if not (ancestry and "Ascendance" in item["item"]))
+    population_note = ("L'affinité aux références d'ascendance a été calculée séparément et ses contrôles figurent dans ce rapport. "
+                       if ancestry else "L'ascendance n'a pas été calculée pour ce rendu. ")
     return ('<section id="qualite"><h2>Qualité, couverture et concordance</h2>'
             '<p class="takeaway">DP et GQ décrivent les sites appelés ; ils ne mesurent pas la couverture complète du génome.</p>'
             '<div class="table-wrap"><table><thead><tr><th>Fichier</th><th>Appels</th><th>DP médiane</th><th>GQ médiane</th><th>Sites avec bloc de phase</th><th>Filtres</th></tr></thead><tbody>'
@@ -579,8 +642,44 @@ def _quality_section(result: dict, traits: dict) -> str:
             '<p class="caveat">Une absence de ligne dans ces VCF de variants demeure non évaluable. FILTER « . » signifie qu’aucun filtre n’est déclaré, même avec GQ élevé.</p>'
             '<div class="prose"><h3>Informations utiles qui manquent encore</h3><ul>' + unavailable + '</ul>'
             '<p>Les groupes sanguins sérologiques, l’histoire familiale et les traitements déclarés ne sont pas renseignés. '
-            'Aucun pourcentage d’ascendance, test de parenté IBD ou taux de contamination n’a été calculé. '
-            'Il faudrait un panel de référence et des méthodes validées pour ces contrôles.</p></div></section>')
+            + population_note + 'Les pourcentages de mélange ancestral, la nationalité, la parenté IBD et la contamination '
+            'ne sont pas déduits de ce panel.</p></div></section>')
+
+
+def _population_audit(extras: dict, references: dict) -> str:
+    """Rendre visibles les méthodes et exclusions, sans les confondre avec risques."""
+
+    text = []
+    ancestry = extras.get("ancestry")
+    if ancestry:
+        text.append('<section id="ascendance-audit"><h2>Contrôles de l’ascendance</h2>'
+                    f'<p>Méthode : {escape(ancestry["method"])}. '
+                    f'{ancestry["marker_counts"]["explicit_sites_accepted"]} marqueurs explicites retenus sur '
+                    f'{ancestry["panel"]["selected_markers"]} sites du panel ; les autres restent inconnus.</p>'
+                    + _paragraphs(ancestry.get("limitations_fr", []))
+                    + _source_links(ancestry.get("sources", []), references)
+                    + '<p><a href="ancestry.json">Résultat d’ascendance et contrôles complets</a></p></section>')
+    polygenic = extras.get("polygenic")
+    if polygenic:
+        rows = []
+        for score in polygenic.get("scores", []):
+            state = {"incomplete_not_calibrated": "Incomplet, sans calibration personnelle",
+                     "incomplete_reference_calibrated_bounds_only": "Bornes de recherche seulement",
+                     "research_bounds_not_predictively_validated": "Bornes de recherche, non validées pour prédire la maladie"}.get(score["status"], score["status"])
+            rows.append(f'<tr><td>{escape(score["trait_fr"])}</td><td>{escape(score["pgs_id"])}</td>'
+                        f'<td>{score.get("usable_genotypes", 0)} / {score["n_variants"]}</td>'
+                        f'<td>{escape(str(state))}<br>{escape(" ; ".join(score.get("reasons_fr", [])))}</td></tr>')
+        text.append('<section id="scores-audit"><h2>Scores testés et raisons de non-affichage</h2>'
+                    '<p>Le filtre de synthèse est |z| &gt; 1 dans une référence calibrée. '
+                    'Il ne correspond pas à un seuil de signification clinique. Les génotypes absents ne sont pas transformés en référence.</p>'
+                    '<p>La calibration d’un sous-ensemble de recherche peut être vérifiée numériquement sans '
+                    'être validée pour prédire la maladie comme le PGS publié. Les percentiles personnels ne '
+                    'sont pas affichés tant que cette qualification manque ; cela ne signifie pas un score normal.</p>'
+                    '<div class="table-wrap"><table><thead><tr><th>Sujet</th><th>Modèle</th><th>Sites utilisables / attendus</th><th>État</th></tr></thead><tbody>'
+                    + "".join(rows) + '</tbody></table></div>'
+                    + _source_links([source for score in polygenic.get("scores", []) for source in score.get("sources", [])], references)
+                    + '<p><a href="polygenic.json">Audit des scores, poids, bornes et calibration</a></p></section>')
+    return "\n".join(text)
 
 
 def _structural_section(result: dict) -> str:
@@ -625,6 +724,7 @@ def _provenance_section(result: dict, source_path: Path, hashes: dict, traits: d
                    for item in result["provenance"]["inputs"])
     reference_names = ", ".join(Path(item["path"]).name for item in result["provenance"].get("references", []))
     return ('<section id="provenance" data-document-only><h2>Méthode, provenance et limites</h2>'
+            '<details class="audit-details"><summary>Sources, méthodes, empreintes et téléchargements</summary>'
             f'<p>Analyse figée : {escape(result["provenance"]["run_utc"])}. Lecture clinique et présentation : {escape(report_date)}.</p>'
             f'<p>Références de l’analyse : {escape(reference_names)}. '
             'Les fréquences gnomAD globales et NFE sont distinguées. NFE est une référence populationnelle européenne non finlandaise, pas une ascendance calculée ni une cohorte française.</p>'
@@ -638,7 +738,7 @@ def _provenance_section(result: dict, source_path: Path, hashes: dict, traits: d
             '<p class="download-row"><a href="variants.csv">Table complète des observations (CSV)</a>'
             '<a href="traits.json">Résultats du panel ciblé (JSON)</a><a href="report.md">Source éditable du rapport</a>'
             '<a href="build.json">Provenance du rendu HTML</a></p>'
-            '<p>Aucune donnée génomique n’est envoyée à un service web par ce rapport. Les liens de documentation ouvrent des ressources externes.</p></section>')
+            '<p>Aucune donnée génomique n’est envoyée à un service web par ce rapport. Les liens de documentation ouvrent des ressources externes.</p></details></section>')
 
 
 def _save_variant_table(records: list[dict], destination: Path) -> None:
@@ -654,18 +754,26 @@ def _couple_individual_context(results: list[dict], catalog: dict, references: d
     genes = sorted({x["gene"] for result in results for x in collect_variant_records(result)
                     if x["report_tier"] == "plp"})
     content = ['<section id="portages-personnels"><h2>Les résultats individuels utiles au couple</h2>'
-               f'<p class="takeaway">Résultats P/LP personnels : {escape(", ".join(genes) or "aucun retenu")}. '
-               'Leurs implications et leurs prochaines étapes doivent être comprises par maladie.</p><div class="prose">']
+               f'<p class="takeaway">Gènes concernés par un résultat pathogène du catalogue : {escape(", ".join(genes) or "aucun retenu")}.</p>'
+               '<div class="finding-grid">']
     for result in results:
         for item in collect_variant_records(result):
             if item["report_tier"] != "plp":
                 continue
             gene = item["gene"]
-            content.append(f'<h3>{escape(result["sample_name"])} · {escape(gene)}</h3>')
             card = catalog[gene]
-            content.append(_paragraphs(card["interpretation"]) + _paragraphs(card["phenotype"]))
-            content.append('<h4>Étapes possibles</h4>' + _paragraphs(card["diagnostic_steps"]))
-            content.append('<h4>Prise en charge si diagnostic</h4>' + _paragraphs(card["management"]))
+            title = card.get("title") or card["conditions"][0]["name"]
+            content.append(f'<article class="finding-card"><p class="finding-domain">{escape(result["sample_name"])} · {escape(gene)}</p>'
+                           f'<h3>{escape(title)}</h3><dl class="plain-result"><dt>Votre résultat</dt>'
+                           f'<dd>Un variant classé pathogène ou probablement pathogène dans le catalogue, appelé {escape(item["genotype"])} ; à confirmer cliniquement.</dd>'
+                           '<dt>Ce que cela signifie pour le couple</dt><dd>' + escape(card["interpretation"]) + '</dd>'
+                           '<dt>La prochaine étape</dt><dd>Confirmer le résultat et compléter le test fiable du gène chez l’autre partenaire, '
+                           'plutôt que considérer l’absence de ligne VCF comme un résultat négatif.</dd></dl>'
+                           '<details class="explanation prose"><summary>Symptômes, examens et prise en charge</summary>')
+            content.append(_paragraphs(card["phenotype"]))
+            content.append('<h4>Étapes possibles</h4>' + _paragraphs(card.get("diagnostic_steps") or card.get("diagnosis", [])))
+            content.append('<h4>Prise en charge si diagnostic</h4>' + _paragraphs(card["management"]) + '</details>')
             content.append(_source_links(card["sources"], references))
+            content.append('</article>')
     content.append('</div></section>')
     return "\n".join(content)

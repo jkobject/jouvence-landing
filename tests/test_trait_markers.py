@@ -75,7 +75,7 @@ class TraitMarkerTests(unittest.TestCase):
 
     def test_panel_has_unique_sites_and_explicit_strand(self):
         markers = load_trait_markers()["markers"]
-        self.assertEqual(len(markers), 33)
+        self.assertGreaterEqual(len(markers), 57)
         self.assertEqual(len({(m["chrom"], m["pos"]) for m in markers}), len(markers))
         self.assertTrue(all(m["strand"] == "+" for m in markers))
         self.assertTrue(self.marker({"markers": markers}, "rs56038477")["proxy"])
@@ -93,6 +93,34 @@ class TraitMarkerTests(unittest.TestCase):
             "10\t96541616\t.\tG\tA\t99\tPASS\t.\tGT:DP:GQ\t0/1:30:99",
         ])])
         self.assertFalse(self.marker(result, "rs4244285")["quality_pass"])
+
+    def test_raw_strand_bias_is_flagged_and_pgt_phase_is_preserved(self):
+        result = audit_traits([self.vcf([
+            "10\t96541616\t.\tG\tA\t99\t.\tQD=10;FS=70;SOR=4;MQ=60\tGT:DP:GQ:AD:PGT:PID\t0/1:30:99:15,15:1|0:block1",
+        ])])
+        item = self.marker(result, "rs4244285")
+        self.assertFalse(item["quality_pass"])
+        self.assertTrue(any("GATK brut échoué" in value for value in item["quality_issues_fr"]))
+        self.assertTrue(item["phased_gt"])
+        self.assertEqual(item["effect_allele_haplotypes"], [0])
+
+    def test_reads_for_uncalled_third_allele_are_not_ignored(self):
+        result = audit_traits([self.vcf([
+            "10\t96541616\t.\tG\tA,T\t99\tPASS\t.\tGT:DP:GQ:AD\t0/1:100:99:5,5,90",
+        ])])
+        item = self.marker(result, "rs4244285")
+        self.assertFalse(item["quality_pass"])
+        self.assertIn("moins de 80 % des lectures soutiennent les allèles appelés", item["quality_issues_fr"])
+
+    def test_discordant_pgt_does_not_create_two_effect_haplotypes(self):
+        result = audit_traits([self.vcf([
+            "10\t96541616\t.\tG\tA\t99\tPASS\t.\tGT:DP:GQ:AD:PGT:PID\t0/1:30:99:15,15:1|1:block1",
+        ])])
+        item = self.marker(result, "rs4244285")
+        self.assertEqual(item["effect_allele_copies"], 1)
+        self.assertEqual(item["effect_allele_haplotypes"], [])
+        self.assertFalse(item["phased_gt"])
+        self.assertFalse(item["quality_pass"])
 
 
 if __name__ == "__main__":

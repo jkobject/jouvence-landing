@@ -122,14 +122,17 @@ def phase_details(call: dict[str, str], alt_index: int) -> dict[str, object]:
     the phase block. PGT is used when GATK stores the phased genotype there.
     """
 
-    raw_gt = (
-        call.get("PGT") if call.get("PGT") not in {None, "."} else call.get("GT", "./.")
-    )
+    genotype = call.get("GT", "./.")
+    genotype_alleles = genotype.replace("|", "/").split("/")
+    pgt = call.get("PGT")
+    discordant = pgt not in {None, ".", ""} and Counter(pgt.replace("|", "/").split("/")) != Counter(genotype_alleles)
+    # PGT peut fournir l'ordre des mêmes allèles, jamais changer leur nombre.
+    raw_gt = pgt if pgt not in {None, ".", ""} and not discordant else genotype
     separator = "|" if "|" in raw_gt else "/"
     alleles = raw_gt.split(separator)
-    copies = sum(value == str(alt_index) for value in alleles)
-    block = call.get("PID") or call.get("PS")
-    phased = separator == "|" and block not in {None, ".", ""}
+    copies = sum(value == str(alt_index) for value in genotype_alleles)
+    block = next((call.get(key) for key in ("PID", "PS") if call.get(key) not in {None, ".", ""}), None)
+    phased = separator == "|" and block is not None and not discordant and all(value.isdigit() for value in alleles)
     haplotypes = [
         index for index, value in enumerate(alleles) if value == str(alt_index)
     ]
@@ -138,6 +141,7 @@ def phase_details(call: dict[str, str], alt_index: int) -> dict[str, object]:
         "phased": phased,
         "phase_block": block if phased else None,
         "alt_haplotypes": haplotypes if phased else [],
+        "phase_discordant": discordant,
     }
 
 

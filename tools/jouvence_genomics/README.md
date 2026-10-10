@@ -143,3 +143,45 @@ Les homozygotes doivent être cohérents avec les lectures. CYP3A5 *3 et un
 allèle ABO O courant correspondent ici à la référence : un site absent ne
 permet donc aucune conclusion à leur sujet. Les gènes PGx complexes, les allèles
 HLA, RhD et l'ascendance nécessitent des méthodes supplémentaires.
+
+### Première lecture et annexe
+
+Le rendu v3 sépare `patient_view.py` (sélection éditoriale et cartes simples)
+de l'analyse et de l'annexe exhaustive. Les VUS et les sites inconnus ne sont
+pas des cartes de maladie. Les marqueurs de qualité insuffisante sont écartés
+de la synthèse ; `FILTER=.` reste visible comme observation provisoire, même
+quand les autres contrôles disponibles sont satisfaisants. Le panel comprend
+57 sites et 27 profils sourcés, pas 57 diagnostics ou 27 diplotypes.
+
+### Ascendance et scores polygéniques : calculs facultatifs et explicites
+
+Ces fonctions ne requièrent pas de BAM et ne transmettent aucun génome. Leurs
+téléchargements portent uniquement sur des références publiques. Les caches,
+génotypes extraits et résultats doivent rester dans les répertoires ignorés.
+Utiliser `uv run --with numpy==2.5.3 --with scikit-learn==1.9.1` pour le calcul
+d'ascendance, en complément des dépendances du rendu.
+
+`ancestry.py` fournit `prepare_ancestry_reference()` et
+`analyze_ancestry()`. Le panel Peddy/1000 Genomes GRCh37 est épinglé par commit
+et SHA-256. L'entraînement et les références indépendantes sont séparés ; les
+références sont masquées pour reproduire l'absence de 0/0 dans un VCF de variants.
+Les contrôles incluent plis indépendants, sous-panels et chromosomes pairs/impairs.
+La sortie est une affinité à cinq groupes de référence, jamais un pourcentage
+de mélange, une ethnicité ou une nationalité. Le nuage PCA et le résultat
+doivent porter la même empreinte de modèle, pas seulement les mêmes fichiers.
+
+`polygenic.py` fournit `prepare_polygenic_references()`,
+`audit_polygenic_scores()` et `calibrate_polygenic_bounds()`. Les poids PGS
+Catalog GRCh37, métadonnées, licences et empreintes sont conservés. Tout dosage
+absent reste inconnu ; des bornes explicitent cette incertitude. Les loci liés
+à l'X exigent une convention de ploïdie validée. Une référence 1000 Genomes
+peut calibrer un sous-ensemble de recherche, sans le transformer en PGS clinique
+validé ou en risque absolu. Aucun percentile n'est affiché si la qualification
+échoue. La règle de synthèse est strictement `abs(z) > 1`, ou des bornes
+entièrement au-delà de ±1 ; elle s'applique aux deux queues.
+
+Transmettre les JSON à `build_genomic_reports()` via `ancestry_results` et
+`polygenic_results`, indexés par le `sample_name` exact, et le nuage public via
+`ancestry_reference_projection`. Le constructeur vérifie les empreintes des
+VCF et de l'analyse pour empêcher une attribution à une autre personne. Les
+JSON complets restent téléchargeables dans l'HTML autonome.

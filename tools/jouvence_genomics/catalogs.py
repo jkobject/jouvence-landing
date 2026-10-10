@@ -58,6 +58,8 @@ def review_stars(review_status: str) -> int:
         return 3
     if "multiple_submitters" in normalized and "no_conflicts" in normalized:
         return 2
+    if "no_assertion" in normalized:
+        return 0
     if "criteria_provided" in normalized:
         return 1
     return 0

@@ -53,6 +53,12 @@ class PhaseTests(unittest.TestCase):
         self.assertTrue(details["phased"])
         self.assertEqual(details["alt_haplotypes"], [1])
 
+    def test_missing_pid_does_not_mask_valid_ps(self) -> None:
+        details = phase_details({"GT": "0|1", "PID": ".", "PS": "100"}, alt_index=1)
+        self.assertTrue(details["phased"])
+        self.assertEqual(details["phase_block"], "100")
+        self.assertEqual(details["copies"], 1)
+
     def test_trans_pair_is_compound_heterozygous(self) -> None:
         first, second = small_finding(10, 0), small_finding(20, 1)
         self.assertEqual(assess_phase(first, second), "trans")

@@ -6,9 +6,19 @@ from tools.jouvence_genomics.html_reporting import (
     collect_variant_records, render_couple_section, render_trait_sections, _structural_section,
 )
 from tools.jouvence_genomics.traits import load_trait_markers
+from tools.jouvence_genomics.catalogs import review_stars
 
 
 class HtmlReportTests(unittest.TestCase):
+    def test_no_assertion_criteria_is_zero_stars_and_not_promoted_from_frozen_result(self):
+        self.assertEqual(review_stars("no_assertion_criteria_provided"), 0)
+        self.assertEqual(review_stars("no assertion criteria provided"), 0)
+        self.assertEqual(review_stars("criteria_provided,_single_submitter"), 1)
+        item = {"gene": "EXAMPLE", "chrom": "1", "pos": 100, "ref": "A", "alt": "G",
+                "quality_flags": [], "clinvar": {"gene": "EXAMPLE", "stars": 1,
+                    "review_status": "no assertion criteria provided"}}
+        result = {"all_reviewed_clinvar_matches": [item], "novel_variant_analysis": {}}
+        self.assertEqual(collect_variant_records(result)[0]["report_tier"], "unassigned")
     def test_rnf213_is_mechanism_uncertain_not_recessive_carrier(self):
         item = {"gene": "RNF213", "chrom": "17", "pos": 100,
                 "ref": "A", "alt": "AG", "genotype": "0/1"}

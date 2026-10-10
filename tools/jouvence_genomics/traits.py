@@ -14,7 +14,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Sequence
 
-from .vcf import inspect_vcf_header, open_vcf, parse_sample
+from .vcf import inspect_vcf_header, open_vcf, parse_sample, parse_info, phase_details
 
 
 def load_trait_markers(path: Path | None = None) -> dict:
@@ -94,6 +94,8 @@ def _decode_call(fields: list[str], site: dict, path: Path, mt_verified: bool) -
         called_indexes = [int(i) for i in indexes]
         if max(called_indexes) < len(ad):
             total = sum(ad[i] for i in called_indexes)
+            if total / sum(ad) < 0.8:
+                issues.append("moins de 80 % des lectures soutiennent les allèles appelés")
             allele_balance = ad[called_indexes[1]] / total if total else None
             if allele_balance is None or not 0.2 <= allele_balance <= 0.8:
                 issues.append("équilibre allélique hors de 20–80 %")
@@ -117,12 +119,43 @@ def _decode_call(fields: list[str], site: dict, path: Path, mt_verified: bool) -
         status = "called_needs_validation"
         issues.append("hétéroplasmie non évaluée par ce module")
     copies = sum(a == site["effect_allele"] for a in alleles)
+    annotations = parse_info(fields[7])
+    snp = len(fields[3]) == 1 and all(len(value) == 1 for value in available[1:])
+    rules = {"QD": ("lt", 2), "FS": ("gt", 60 if snp else 200),
+             "SOR": ("gt", 3 if snp else 10), "ReadPosRankSum": ("lt", -8 if snp else -20)}
+    if snp:
+        rules.update({"MQ": ("lt", 40), "MQRankSum": ("lt", -12.5)})
+    quality_annotations = {}
+    for name, (direction, threshold) in rules.items():
+        if annotations.get(name) in {None, ".", ""}:
+            continue
+        try:
+            value = float(annotations[name])
+        except ValueError:
+            issues.append(f"annotation qualité {name} non interprétable")
+            continue
+        if not math.isfinite(value):
+            issues.append(f"annotation qualité {name} non finie")
+            continue
+        quality_annotations[name] = value
+        if fields[6] == "." and (value < threshold if direction == "lt" else value > threshold):
+            issues.append(f"filtre GATK brut échoué : {name}={value:g} ({'<' if direction == 'lt' else '>'}{threshold})")
+    if issues and status == "called":
+        status = "called_needs_validation"
+    phase = phase_details(call, available.index(site["effect_allele"]) if site["effect_allele"] in available else 1)
+    if phase["phase_discordant"]:
+        issues.append("PGT incompatible avec le génotype GT : phase non retenue")
+        if status == "called":
+            status = "called_needs_validation"
     return {
         "path": str(path.resolve()), "raw_gt": gt, "genotype": "/".join(a or "?" for a in alleles),
         "alleles": alleles, "effect_allele_copies": copies if None not in alleles else None,
         **metrics, "ad": ad, "qual": fields[5], "filter": fields[6],
         "other_alts": other_alts, "allele_balance": allele_balance,
-        "phased_gt": "|" in gt, "phase_block": call.get("PS") or call.get("PID"),
+        "phased_gt": phase["phased"], "phase_block": phase["phase_block"],
+        "effect_allele_haplotypes": phase["alt_haplotypes"],
+        "quality_annotations": quality_annotations,
+        "missing_hard_filter_annotations": sorted(set(rules) - quality_annotations.keys()),
         "status": status, "quality_pass": status == "called", "quality_issues_fr": issues,
     }
 
@@ -221,7 +254,7 @@ def audit_traits(vcf_paths: Sequence[Path | str], markers_path: Path | None = No
             {"item": "Ascendance génétique / ethnicité", "reason_fr": "Aucun calcul: panel de référence et calibration nécessaires pour l'ascendance; l'ethnicité ne se déduit pas de SNP isolés."},
             {"item": "ABO définitif", "reason_fr": "Panel partiel et phase: confirmation sérologique indispensable."},
             {"item": "Diplotypes pharmacogénétiques et APOE", "reason_fr": "Couverture, autres allèles et phase non établies par ce panel ciblé."},
-        ],
+        ] + panel.get("not_evaluated", []),
         "limitations_fr": [
             "Un site absent d'un VCF de variants reste indéterminé, y compris pour un allèle cible de référence.",
             "Un marqueur observé n'est pas une maladie ni un score de risque; les effets et la validité varient selon le contexte.",
