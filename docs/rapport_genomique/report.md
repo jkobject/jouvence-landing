@@ -361,6 +361,44 @@ spécifiques au contenu et distinguent source originale et ressource grand publi
 
 </section>
 
+<section id="reproductibilite" data-document-only markdown="1">
+
+## Reprendre et préserver une analyse
+
+Le [runbook de reproduction](REPRODUCTION.md) relie les fonctions de calcul,
+les annotations de recherche, le rendu et la sauvegarde. Un agent commence par
+les entrées figées, leurs empreintes et les références/version/licences utilisées,
+pas par des résultats recopiés d'une autre version. Un BAM est un complément
+possible pour valider les lectures, pas un prérequis du chemin VCF actuel.
+
+Les profils réutilisable et personnel privé non commercial restent séparés.
+Une nouvelle annotation prédictive ne change pas les filtres, la phase ou le
+diagnostic. Les résultats non qualifiés et comparaisons fournisseur/VCF restent
+dans leurs audits privés, pas dans les panels ou pièces jointes du rapport.
+
+Chaque export annonce son périmètre : allèles uniques, associations ou lignes
+score/transcrit/observation ne sont pas des compteurs interchangeables. Avant
+une annonce publique, les nombres de conditions, gènes et variants doivent être
+recalculés depuis le snapshot exact et les filtres du code exécuté. Distinguer
+catalogue inventorié et appels réellement évaluables : un site absent du VCF
+reste inconnu, et le catalogue ne constitue pas un test validé pour chaque
+maladie. Les futurs runs nécessitent un manifeste complémentaire des références
+et du code ; les JSON actuels du moteur ne figent pas toutes ces empreintes.
+Ne pas reconstruire rétrospectivement une preuve d'exécution manquante.
+
+Un rapport peut se lire seul tout en ayant des CSV annexes. La fonction
+`prepare_report_delivery()` conditionne chaque HTML choisi et ses références
+statiques dans un ZIP vérifié, sans ajouter les audits voisins ni envoyer de
+message. Extraire les rapports dans des dossiers distincts ; autoriser
+explicitement les rapports et leur destinataire avant partage.
+
+Une sauvegarde privée vérifiée préserve les sources locales ; elle ne démontre
+pas que l'analyse ou l'interface a été reproduite sur un autre hôte. La version
+du guide reste distincte de celle des rapports patients : réviser ce document
+ne recalcule ni ne réétiquette ces rapports.
+
+</section>
+
 <section id="validation" data-document-only markdown="1">
 
 ## Vérifications avant de remettre le rapport

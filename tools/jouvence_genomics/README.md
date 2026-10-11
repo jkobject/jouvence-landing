@@ -1,5 +1,10 @@
 # Jouvence genomics research workflow
 
+Pour reprendre le projet, commencer par le
+[runbook de reproduction](../../docs/rapport_genomique/REPRODUCTION.md) et les
+[consignes des agents](../../AGENTS.md). Le runbook sépare calcul, audit,
+rendu et sauvegarde privée ; il n'est pas un journal d'exécution individuel.
+
 The public function `analyze_without_bam()` in `tools/analyze_dante_vcf.py`
 performs a reusable VCF-only screen. It accepts SNP, indel, CNV and SV VCFs,
 but never interprets an absent VCF record as a reliable reference genotype.
