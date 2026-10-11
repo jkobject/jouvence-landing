@@ -382,7 +382,7 @@ def build_genomic_reports(
     skill_scripts: Path,
     refresh_traits: bool = True,
     report_date: str | None = None,
-    report_version: str = "v5.0 · effets contextualisés",
+    report_version: str = "v7.0 · comprendre et agir",
     ancestry_results: dict[str, Path] | None = None,
     polygenic_results: dict[str, Path] | None = None,
     ancestry_reference_projection: Path | None = None,
@@ -613,15 +613,15 @@ def build_genomic_reports(
             shutil.copyfile(source_csv, folder / ("GWAS-" + domain + ".csv"))
         description = (f'{len(signals["clinical"])} résultat(s) de portage ou santé à confirmer, '
                        f'{signals["profiles"]} sujet(s) de médicaments, nutrition ou traits avec une observation utile.')
+        panels = build_report_panels(records, traits, catalog,
+                                    polygenic=qualified_scores, supplementary=report_extras)
         sections = ['<section id="synthese"><h2>Vos informations clés</h2>'
                     f'<p class="takeaway">{escape(description)}</p>'
                     '<p>Commencez par les cartes : votre résultat, ce qu’il signifie et la prochaine étape. '
                     'Les détails complets sont accessibles sans encombrer cette première lecture.</p>'
-                    '<p class="caveat">Ce rapport n’est pas un diagnostic. Les observations provisoires demandent une confirmation ; '
-                    'les traitements et antécédents n’ont pas été renseignés.</p></section>',
-                    render_panel_dashboard(build_report_panels(records, traits, catalog,
-                        polygenic=qualified_scores, supplementary=report_extras)),
-                    render_patient_sections(signals, catalog, references),
+                    '<p><a href="#comprendre-les-resultats"><sup>1</sup> Comment lire les résultats et leurs limites</a></p></section>',
+                    render_panel_dashboard(panels),
+                    render_patient_sections(signals, catalog, references, include_traits=False),
                     render_exploratory_scores(exploratory) if exploratory is not None else "",
                     render_population_results(extras.get("ancestry"), qualified_scores, references),
                     _ancestry_sensitivity_section(extras.get("ancestry_sensitivity"))]
@@ -635,7 +635,9 @@ def build_genomic_reports(
                         + render_variant_catalog(records, catalog, references) + '</section>'
                         + render_trait_sections(traits, references)
                         + _population_audit(report_extras, references)
+                        + render_panel_dashboard(panels, view="audit")
                         + '</details></section>')
+        sections.append(_result_reading_note(has_exploratory=exploratory is not None))
         sections.append(_provenance_section(result, source_paths[index - 1], frozen_hashes, traits, report_date))
         md = "\n".join(sections)
         (folder / "report.md").write_text(md, encoding="utf-8")
@@ -647,9 +649,12 @@ def build_genomic_reports(
                     "counts": counts, "patient_signals": {"clinical": len(signals["clinical"]), "validation": len(signals["validation"]), "profiles": signals["profiles"]},
                     "additional_results_sha256": {key: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest() for key, value in extras.items()},
                     "exploratory_trait_labels_sha256": hashlib.sha256((HERE / "pgs_trait_labels_fr.json").read_bytes()).hexdigest() if exploratory else None,
+                    "prevention_guidance_sha256": hashlib.sha256((HERE / "prevention_guidance.json").read_bytes()).hexdigest() if exploratory else None,
+                    "exploratory_display_selection": "largest_published_model_then_pgs_id_then_author_reference_before_personal_values",
                     "clinical_history": "non renseignée",
                     "interpretation_definition_sha256": hashlib.sha256(
                         (HERE / "trait_effect_evidence.json").read_bytes() +
+                        (HERE / "patient_trait_labels.json").read_bytes() +
                         (HERE / "trait_interpretation.py").read_bytes() +
                         (HERE / "association_interpretation.py").read_bytes()).hexdigest(),
                     "report_scope": "Résultats locaux ; scores qualifiés et volet exploratoire conditionnel explicitement séparés ; imports fournisseur hors rapport."}
@@ -700,6 +705,51 @@ def build_genomic_reports(
         "references": references, "analysis_input_sha256": frozen_hashes,
     }, skill_scripts)
     return outputs
+
+
+def _result_reading_note(*, has_exploratory: bool) -> str:
+    """Une note commune lisible ; les réserves propres à un appel restent locales."""
+    html = ['<section id="comprendre-les-resultats" data-document-only>'
+            '<h2><sup>1</sup> Comprendre les résultats</h2>'
+            '<p>Un marqueur est une position de votre ADN utilisée dans le calcul ou la description : '
+            'ce n’est pas forcément une mutation nocive. Les cartes indiquent ce que l’on peut '
+            'comprendre à partir des données disponibles, pas un diagnostic.</p>'
+            '<p>Les gestes proposés viennent de recommandations publiques sur le sujet concerné. '
+            'Ils ne prouvent pas que leur bénéfice dépend de votre génotype. Les données ne suffisent '
+            'pas à promettre une performance sportive ou à choisir un régime sur mesure. Un score '
+            'plus bas ne supprime pas les précautions habituelles.</p>'
+            '<p>Les observations marquées « À confirmer » restent provisoires. Aucun changement de '
+            'médicament, de dépistage ou de décision reproductive ne doit reposer sur ces indices seuls. '
+            'Vos traitements et antécédents ne sont pas renseignés ; les sites absents du VCF restent inconnus.</p>']
+    if has_exploratory:
+        html.extend(['<h3>L’échelle des indices polygéniques</h3>'
+                     '<p><strong>0σ</strong> correspond à la valeur centrale de la comparaison ; '
+                     '<strong>+1σ</strong> est un écart-type au-dessus, <strong>−1σ</strong> un écart-type '
+                     'en dessous. La carte affiche la direction du score, pas automatiquement un '
+                     'avantage ou un danger. Un <strong>90e percentile</strong> est une position de '
+                     '90 sur 100 sur l’échelle simulée : <strong>ce n’est pas 90 % de risque de maladie</strong>.</p>'
+                     '<p>Ces comparaisons sont calculées seulement avec les marqueurs utilisables '
+                     'de votre fichier et les fréquences publiques disponibles. Ce sont des indices '
+                     'génétiques partiels, pas les scores complets ni un classement dans une population '
+                     'de personnes réellement mesurées. Le seuil ±1σ réduit le nombre de cartes à lire ; '
+                     'il ne valide pas un score.</p>'
+                     '<details class="jex-methods jex-shared-methods"><summary>Méthode statistique et incertitudes</summary>'
+                     '<p>La simulation utilise les fréquences publiques et les poids publiés, sous '
+                     'équilibre de Hardy–Weinberg (HWE) et indépendance des loci. Pour les appels '
+                     'non-référence, elle est conditionnée au même statut non-référence ; les véritables '
+                     'appels de référence explicites utilisent HWE ordinaire, avec l’hypothèse '
+                     'd’une disponibilité indépendante du génotype.</p>'
+                     '<p>Le déséquilibre de liaison (LD), la qualité, la callabilité et la sélection '
+                     'des sites peuvent modifier le classement. Des fréquences mondiales mélangées '
+                     'forment une référence synthétique, pas une population homogène observée. '
+                     'Plusieurs comparaisons du même modèle ne sont pas indépendantes.</p>'
+                     '<p>Le percentile est un rang médian simulé qui attribue la moitié des ex æquo ; '
+                     'ce n’est pas une approximation par une courbe normale. L’erreur Monte-Carlo '
+                     'concerne seulement la simulation, pas l’incertitude des fréquences, des poids, '
+                     'de la qualité ou du LD. Les bornes brutes ne sont pas un intervalle de confiance. '
+                     'Les données complètes figurent dans l’export JSON et les CSV.</p></details>'])
+    html.append('</section>')
+    return "".join(html)
 
 
 def _ancestry_sensitivity_section(audit: dict | None) -> str:

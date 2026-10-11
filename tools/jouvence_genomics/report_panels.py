@@ -23,7 +23,9 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
     scores doivent être reproduits et qualifiés avant d'entrer dans cette vue.
     Les imports PDF/HTML et leurs comparaisons restent dans des audits privés
     séparés : ils ne produisent ni panel, ni texte, ni CSV dans le rapport.
-    Les associations GWAS sont un catalogue de recherche, pas des diagnostics.
+    Les associations GWAS sont un catalogue de recherche, pas des diagnostics :
+    leurs panels ``audit_only`` sont réservés à l'annexe, jamais à la première
+    lecture. Le choix de présentation ne change aucun appel ni export source.
     Les comparaisons entre fournisseurs et VCF restent dans leurs audits séparés,
     jamais dans les panels ni leurs exports destinés à la personne.
     """
@@ -46,6 +48,7 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
             "interpretation_fr": card["interpretation"], "sources": card.get("sources", []),
             "variants": [{"gene": row["gene"], "chrom": row["chrom"], "pos": row["pos"],
                 "ref": row["ref"], "alt": row["alt"], "genotype": row["genotype"],
+                "observed_used": True,
                 "status": row["report_tier"], "dp": row.get("DP"), "gq": row.get("GQ"),
                 "quality_issues": row.get("quality_flags", [])}]})
     # Ces signaux ont un intérêt de revue, pas un statut de mutation confirmée.
@@ -61,6 +64,7 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
                 "Il ne démontre ni une maladie ni une indication de traitement. Les lectures et une confirmation indépendante peuvent permettre de trancher.",
             "sources": card.get("sources", []), "variants": [{"gene": row["gene"], "chrom": row["chrom"],
                 "pos": row["pos"], "ref": row["ref"], "alt": row["alt"], "genotype": row["genotype"],
+                "observed_used": False,
                 "dp": row.get("DP"), "gq": row.get("GQ"), "allele_balance": row.get("allele_balance"),
                 "status": "rejected", "quality_issues": row.get("quality_flags", [])}]})
     grouped = defaultdict(list)
@@ -77,6 +81,7 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
             "sources": explanation["sources"],
             "variants": [{"gene": m["gene"], "rsid": m["rsid"], "chrom": m["chrom"], "pos": m["pos"],
                 "ref": m["ref"], "alt": m["alt"], "genotype": m["genotype"],
+                "observed_used": True,
                 "effect_allele": m["effect_allele"], "dosage": m["effect_allele_copies"],
                 "sample_filter": m.get("raw_sample_filter"), "sample_filter_status": m.get("sample_filter_status"),
                 "dp": m["dp"], "gq": m["gq"], "ad": m["ad"], "status": m["status"],
@@ -92,6 +97,7 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
             dosage = variant["dosage_used"]
             variants.append({"chrom": variant["chrom"], "pos": variant["pos"], "rsid": variant["rsid"],
                 "genotype": genotype, "effect_allele": variant["effect_allele"], "dosage": dosage,
+                "observed_used": dosage is not None,
                 "weight": variant["weight"], "contribution": dosage * variant["weight"] if dosage is not None else None,
                 "status": "usable" if dosage is not None else "unknown_or_not_retained",
                 "quality_issues": variant["issues_fr"]})
@@ -119,19 +125,14 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
         markers = {row["rsid"]: row for row in associations["markers"]}
         for domain, rows in grouped_associations.items():
             variants = []
-            examples = {}
             for row in rows:
                 marker = markers[row["rsid"]]
                 mapping = marker["mapping"]
                 explanation = explain_gwas_association(row)
-                examples.setdefault(explanation["outcome_type"], {"title": row["reported_trait"],
-                    "result_fr": f"{row['rsid']} · {row['genotype']} : {explanation['meaning_fr']}",
-                    "meaning_fr": explanation["meaning_fr"], "magnitude_fr": [explanation["magnitude_fr"]],
-                    "comparison_fr": explanation["comparison_fr"], "actions_fr": [explanation["action_fr"]],
-                    "limitations_fr": [explanation["limitation_fr"]], "sources": []})
                 variants.append({"rsid": row["rsid"], "chrom": mapping.get("chrom"), "pos": mapping.get("pos"),
                     "genotype": row["genotype"], "effect_allele": row["effect_allele_grch37"],
                     "dosage": row.get("effect_allele_copies"),
+                    "observed_used": marker.get("quality_pass") is True and row["marker_status"] == "called",
                     "phenotype": row["reported_trait"], "p_value": row["p_value"], "pmid": row["pmid"],
                     "source_study": row["study_accession"], "status": row["marker_status"],
                     "reported_effect_value": row.get("reported_effect_value"),
@@ -139,7 +140,8 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
                     "quality_issues": marker.get("quality_issues_fr", []), **explanation})
             export = associations.get("domain_exports", {}).get(domain)
             panels.append({"id": "gwas-" + domain, "title": TRAIT_DOMAINS[domain]["label_fr"],
-                "category": "Associations publiées : exploration, pas un diagnostic", "kind": "genetic", "status": "research_only",
+                "category": "Catalogue des associations publiées", "kind": "audit_only", "status": "research_only",
+                "result_scope": "gwas_catalogue_associations",
                 "summary": (f"Aperçu de {len(rows)} associations à des marqueurs explicitement appelés. "
                             f"Le CSV complet contient {export['association_rows']} associations sélectionnées du domaine, inconnus inclus."
                             if export else f"{len(rows)} associations publiées croisées avec {len({r['rsid'] for r in rows})} marqueurs explicitement appelés."),
@@ -149,7 +151,6 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
                     "La valeur P mesure la preuve statistique dans l'étude, pas l'importance de l'effet chez vous. "
                     "Une même variante peut apparaître dans plusieurs études ; ces lignes ne sont pas indépendantes. "
                     "Leur somme ne constitue pas un score polygénique : aucun pourcentage personnel n'en est déduit.",
-                "association_explanations": list(examples.values()),
                 "provenance_fr": ("Aperçu limité aux génotypes explicitement observés, classé par valeur P dans chaque domaine. "
                                   "Ces lignes ne sont pas des résultats indépendants ; le périmètre technique reste dans l’audit JSON."
                                   if associations.get("preview_scope") else "Toutes les observations retenues de ce domaine sont présentées."),

@@ -93,6 +93,16 @@
       "terms": "Code SIFT4G sous GPL-3.0 ; cela ne confère pas automatiquement une permission pour toutes les tables historiques distribuées par un annotateur. Les conditions actuelles des données doivent être vérifiées avant leur téléchargement automatique.",
       "obligations": ["Séparer conditions du code et des scores", "Pas d'autorisation inférée d'un site indisponible", "Épingler les versions et sources"],
       "sources": ["https://github.com/rvaser/sift4g", "https://github.com/rvaser/sift4g/blob/master/LICENSE"]
+    },
+    {
+      "name": "Educational physiology and prevention references",
+      "reviewed_on": "2026-10-11",
+      "scope": "Liens vers recommandations publiques et articles primaires ; textes éditoriaux originaux de patient_trait_labels.json et prevention_guidance.json, avec courts extraits sourcés.",
+      "personal_profile": "cited_editorial_summaries_not_reference_database_redistribution",
+      "jouvence_reusable_profile": "original_editorial_text_source_rights_review_separate",
+      "terms": "Une page accessible publiquement n'est pas une licence de redistribution de ses textes, images ou bases. Les notices propres aux sources restent applicables ; aucune autorisation commerciale globale n'est attestée ici. Les recommandations sont reformulées, les références liées et les extraits limités ; cela ne confère pas des droits nouveaux sur les documents originaux.",
+      "obligations": ["Attribution, URL, date et profondeur de lecture conservées", "Pas de copie intégrale ou redistribution de médias/bases", "Vérifier les droits de chaque source avant une réutilisation commerciale qui reproduirait son contenu", "Aucun génotype personnel transmis aux sources", "Recommandation générale distincte d'un bénéfice validé pour le génotype"],
+      "sources": ["https://www.who.int/", "https://www.cdc.gov/", "https://www.niddk.nih.gov/", "https://www.wcrf.org/", "https://www.ameli.fr/", "https://www.ncbi.nlm.nih.gov/"]
     }
   ]
 }

@@ -1,11 +1,14 @@
 """Le dashboard respecte les preuves, les langues et le périmètre des sources."""
 
 import math
+import json
 import unittest
 from copy import deepcopy
+from pathlib import Path
 
 from tools.jouvence_genomics.report_panels import build_report_panels, reportable_polygenic_results
 from tools.jouvence_genomics.panel_view import render_panel_dashboard
+from tools.jouvence_genomics.traits import _decode_call
 
 
 class ReportPanelsTests(unittest.TestCase):
@@ -86,6 +89,69 @@ class ReportPanelsTests(unittest.TestCase):
         html = render_panel_dashboard(result)
         self.assertNotIn("PGS000001", html)
         self.assertNotIn("data-panel-export", html)
+
+    def test_unoriented_gwas_is_annex_only_without_changing_source_rows_or_export(self):
+        row = {"rsid": "rs2129977", "marker_status": "called", "genotype": "G/G",
+               "quality_pass": True, "effect_orientation_status": "reported_allele_unresolved",
+               "effect_allele_grch37": None, "effect_allele_copies": None,
+               "domains": ["sleep"], "reported_trait": "PER3 protein levels",
+               "p_value": 1e-20, "pmid": "123", "study_accession": "GCSTTEST"}
+        audit = {"associations": [row, {**row, "study_accession": "GCSTOTHER"}],
+                 "markers": [{"rsid": "rs2129977", "mapping": {"chrom": "2", "pos": 200},
+                              "quality_pass": True, "quality_issues_fr": []}],
+                 "sources": ["https://www.ebi.ac.uk/gwas/"],
+                 "domain_exports": {"sleep": {"association_rows": 10, "sha256": "a" * 64,
+                                               "csv_path": "/private/source.csv"}}}
+        original = deepcopy(audit)
+        panels = build_report_panels([], {"markers": []}, {}, supplementary={"associations": audit})
+        self.assertEqual(len(panels), 1)
+        self.assertEqual(panels[0]["kind"], "audit_only")
+        self.assertEqual(panels[0]["download_csv"], "GWAS-sleep.csv")
+        self.assertNotIn("association_explanations", panels[0])
+        self.assertEqual([variant["dosage"] for variant in panels[0]["variants"]], [None, None])
+        self.assertEqual(render_panel_dashboard(panels), "")
+        appendix = render_panel_dashboard(panels, view="audit")
+        self.assertIn("rs2129977", appendix)
+        self.assertIn('data-companion-file="GWAS-sleep.csv"', appendix)
+        self.assertIn('<strong>1</strong><span>marqueurs avec un appel admis', appendix)
+        self.assertNotIn('<meter', appendix)
+        self.assertEqual(audit, original)
+
+    def test_targeted_educational_actn3_with_reference_effect_remains_one_useful_card(self):
+        catalogue = json.loads(Path("tools/jouvence_genomics/trait_markers.json").read_text())
+        marker = next(item for item in catalogue["markers"] if item["rsid"] == "rs1815739")
+        profile = catalogue["profiles"][marker["profile"]]
+        called = {**profile, **marker, "effect_allele_copies": 0, "report_effect_copies": [0, 1, 2],
+                  "genotype": "C/C", "quality_pass": True, "quality_issues_fr": [],
+                  "status": "called", "dp": 30, "gq": 99, "ad": [0, 30]}
+        panels = build_report_panels([], {"markers": [called]}, {})
+        self.assertEqual(len(panels), 1)
+        self.assertEqual(panels[0]["kind"], "genetic")
+        self.assertEqual(panels[0]["variants"][0]["effect_allele"], "T")
+        self.assertEqual(panels[0]["variants"][0]["dosage"], 0)
+        html = render_panel_dashboard(panels)
+        self.assertIn("ACTN3", html)
+        self.assertIn('min="0" max="2" value="0"', html)
+        self.assertIn('<strong>1</strong><span>marqueurs de votre ADN utilisés', html)
+        self.assertEqual(render_panel_dashboard(panels, view="audit"), "")
+
+    def test_actual_haploid_g6pd_call_never_acquires_a_two_copy_denominator(self):
+        catalogue = json.loads(Path("tools/jouvence_genomics/trait_markers.json").read_text())
+        marker = next(item for item in catalogue["markers"] if item["rsid"] == "rs5030868")
+        profile = catalogue["profiles"][marker["profile"]]
+        fields = ["X", str(marker["pos"]), marker["rsid"], "G", "A", "100", "PASS", ".",
+                  "GT:AD:DP:GQ", "1:0,30:30:99"]
+        call = _decode_call(fields, marker, Path("synthetic.vcf"), False)
+        self.assertEqual(call["genotype"], "A")
+        self.assertEqual(call["effect_allele_copies"], 1)
+        self.assertTrue(call["quality_pass"])
+        panels = build_report_panels([], {"markers": [{**profile, **marker, **call}]}, {})
+        html = render_panel_dashboard(panels)
+        self.assertIn("G6PD", html)
+        self.assertIn("rs5030868", html)
+        self.assertNotIn("<meter", html)
+        self.assertNotIn("1 sur 2", html)
+        self.assertIn('<strong>1</strong><span>marqueurs de votre ADN utilisés', html)
 
     def test_qualified_import_requires_reproduction_proof_and_is_preserved(self):
         score = {"pgs_id": "PGS000001", "trait_fr": "Exemple qualifié", "status": "validated_external_reported",

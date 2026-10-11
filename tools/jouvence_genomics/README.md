@@ -117,14 +117,33 @@ panel ciblé PGx/nutrition/traits et génère trois HTML autonomes. Les appels
 inconnus restent inconnus ; aucun diplotype, posologie, groupe ABO définitif
 ou ascendance n'est fabriqué. Le filtre de navigation ne change aucun calcul.
 
-Le rendu v5 utilise `interpret_trait_markers()` et `render_interpretation()`
-pour partager les mêmes réponses entre cartes et panels : résultat,
-physiologie, ampleur publiée, comparateur, actions et limites. Les effets
+Le rendu patient utilise `interpret_trait_markers()` et `render_interpretation()`
+pour répondre d'abord « résultat, signification biologique, geste concret ».
+`patient_trait_labels.json` documente les 28 profils : par exemple l'allèle O
+courant inactive l'enzyme qui ajoute les marques A/B des globules rouges ; il
+ne constitue pas un groupe sanguin complet. Ampleur publiée, comparateur et
+preuves sont repliés, avec une note commune ¹ plutôt que des réserves répétées.
+Les effets
 versionnés de `trait_effect_evidence.json` concernent trois marqueurs revus ;
 ils ne représentent pas une calibration de risque individuel. Un OR est un
 rapport d'odds, pas un risque relatif ou un pourcentage de maladie. Les autres
 profils conservent leurs explications et actions sourcées ; aucun chiffre
 personnel n'est inventé en l'absence de modèle validé.
+
+`render_panel_dashboard(panels, view="main")` présente les résultats utiles ;
+`view="audit"` réserve les listes GWAS par domaine à une annexe fermée, exports
+intacts. Le nombre de marqueurs compte les positions distinctes de la personne
+réellement utilisées, pas les publications ni les sites inconnus. Un graphique
+de copies exige un génotype diploïde explicite, sans inférer le sexe.
+
+`select_exploratory_traits()` fixe un modèle principal par trait avant lecture
+des valeurs personnelles (taille publiée, ID, référence auteurs prioritaire).
+Le rendu ne choisit jamais le maximum z. Seuls les principaux calculés hors de
+±1σ disposant de conseils sourcés alimentent une carte avec jauge, sigma et
+percentile théorique. Toutes les alternatives restent dans les calculs détaillés
+et les CSV. `prevention_guidance.json` garde définitions, actions et sources ;
+ses conseils ne prétendent pas qu'un mode de vie a un bénéfice propre au génotype.
+Une révision de présentation réutilise les scores audités, sans les recalculer.
 
 `explain_gwas_association()` distingue notamment protéine/ARN, chronotype,
 durée du sommeil et insomnie. Les CSV complets de `export_association_audit()`

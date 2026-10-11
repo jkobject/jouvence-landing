@@ -269,7 +269,7 @@ addEventListener('afterprint',()=>document.querySelectorAll('details[data-open-b
       dashboard.querySelectorAll('[data-panel-category-group]').forEach(group => {
         group.hidden = ![...group.querySelectorAll('[data-panel-card]')].some(card => !card.hidden);
       });
-      if (count) count.textContent = `${visible} panel(s) affiché(s) sur ${cards.length}`;
+      if (count) count.textContent = `${visible} ${dashboard.dataset.panelView === 'audit' ? 'table(s)' : 'sujet(s)'} affiché(s) sur ${cards.length}`;
       const empty = dashboard.querySelector('[data-panel-no-results]');
       if (empty) empty.hidden = visible !== 0;
     };

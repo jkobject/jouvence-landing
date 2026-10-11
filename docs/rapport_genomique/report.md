@@ -269,9 +269,19 @@ de glycémie, sont étiquetées comme telles et ne justifient pas de supplément
 
 ## Associations utiles : un effet compréhensible, pas une liste de valeurs P
 
-Chaque association retenue pour la lecture personnelle doit répondre aux cinq
-questions ci-dessous. Si l'effet n'est pas quantifié dans la source consultée,
-écrire « ampleur non renseignée » plutôt que fabriquer un pourcentage.
+La première lecture présente une carte par maladie ou trait interprétable,
+pas un bloc de cent lignes « Associations cardiovasculaires ». Trois réponses
+immédiates suffisent : **votre résultat, ce que cela signifie biologiquement,
+quoi essayer concrètement**. Décrire l'organe et la fonction avec des mots
+ordinaires : « repère d'allèle ABO » ne suffit pas à expliquer l'absence des
+marques A/B sur les globules rouges portée par un allèle O courant.
+
+Les réserves statistiques générales figurent une fois en bas, liées par ¹.
+Les réserves propres à un appel provisoire et les risques médicamenteux restent
+visibles. Les cinq questions ci-dessous définissent le dossier complet ; OR/HR/β,
+comparateurs et limites ne doivent pas remplir le texte principal. Si un effet
+n'est pas chiffrable, ne pas inventer un pourcentage ni afficher une carte vide
+qui répète simplement que rien n'est interprétable.
 
 | Question | Contenu attendu |
 |---|---|
@@ -287,6 +297,21 @@ une probabilité absolue ou une durée personnelle. Une valeur P, même très pe
 ne donne ni l'ampleur de l'effet ni son utilité clinique. Des lignes partageant
 un locus ou des variants corrélés ne sont pas des preuves indépendantes à additionner.
 Une liste GWAS, même étendue, ne produit ni score personnel ni percentile.
+
+Chaque action doit être utile et sourcée : remplacer des boissons sucrées par
+de l'eau, progresser en activité adaptée, protéger sa peau des UV, limiter
+l'alcool selon le sujet. Distinguer prévention générale établie, gestion de
+symptômes et simple bénéfice de santé générale. Ne pas présenter ce dernier
+comme une prévention spécifique d'une maladie faute de preuve. Pour un trait
+descriptif utile (groupe sanguin, pigment), expliquer le résultat sans inventer
+un changement de régime. Pour le sport, proposer un essai et des performances
+mesurées, pas une discipline génétiquement prescrite. Les conseils ne prétendent
+pas avoir un bénéfice supérieur à cause du génotype.
+
+Le titre et le compteur indiquent les positions de l'ADN de la personne réellement
+utilisées. Les nombres d'associations du catalogue, doublons et sites inconnus
+restent dans l'annexe technique avec tous les CSV. Les mêmes profils ciblés ne
+doivent pas être répétés dans un deuxième ensemble de cartes.
 
 Un pQTL associe un variant à une mesure de protéine dans un tissu ou un liquide
 précis ; il ne révèle pas la concentration réelle chez la personne, ni son
@@ -417,6 +442,13 @@ exploratoires**, calculés par `score_observed_subset()` et préparés par
 `build_exploratory_scores()`. Elle montre écart en sigma, percentile théorique
 simulé, sites utilisables/total, population des AF, modèle source et CSV de
 contributions. Ce n'est ni le PGS complet, ni un classement clinique validé.
+Une jauge neutre et son curseur indiquent le score plus bas ou plus haut : ne
+pas colorer automatiquement « sain/dangereux », notamment pour les biomarqueurs.
+Un seul principal par trait est choisi par taille publiée puis ID avant lecture
+du z ; ses fréquences auteurs sont prioritaires. Ne pas choisir le modèle le
+plus extrême ni remplacer un principal indisponible par une alternative positive.
+La première lecture exige aussi un conseil utile sourcé. Cette règle d'affichage
+ne prétend pas identifier le modèle le mieux validé.
 Les autres scores calculés sont accessibles, même lorsqu'ils ne dépassent pas
 ±1 sigma. Aucun traitement ou PGT ne découle de ce volet.
 

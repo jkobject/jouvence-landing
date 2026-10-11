@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "revision": "pedagogie-v7-2026-10-11",
+  "scope_fr": "Textes de présentation uniquement : aucun appel, seuil qualité, allèle ciblé, effet publié ou modèle n'est modifié. Les sources du panel et du catalogue d'effets restent conservées.",
+  "profiles": {
+    "actn3": {
+      "meaning_fr": "ACTN3 fabrique l'alpha-actinine-3, une protéine des fibres musculaires rapides utilisées pour les efforts brefs et puissants. Le variant T arrête sa fabrication sur la copie concernée. Son absence sur les deux copies est fréquente chez des personnes en bonne santé ; cela ne mesure ni votre force ni votre endurance.",
+      "actions_fr": ["Vous pouvez essayer une activité d'endurance qui vous plaît (marche rapide, vélo, natation) et suivre vos progrès : durée, allure et récupération. Ce n'est pas une recommandation propre à ce génotype.", "Maintenir aussi du renforcement musculaire adapté à vos capacités ; ajuster l'entraînement aux performances mesurées, pas à ce SNP."],
+      "sources": [
+        {"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1180686/", "title": "Yang et al., 2003 — ACTN3 et sportifs de haut niveau", "reading_depth": "full_text_relevant_sections", "supporting_quote": "α-Actinin-3 is specifically expressed in fast-twitch myofibers"},
+        {"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3761844/", "title": "Gentil et al., 2011 — réponse au renforcement chez 141 hommes", "reading_depth": "full_text_methods_results_conclusion", "supporting_quote": "all genotypes significantly increased knee extensors PT and bench press 1RM"},
+        {"url": "https://www.niddk.nih.gov/health-information/weight-management/healthy-eating-physical-activity-for-life/health-tips-for-adults", "title": "NIDDK — activité aérobie et renforcement pour la santé", "reading_depth": "official_guidance_relevant_sections"}
+      ]
+    },
+    "cyp2c19": {
+      "meaning_fr": "CYP2C19 est une enzyme qui transforme certains médicaments dans le foie. Elle active notamment le clopidogrel et élimine certains traitements gastriques ou psychotropes. Les marqueurs *2/*3 réduisent cette fonction ; *17 peut l'augmenter. Leur combinaison, et pas le nombre de SNP pris séparément, détermine le profil complet.",
+      "actions_fr": ["Si un de ces médicaments vous est proposé, apporter ce résultat au prescripteur ou pharmacien pour une confirmation pharmacogénétique et l'interprétation des deux copies du gène. Ne pas modifier seul un traitement."]
+    },
+    "warfarin": {
+      "meaning_fr": "CYP2C9 aide le foie à éliminer la warfarine ; VKORC1 intervient dans le recyclage de la vitamine K, que ce médicament bloque. Selon le marqueur, la warfarine peut donc agir plus longtemps ou à une quantité plus faible. Cela ne signifie pas une mauvaise coagulation en dehors de ce traitement.",
+      "actions_fr": ["Si vous prenez ou devez prendre de la warfarine, montrer le résultat confirmé au prescripteur. La surveillance de l'INR (mesure de la coagulation), les interactions et le contexte clinique restent indispensables ; aucune dose n'est calculée ici."]
+    },
+    "slco1b1": {
+      "meaning_fr": "SLCO1B1 est un transporteur qui fait entrer certaines statines dans les cellules du foie. Un transport moindre peut laisser davantage de médicament dans le sang et favoriser des symptômes musculaires, selon la statine et sa dose.",
+      "actions_fr": ["Si une statine est concernée, discuter du résultat confirmé avec le prescripteur et signaler des douleurs ou une faiblesse musculaire inhabituelles. Ne pas arrêter seul le traitement."]
+    },
+    "dpyd": {
+      "meaning_fr": "La DPD, produite par DPYD, dégrade notamment les anticancéreux 5-FU et capécitabine. Si elle fonctionne moins bien, ces médicaments peuvent s'accumuler et provoquer une toxicité importante, notamment digestive ou sanguine. Les variants directs et le simple repère lié à HapB3 ne sont pas équivalents.",
+      "actions_fr": ["Avant une fluoropyrimidine, transmettre un résultat confirmé à l'équipe d'oncologie et réaliser le dépistage DPD prévu localement. Le génotype et une mesure de l'activité peuvent être complémentaires ; ce panel ne propose pas de dose."]
+    },
+    "thiopurines": {
+      "meaning_fr": "TPMT et NUDT15 participent à la gestion des thiopurines, comme l'azathioprine et la mercaptopurine. Une fonction diminuée peut accroître leur toxicité pour les cellules sanguines. Plusieurs variants sur une même copie du gène ne comptent pas comme plusieurs copies inactivées.",
+      "actions_fr": ["Si une thiopurine est envisagée, faire confirmer les allèles et leur phase par un laboratoire adapté. Le prescripteur choisit le traitement et organise la surveillance de la numération sanguine et du foie."]
+    },
+    "cyp3a5": {
+      "meaning_fr": "CYP3A5 est une enzyme qui participe à l'élimination du tacrolimus, utilisé notamment après certaines greffes. Des marqueurs de non-expression peuvent augmenter l'exposition au médicament à quantité identique ; le résultat dépend des deux copies et des autres facteurs cliniques.",
+      "actions_fr": ["Si le tacrolimus vous concerne, faire confirmer le profil complet et en parler à l'équipe soignante. Les concentrations sanguines du médicament et les interactions guident toujours le suivi."]
+    },
+    "mt_rnr1": {
+      "meaning_fr": "MT-RNR1 appartient à l'ADN des mitochondries et participe à leur fabrication des protéines. Certains variants rendent l'audition plus vulnérable aux antibiotiques aminosides. Une lecture diploïde ordinaire ne mesure pas la proportion des mitochondries qui portent le variant.",
+      "actions_fr": ["Si un variant ciblé est confirmé par une méthode mitochondriale adaptée, prévenir le prescripteur avant un aminoside. Le choix de l'antibiotique relève de l'équipe qui traite l'infection."]
+    },
+    "lactase": {
+      "meaning_fr": "La lactase est l'enzyme de l'intestin qui découpe le lactose, le sucre du lait. Ces repères régulateurs peuvent favoriser le maintien de cette enzyme à l'âge adulte. Ils ne mesurent ni la tolérance réelle à une portion de lait ni une allergie aux protéines du lait.",
+      "actions_fr": ["Se fier à la tolérance observée et ajuster les quantités plutôt que supprimer automatiquement les laitages. Si ballonnements, douleurs ou diarrhées persistent, discuter d'un test respiratoire et des autres causes, en préservant les apports nutritionnels."]
+    },
+    "hfe": {
+      "meaning_fr": "HFE participe au réglage de l'absorption du fer. Certains allèles, surtout deux copies de C282Y, peuvent favoriser une accumulation de fer, mais une prédisposition n'est pas une surcharge déjà présente. H63D seul est beaucoup moins prédictif.",
+      "actions_fr": ["Selon le résultat et le contexte familial ou clinique, demander au médecin si ferritine et saturation de la transferrine sont utiles. Ne pas entreprendre de saignées, de supplémentation en fer ou de régime restrictif à partir de ce seul résultat."]
+    },
+    "aldh2": {
+      "meaning_fr": "ALDH2 dégrade l'acétaldéhyde, une substance produite quand l'organisme transforme l'alcool. L'allèle *2 ralentit cette étape et peut favoriser rougeur du visage et inconfort après consommation ; il ne mesure pas à lui seul un risque individuel de cancer.",
+      "actions_fr": ["Ne pas chercher à masquer une rougeur pour boire davantage. Réduire ou éviter l'alcool reste possible indépendamment du génotype ; demander un avis médical en cas de réactions importantes."]
+    },
+    "apoe": {
+      "meaning_fr": "APOE aide à transporter les graisses, notamment le cholestérol. Ses formes usuelles ε2, ε3 et ε4 sont définies par la combinaison de deux sites sur chaque copie du gène. Un site isolé ne donne pas cette combinaison ni une prévision de maladie d'Alzheimer.",
+      "actions_fr": ["Pour la santé lipidique, partir d'un bilan de cholestérol et de l'histoire familiale. Si vous souhaitez une interprétation APOE, faire confirmer les deux sites et leur combinaison dans un cadre de conseil adapté."]
+    },
+    "abo": {
+      "meaning_fr": "ABO fabrique une enzyme qui ajoute des marques de sucre A ou B à la surface des globules rouges. Sur les allèles O courants avec c.261delG, cette enzyme est inactive et n'ajoute ni marque A ni marque B. Ce sont des différences de groupe sanguin, pas une maladie ; le second allèle et les variants rares peuvent changer le groupe observé.",
+      "actions_fr": ["Si votre groupe sanguin est inconnu, demander au professionnel, lors d'un prochain prélèvement approprié, si un groupage et une carte de groupe sont indiqués. Une carte ou un résultat de laboratoire existant permet déjà la comparaison.", "Pour une transfusion ou une grossesse, utiliser le groupage et les examens du laboratoire, jamais ce panel partiel. Aucun régime « selon le groupe sanguin » ne découle de ce résultat."],
+      "sources": [
+        {"url": "https://api.ncbi.nlm.nih.gov/variation/v0/refsnp/8176719", "title": "dbSNP — rs8176719, placement NC_000009.11 GRCh37", "reading_depth": "public_json_placement_and_alleles"},
+        {"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5019240/", "title": "Lane et al., 2016 — référence génomique ABO et c.261delG", "reading_depth": "full_text_relevant_ABO_section", "supporting_quote": "the reference sequence contains a deletion characteristic of O"},
+        {"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6467059/", "title": "Étude de séquençage ciblé, 2018 — rs8176719 T/TC et allèle non-O", "reading_depth": "full_text_results_and_table_2"},
+        {"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3901630/", "title": "Goebel et al., 2013 — allèles ABO rares et limites du typage ciblé", "reading_depth": "full_text_relevant_sections", "supporting_quote": "The most common non-deletional O allele is ABO*O03"},
+        {"url": "https://www.ncbi.nlm.nih.gov/grc/human/issues/HG-79", "title": "Genome Reference Consortium — particularités du locus ABO GRCh37", "reading_depth": "official_reference_issue"}
+      ]
+    },
+    "fut2": {
+      "meaning_fr": "FUT2 permet de fabriquer dans les sécrétions, notamment la salive et le mucus de l'intestin, les précurseurs des marques sanguines H/A/B. « Sécréteur » signifie que ces marques peuvent être présentes dans ces fluides ; « non-sécréteur » ne veut pas dire absence de salive ou de mucus. Le groupe ABO des globules rouges est une autre question.",
+      "actions_fr": ["Ce trait descriptif ne demande habituellement ni traitement, ni régime, ni probiotiques particuliers. En cas de question médicale précise, le statut peut être confirmé par un typage adapté."]
+    },
+    "herc2": {
+      "meaning_fr": "Ce repère HERC2/OCA2 intervient dans la quantité de pigment de l'iris. Certaines formes sont plus fréquentes chez les personnes aux yeux clairs, mais plusieurs gènes et leur combinaison expliquent la couleur réelle.",
+      "actions_fr": ["Comparer simplement à la couleur de vos yeux. Une différence ne prouve pas une erreur d'échantillon ; ce trait ne sert pas de test d'identité et ne demande pas de traitement."]
+    },
+    "mtnr1b": {
+      "meaning_fr": "MTNR1B code un récepteur de la mélatonine présent notamment dans les cellules du pancréas qui fabriquent l'insuline. L'insuline aide à réguler le sucre dans le sang. Le marqueur G est associé à une réponse insulinique moins efficace et à une glycémie à jeun légèrement plus élevée en moyenne ; il ne renseigne pas une anomalie du cœur.",
+      "actions_fr": ["Comparer au contexte familial et, si le professionnel le juge utile, à une glycémie mesurée ou une HbA1c. Bouger régulièrement et limiter la sédentarité restent utiles indépendamment du marqueur ; aucun complément de mélatonine ni horaire de repas obligatoire n'en est déduit."],
+      "sources": [{"url": "https://www.nature.com/articles/ng.288", "title": "Lyssenko et al., 2009 — MTNR1B dans les cellules pancréatiques", "reading_depth": "abstract_and_figure_legends", "supporting_quote": "MTNR1B mRNA is expressed in human islets"}]
+    },
+    "tcf7l2": {
+      "meaning_fr": "TCF7L2 participe à des mécanismes qui régulent la sécrétion d'insuline, l'hormone qui aide à contrôler le sucre dans le sang. L'allèle T est un facteur courant de susceptibilité au diabète de type 2, pas un diabète déjà présent ni une maladie inévitable.",
+      "actions_fr": ["Pour la prévention habituelle : bouger régulièrement, interrompre les longues périodes assises, privilégier une alimentation variée et l'eau plutôt que les boissons sucrées. Ces mesures ne sont pas un régime spécifique au génotype.", "Mettre ce résultat en regard des antécédents familiaux et des mesures biologiques. Discuter avec le médecin de l'utilité et de la fréquence d'un dépistage, sans médicament prescrit à partir de ce SNP."],
+      "sources": [{"url": "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-type-2-diabetes", "title": "NIDDK — prévention du diabète de type 2, indépendante d'un SNP", "reading_depth": "official_guidance_full_page", "supporting_quote": "Drink water instead of sweetened beverages."}]
+    },
+    "ugt1a1": {
+      "meaning_fr": "UGT1A1 transforme la bilirubine pour permettre son élimination et intervient aussi pour certains médicaments. Une fonction moindre peut contribuer à une bilirubine élevée, mais le syndrome de Gilbert se vérifie avec la biologie. Le SNP *80 est un proxy : il ne mesure pas les répétitions TA.",
+      "actions_fr": ["Si jaunisse ou bilirubine élevée, demander une évaluation clinique et biologique. Avant un médicament concerné, faire confirmer le profil complet, répétitions comprises si pertinentes ; ne pas modifier seul un traitement."]
+    },
+    "abcg2": {
+      "meaning_fr": "ABCG2 est un transporteur qui contribue à l'élimination de certains médicaments. Ce marqueur peut augmenter l'exposition à la rosuvastatine ; il ne signifie pas une intolérance déjà présente ni un effet identique pour toutes les statines.",
+      "actions_fr": ["Si la rosuvastatine vous concerne, montrer le résultat confirmé au prescripteur et discuter des symptômes ou interactions. Ne pas interrompre seul la statine."]
+    },
+    "cyp2b6": {
+      "meaning_fr": "CYP2B6 est une enzyme du foie qui élimine notamment l'éfavirenz. Une activité moindre peut laisser davantage de médicament dans le sang. Les sites *4/*6/*9 se distinguent par leur combinaison sur les deux copies, pas par une simple addition des variants.",
+      "actions_fr": ["Si un médicament concerné est envisagé, faire confirmer les allèles complets et leur phase, puis discuter de leur pertinence avec le prescripteur. Aucune dose n'est déduite de ces sites isolés."]
+    },
+    "nat2": {
+      "meaning_fr": "NAT2 est une enzyme qui transforme notamment l'hydralazine, un médicament contre l'hypertension. Une fonction diminuée peut ralentir son élimination et modifier ses effets. Les quatre sites ne reconstituent pas à eux seuls les deux allèles complets.",
+      "actions_fr": ["Si l'hydralazine vous est proposée, demander une confirmation du profil complet. La tension mesurée, la tolérance, les interactions et l'indication clinique guident la décision, pas ce panel seul."]
+    },
+    "g6pd": {
+      "meaning_fr": "G6PD aide les globules rouges à se protéger contre certaines agressions oxydantes. Une activité trop faible peut favoriser leur destruction, appelée hémolyse, avec certains médicaments. Le gène est sur le chromosome X ; un marqueur seul ne mesure pas l'activité de l'enzyme.",
+      "actions_fr": ["Si un médicament à risque est envisagé ou si des symptômes le justifient, demander le dosage enzymatique et la confirmation adaptés. Une jaunisse aiguë, des urines foncées ou une fatigue brutale nécessitent un avis médical, quel que soit ce marqueur."]
+    },
+    "bche": {
+      "meaning_fr": "La butyrylcholinestérase produite par BCHE élimine certains relaxants musculaires utilisés en anesthésie, notamment succinylcholine et mivacurium. Une activité moindre peut prolonger leur effet et le besoin de ventilation après leur administration ; cela ne concerne pas toute anesthésie.",
+      "actions_fr": ["Avant une anesthésie, signaler un résultat confirmé et toute histoire personnelle ou familiale de paralysie prolongée à l'anesthésiste. Un bilan enzymatique, dont le test à la dibucaïne, peut préciser le résultat si indiqué."]
+    },
+    "f5_leiden": {
+      "meaning_fr": "Le facteur V participe à la coagulation. L'allèle Leiden résiste davantage à un mécanisme qui freine la coagulation et favorise les caillots veineux. Une prédisposition n'est pas une thrombose déjà présente ; de nombreux porteurs n'en développent jamais.",
+      "actions_fr": ["Si l'allèle est confirmé, en parler au médecin avant œstrogènes, grossesse/AMP ou chirurgie, et mentionner les antécédents de caillots. Aucun anticoagulant permanent n'est prescrit à partir de ce résultat seul."]
+    },
+    "f2": {
+      "meaning_fr": "F2 produit la prothrombine, une protéine de la coagulation. L'allèle 20210A peut augmenter sa quantité et favoriser les caillots veineux. Ce résultat ne prédit pas à lui seul une thrombose ou une complication de grossesse.",
+      "actions_fr": ["Après confirmation si nécessaire, discuter des antécédents et des situations à risque (œstrogènes, grossesse/AMP, chirurgie) avec le médecin. Aucun anticoagulant ni protocole de grossesse n'est décidé automatiquement."]
+    },
+    "ackr1": {
+      "meaning_fr": "ACKR1 porte les antigènes Duffy à la surface des globules rouges. Le profil courant Duffy-null peut être associé à un nombre de neutrophiles de base plus bas sans déficit immunitaire habituel. Il ne détermine ni une origine ethnique ni l'explication de toute baisse des neutrophiles.",
+      "actions_fr": ["Si une numération sanguine montre des neutrophiles bas, présenter le résultat au médecin sans lui attribuer automatiquement l'anomalie. Le typage Duffy se confirme au laboratoire si utile, notamment pour une question transfusionnelle."]
+    },
+    "kell": {
+      "meaning_fr": "Kell est un autre système de marques à la surface des globules rouges, distinct d'ABO et de Rhésus. Le site recherché différencie les formes courantes K et k ; porter une marque ne signifie ni maladie ni anticorps dirigé contre elle.",
+      "actions_fr": ["Comparer si possible à un phénotype sanguin de laboratoire. Pour transfusion ou grossesse, utiliser le typage et la recherche d'anticorps irréguliers (RAI), qui sont des examens distincts."]
+    },
+    "mc1r": {
+      "meaning_fr": "MC1R participe au choix des pigments de la peau et des cheveux. Certains variants contribuent à une pigmentation claire ou rousse, mais d'autres gènes interviennent et la couleur observée reste plus informative qu'un seul site.",
+      "actions_fr": ["Adapter la protection solaire à votre peau réelle et aux antécédents, sans attendre une prédiction génétique. Un suivi dermatologique se discute selon le contexte, pas à partir de ces marqueurs seuls."]
+    }
+  },
+  "markers": {
+    "rs1815739": {
+      "effect_allele": "T",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Vos deux copies conservent la forme qui permet de fabriquer l'alpha-actinine-3.", "meaning_fr": "Cette forme est plus fréquente dans certains groupes de sportifs de puissance ; elle ne démontre pas un talent individuel et n'empêche pas de pratiquer l'endurance."},
+        "1": {"result_fr": "Une copie peut fabriquer l'alpha-actinine-3 ; l'autre porte le signal d'arrêt R577X.", "meaning_fr": "Le marqueur ne permet pas de vous classer en endurance ou en puissance. Il ne justifie pas de privilégier ou d'éviter une activité."},
+        "2": {"result_fr": "Les deux copies portent le signal d'arrêt R577X, compatible avec une absence d'alpha-actinine-3.", "meaning_fr": "Ce profil est observé chez des personnes en bonne santé. Il ne garantit pas un avantage d'endurance ni une mauvaise réponse au renforcement musculaire."}
+      }
+    },
+    "rs8176719": {
+      "effect_allele": "T",
+      "required_site": {"chrom": "9", "pos": 136132908, "ref": "T", "alt": "TC"},
+      "genotype_findings_fr": {
+        "0": {"result_fr": "La base absente sur les allèles O courants est présente sur vos deux copies à ce site.", "meaning_fr": "La délétion O courante n'est pas retrouvée ici. D'autres variants peuvent néanmoins inactiver ABO ; ce site seul ne dit pas si ces copies sont A, B ou un allèle O rare."},
+        "1": {"result_fr": "Une copie du repère O courant ; sur l'autre copie, la base manquante est présente.", "meaning_fr": "Une copie porte la délétion c.261delG caractéristique d'allèles O courants. L'autre copie n'a pas cette délétion à ce site, mais elle n'est pas encore identifiée comme A ou B : les autres sites et leur phase restent nécessaires."},
+        "2": {"result_fr": "Deux copies du repère O courant sont observées à ce site.", "meaning_fr": "Les deux copies portent le repère de délétion c.261delG, compatible avec deux allèles O courants. Cela ne remplace pas le groupage de laboratoire et n'exclut pas les configurations rares du système sanguin."}
+      }
+    },
+    "rs8176746": {
+      "effect_allele": "T",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Deux bases du motif habituel A à ce site qui distingue A et B.", "meaning_fr": "Ce motif peut aussi se trouver sur un allèle O inactif ; il ne démontre pas à lui seul un groupe A."},
+        "1": {"result_fr": "Une base du motif habituel B et une du motif habituel A à ce site.", "meaning_fr": "Sans savoir quel motif est sur la copie qui porte éventuellement la délétion O, on ne peut pas conclure à un groupe AB, A ou B."},
+        "2": {"result_fr": "Deux bases du motif habituel B à ce site qui distingue A et B.", "meaning_fr": "C'est un repère B, pas la preuve que les deux copies produisent la marque B : les autres variants peuvent rendre l'enzyme inactive."}
+      }
+    },
+    "rs8176747": {
+      "effect_allele": "G",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Deux bases du motif habituel A à ce second site qui distingue A et B.", "meaning_fr": "Ce motif ne suffit pas à appeler un groupe A : un allèle O peut conserver un motif A sans fabriquer de marque A."},
+        "1": {"result_fr": "Une base du motif habituel B et une du motif habituel A à ce second site.", "meaning_fr": "Ce résultat complète l'autre repère A/B ; il ne résout ni la phase avec le site O ni les allèles rares."},
+        "2": {"result_fr": "Deux bases du motif habituel B à ce second site qui distingue A et B.", "meaning_fr": "Il faut encore vérifier que les copies sont fonctionnelles : ce motif B seul ne certifie pas un groupe B."}
+      }
+    },
+    "rs601338": {
+      "effect_allele": "A",
+      "genotype_findings_fr": {
+        "0": {"result_fr": "Profil généralement sécréteur pour ce marqueur, sous réserve des autres allèles FUT2."},
+        "1": {"result_fr": "Profil généralement sécréteur : une copie peut encore fabriquer les marques dans les sécrétions."},
+        "2": {"result_fr": "Profil compatible avec un statut non-sécréteur pour ce marqueur."}
+      }
+    }
+  }
+}

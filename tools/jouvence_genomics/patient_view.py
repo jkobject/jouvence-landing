@@ -46,12 +46,14 @@ def select_patient_signals(records: list[dict], traits: dict) -> dict:
     }
 
 
-def render_patient_sections(signals: dict, catalog: dict, references: dict) -> str:
+def render_patient_sections(signals: dict, catalog: dict, references: dict, *, include_traits: bool = True) -> str:
     """Créer des cartes « résultat / signification / suite » avec détails repliés.
 
     Les descriptions de maladie sont conditionnelles. Le panel fournit des
     explications propres au nombre de copies quand elles sont disponibles ;
     un profil générique n'invente ni diplotype, ni dosage, ni symptôme.
+    ``include_traits=False`` évite les doublons lorsque le tableau de cartes
+    du rapport présente déjà ces profils ; la sélection reste inchangée.
     """
 
     sections = []
@@ -96,6 +98,8 @@ def render_patient_sections(signals: dict, catalog: dict, references: dict) -> s
                         '<div class="finding-grid">' + "".join(cards) + '</div>'
                         '<p class="caveat">Un portage récessif confirmé n’est habituellement pas une maladie chez le porteur. '
                         'La pertinence clinique dépend du variant, du génotype et de la maladie exacte.</p></section>')
+    if not include_traits:
+        return "\n".join(sections)
     for category, section_id, title in (
         ("pharmacogenomique", "medicaments", "Médicaments : les informations à communiquer"),
         ("nutrition", "nutrition-utile", "Nutrition et métabolisme : vos informations utiles"),

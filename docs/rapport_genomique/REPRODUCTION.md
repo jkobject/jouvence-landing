@@ -165,6 +165,37 @@ delivery_manifest = prepare_report_delivery(
 
 La fonction crée un ZIP par rapport avec ses annexes statiques référencées, une notice et un manifeste d'intégrité ; elle ne collecte aucun audit par voisinage et n'envoie rien. Décompresser chaque ZIP dans un **dossier distinct**, puis ouvrir son HTML en conservant l'arborescence des annexes. Vérifier les listes, CRC et SHA du manifeste avant partage. Les personnes dont les rapports sont inclus et le destinataire doivent être autorisés explicitement ; ne pas envoyer les analyses privées complètes par défaut.
 
+### Contrat de présentation réutilisable
+
+Une révision purement éditoriale réutilise les JSON et CSV figés, sans relancer
+`build_exploratory_scores()` ni rescanner les VCF. Les cartes répondent à
+« votre résultat / ce que cela signifie / quoi faire concrètement » ; les
+chiffres techniques et preuves sont dépliables. `patient_trait_labels.json`
+explique les 28 profils ciblés sans changer leurs allèles ou filtres.
+`prevention_guidance.json` relie les traits PGS aux définitions et recommandations
+publiques, avec passage lu, date et périmètre du conseil.
+
+Construire les panels une seule fois. `render_panel_dashboard(panels)` rend
+les cartes utiles ; `view="audit"` réserve le catalogue GWAS à l'annexe fermée.
+Si ces cartes présentent les profils ciblés, appeler `render_patient_sections`
+avec `include_traits=False` pour supprimer les doublons. Fournir l'ancre
+`comprendre-les-resultats`, où les notes ¹ expliquent une fois les limites communes.
+
+`select_exploratory_traits()` fixe un principal par libellé de trait distinct,
+par taille publiée puis ID, avant z/percentile. Ne jamais retenir le modèle
+au z le plus élevé. Un principal indisponible reste indisponible. La première
+lecture demande `abs(z)>1` et un conseil utile documenté ; tous les calculs et
+CSV restent accessibles. Compter les positions observées utilisées, pas les
+lignes d'études. Un percentile théorique de sous-panel n'est ni un score complet
+ni un risque absolu. Les conseils généraux ne prétendent pas avoir un bénéfice
+spécifique au génotype ; ne pas prescrire sport, médicament, supplément ou nouveau
+dépistage à partir d'un indice partiel.
+
+Figer aussi l'empreinte des deux catalogues éditoriaux dans la provenance du
+rapport. Vérifier les z/percentiles/CSV contre les calculs source et les comptes
+cliniques contre la version précédente avant livraison. Une QA numérique ou
+structurelle ne vaut pas une QA visuelle ; documenter séparément les trois.
+
 ## 5. Sauvegarder sans effacer le Mac
 
 Une sauvegarde privée autorisée copie des données ; elle n'autorise ni publication, ni inférence distante, ni suppression locale. La destination exacte, le projet de facturation et les sources sont des paramètres vérifiés, pas des valeurs reprises d'un ancien mémo. Ne pas utiliser un préfixe existant du KB pour un nouveau backup.

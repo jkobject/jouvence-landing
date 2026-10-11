@@ -21,8 +21,8 @@ def interpret_trait_markers(markers: list[dict]) -> dict:
     ----------
     markers : list[dict]
         Marqueurs d'un même profil, déjà sélectionnés par la politique qualité.
-        Les champs du panel (explication, suites, conclusions par génotype)
-        restent la référence pour les profils non revus quantitativement.
+        Les champs du panel restent la référence technique. Le petit catalogue
+        éditorial explique la physiologie et les actions sans changer les GT.
 
     Returns
     -------
@@ -40,7 +40,8 @@ def interpret_trait_markers(markers: list[dict]) -> dict:
     clinique ; aucun autre défaut de qualité n'est toléré ici.
     """
     evidence = json.loads(Path(__file__).with_name("trait_effect_evidence.json").read_text())
-    result, meanings, magnitudes, comparisons, actions, limits, sources = [], [], [], [], [], [], []
+    labels = json.loads(Path(__file__).with_name("patient_trait_labels.json").read_text())
+    result, meanings, magnitudes, comparisons, actions, limits, sources, context = [], [], [], [], [], [], [], []
     for marker in markers:
         copies = marker.get("effect_allele_copies")
         soft = (marker.get("status") == "called_needs_validation"
@@ -50,21 +51,31 @@ def interpret_trait_markers(markers: list[dict]) -> dict:
         if not usable or type(copies) is not int or copies not in (0, 1, 2):
             result.append(f"{marker['rsid']} : génotype non interprétable ou qualité insuffisante.")
             continue
-        specific = marker.get("genotype_findings_fr", {}).get(str(copies), {})
-        result.append(f"{marker['gene']} · {marker['rsid']} · {marker['genotype']} : "
+        profile = labels["profiles"].get(marker.get("profile"), {})
+        specific = _patient_marker_text(marker, labels["markers"].get(marker["rsid"]))
+        result.append(f"{marker['rsid']} · {marker['genotype']} : "
                       + (specific.get("result_fr") or f"{copies} copie(s) de l'allèle {marker['effect_allele']}."))
+        if profile:
+            meanings.append(profile["meaning_fr"])
+            actions.extend(profile["actions_fr"])
+            sources.extend(profile.get("sources", []))
+            # Les textes et recommandations d'origine restent inspectables,
+            # mais ne masquent plus l'explication courte de première lecture.
+            context.extend([marker["explanation_fr"], marker["next_steps_fr"]])
+        if marker.get("marker_caveat_fr"):
+            limits.append(marker["marker_caveat_fr"])
         record = evidence["markers"].get(marker["rsid"])
         # La preuve est attachée à l'allèle harmonisé, pas au rsID seul.
         if record and record["effect_allele"] != marker.get("effect_allele"):
             raise ValueError("Allèle du catalogue d'effets incompatible avec le panel")
         if record:
             genotype_evidence = record.get("genotype_findings_fr", {}).get(str(copies), {})
-            meanings.append(record["meaning_fr"])
+            (context if profile else meanings).append(record["meaning_fr"])
             if genotype_evidence.get("meaning_fr"):
                 meanings.append(genotype_evidence["meaning_fr"])
             actions.extend(genotype_evidence.get("actions_fr") or
                            ([genotype_evidence["action_fr"]] if genotype_evidence.get("action_fr") else []))
-            actions.extend(record["actions_fr"])
+            (context if profile else actions).extend(record["actions_fr"])
             limits.extend(record["limitations_fr"])
             sources.extend(record["sources"])
             for effect in record.get("effects", []):
@@ -85,8 +96,14 @@ def interpret_trait_markers(markers: list[dict]) -> dict:
             if record.get("context_fr"):
                 limits.append(record["context_fr"])
         else:
-            meanings.append(specific.get("meaning_fr") or marker["explanation_fr"])
-            actions.append(specific.get("action_fr") or marker["next_steps_fr"])
+            if not profile:
+                meanings.append(marker["explanation_fr"])
+            if specific.get("meaning_fr"):
+                meanings.append(specific["meaning_fr"])
+            if specific.get("action_fr"):
+                (context if profile else actions).append(specific["action_fr"])
+            elif not profile:
+                actions.append(marker["next_steps_fr"])
             sources.extend({"url": url, "title": "Source du marqueur"} for url in marker.get("sources", [])
                            if "/refsnp/" not in url and "/snp/rs" not in url)
         if soft and marker.get("quality_pass") is not True:
@@ -103,11 +120,41 @@ def interpret_trait_markers(markers: list[dict]) -> dict:
     return {"result_fr": " ".join(result), "meaning_fr": " ".join(dict.fromkeys(meanings)),
             "magnitude_fr": list(dict.fromkeys(magnitudes)), "comparison_fr": " ".join(dict.fromkeys(comparisons)),
             "actions_fr": list(dict.fromkeys(actions)), "limitations_fr": list(dict.fromkeys(limits)),
-            "sources": list({source["url"]: source for source in sources}.values())}
+            "sources": list({source["url"]: source for source in reversed(sources)}.values()),
+            "context_fr": list(dict.fromkeys(context)), "editorial_revision": labels["revision"]}
+
+
+def _patient_marker_text(marker: dict, override: dict | None) -> dict:
+    """Adapter le libellé, sans transformer un nombre d'ALT en allèle O.
+
+    ABO rs8176719 nécessite la représentation GRCh37 T/TC attestée et deux
+    allèles explicites cohérents avec le dosage de T. Une autre représentation
+    demande une normalisation en amont, jamais une inversion de brin devinée.
+    Les autres libellés conservent les conclusions par génotype du panel.
+    """
+    copies = marker["effect_allele_copies"]
+    specific = marker.get("genotype_findings_fr", {}).get(str(copies), {})
+    if not override:
+        return specific
+    if override["effect_allele"] != marker.get("effect_allele"):
+        raise ValueError("Allèle du catalogue éditorial incompatible avec le panel")
+    if override.get("required_site"):
+        if any(marker.get(key) != value for key, value in override["required_site"].items()):
+            raise ValueError("Représentation ABO incompatible : GRCh37 T/TC requis")
+        genotype = marker.get("genotype")
+        if not isinstance(genotype, str):
+            raise ValueError("Génotype ABO explicite requis")
+        alleles = genotype.replace("|", "/").split("/")
+        if (len(alleles) != 2 or any(a not in {"T", "TC"} for a in alleles)
+                or alleles.count("T") != copies):
+            raise ValueError("Génotype ABO et dosage de l'allèle O de référence incohérents")
+        if marker.get("alleles") is not None and sorted(marker["alleles"]) != sorted(alleles):
+            raise ValueError("Génotype ABO et allèles décodés incohérents")
+    return {**specific, **override["genotype_findings_fr"].get(str(copies), {})}
 
 
 def render_interpretation(finding: dict, *, include_proofs: bool = True) -> str:
-    """Rendre les cinq questions utiles ; tout contenu fourni est échappé.
+    """Mettre résultat, signification et actions au premier plan, texte échappé.
 
     Le rendu conserve les unités et les comparateurs. Les limites et courts
     extraits probants sont repliés pour garder une première lecture simple.
@@ -117,27 +164,40 @@ def render_interpretation(finding: dict, *, include_proofs: bool = True) -> str:
     """
     fields = (("Votre résultat", finding["result_fr"]),
               ("Ce que cela signifie", finding["meaning_fr"]),
-              ("Quelle différence cela représente", finding["magnitude_fr"]),
-              ("Par rapport à qui", finding["comparison_fr"]),
               ("Ce que vous pouvez faire", finding["actions_fr"]))
     html = ['<dl class="plain-result quantified-result">']
     for heading, value in fields:
         text = ('<ul>' + ''.join(f'<li>{escape(item)}</li>' for item in value) + '</ul>'
                 if isinstance(value, list) else escape(value))
-        html.append(f'<dt>{heading}</dt><dd>{text}</dd>')
-    html.append('</dl><details class="explanation prose"><summary>Limites et preuves de l’interprétation</summary><ul>')
+        note = (' <sup><a href="#comprendre-les-resultats" '
+                'aria-label="Comprendre la portée et les limites des résultats">1</a></sup>'
+                if heading == "Votre résultat" else "")
+        html.append(f'<dt>{heading}{note}</dt><dd>{text}</dd>')
+    html.append('</dl>')
+    html.append('<details class="explanation prose"><summary>Ampleur publiée, comparateurs et sources</summary>')
+    html.append('<dl class="plain-result"><dt>Quelle différence cela représente</dt><dd><ul>')
+    html.extend(f'<li>{escape(item)}</li>' for item in finding["magnitude_fr"])
+    html.append('</ul></dd><dt>Par rapport à qui</dt><dd>' + escape(finding["comparison_fr"]) + '</dd></dl>')
+    if finding.get("context_fr"):
+        html.append('<p>Contexte technique et suites possibles :</p><ul>')
+        html.extend(f'<li>{escape(item)}</li>' for item in finding["context_fr"])
+        html.append('</ul>')
+    html.append('<p>Limites propres à cette interprétation :</p><ul>')
     html.extend(f'<li>{escape(item)}</li>' for item in finding["limitations_fr"])
     html.append('</ul>')
-    proofs = [source for source in finding["sources"] if source.get("supporting_quote")]
+    proofs = finding["sources"]
     if proofs and include_proofs:
-        html.append('<p>Courts extraits des sources qui étayent les chiffres et leurs limites :</p><ul>')
+        html.append('<p>Sources et, lorsqu’il existe, court extrait probant :</p><ul>')
         for source in proofs:
             url = urlsplit(source["url"])
-            if url.scheme not in {"http", "https"} or not url.netloc:
+            if url.scheme not in {"http", "https"} or not url.netloc or url.username or url.password:
                 raise ValueError("Les preuves exigent une URL HTTP(S)")
-            html.append(f'<li><a href="{escape(source["url"], quote=True)}">{escape(source["title"])}</a> : '
-                        f'<q>{escape(source["supporting_quote"])}</q> '
-                        f'({"texte intégral ou sections pertinentes" if "full_text" in source.get("reading_depth", "") else "résumé ou page de référence"}).</li>')
+            html.append(f'<li><a href="{escape(source["url"], quote=True)}">{escape(source["title"])}</a>')
+            if source.get("supporting_quote"):
+                html.append(f' : <q>{escape(source["supporting_quote"])}</q>')
+            if source.get("reading_depth"):
+                html.append(f' ({"texte intégral ou sections pertinentes" if "full_text" in source["reading_depth"] else "résumé ou page de référence"})')
+            html.append('.</li>')
         html.append('</ul>')
     html.append('</details>')
     return "".join(html)

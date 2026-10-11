@@ -3,8 +3,8 @@
 Public : personnes ayant réalisé un séquençage et couples préparant une grossesse,
 avec une seconde lecture possible par un professionnel de santé.
 
-Question : que montrent réellement les données, quelles maladies sont pertinentes
-pour chaque résultat et que faut-il vérifier avant d'agir ?
+Question : que signifie concrètement chaque résultat et quel geste utile peut-on
+en tirer ? Les preuves et les vérifications restent disponibles en seconde lecture.
 
 Message central : un rapport utile relie chaque variant à ses preuves, au mode de
 transmission et à une suite concrète. Chaque association utile explique le résultat,
@@ -26,10 +26,12 @@ corrections d'interprétation clinique sont tracées, sans modifier les VCF sour
 La première vue ne montre que les résultats utiles : observations P/LP à
 confirmer, candidats pLoF stricts explicitement séparés et marqueurs ciblés
 avec génotype et qualité exploitables. Chaque carte répond à trois questions :
-votre résultat, sa signification et la prochaine étape. La signification précise
-le phénotype réellement étudié et l'ampleur publiée : OR/HR/β, intervalle de
-confiance disponible, unité, population et comparateur. L'action peut être
-« aucune action spécifique justifiée » ; un chiffre non documenté reste absent.
+votre résultat, sa signification biologique et la prochaine étape concrète.
+Les OR/HR/β, unités, comparateurs et limites communes ne sont pas le texte principal :
+ils restent dans les détails. La note commune est citée par un lien ¹, sans
+répéter le disclaimer dans chaque champ. Les conseils de prévention proviennent
+de sources publiques, sans inventer une réponse personnalisée au mode de vie.
+Les traits descriptifs (ABO, yeux) peuvent être utiles sans changement de comportement.
 Les VUS, appels rejetés,
 sites absents et contrôles exhaustifs restent dans une annexe fermée par défaut.
 Les limites qui changent l'interprétation restent visibles sur la carte.
@@ -51,7 +53,12 @@ synthèse clinique. Un volet exploratoire distinct peut être activé explicitem
 avec un sous-panel observé, un modèle HWE conditionnel, un z-score et un rang
 discret Monte-Carlo calculés localement. Il ne copie aucun résultat fournisseur,
 n'impute aucun inconnu et ne revendique pas le PGS complet. La première lecture
-montre `abs(z)>1`, avec les autres calculs repliés et CSV par modèle/référence ;
+montre une carte par trait, seulement si le modèle principal a `abs(z)>1` et
+des conseils utiles sourcés. Le principal est fixé par la taille publiée puis
+l'identifiant PGS avant de regarder les valeurs personnelles ; il n'est pas
+remplacé par un modèle plus extrême si son calcul est indisponible. Tous les
+autres calculs sont repliés, avec CSV par modèle/référence. La jauge compare le
+score partiel à sa référence théorique, pas le risque de maladie ;
 une méthode partagée évite de répéter les avertissements. Ce seuil éditorial n'est pas diagnostique. La validation arithmétique d'un sous-score ne démontre pas
 sa performance prédictive clinique.
 
@@ -67,6 +74,11 @@ qui changent la fiabilité d'une observation réellement extraite des données
 locales restent visibles ; une observation n'est pas un diagnostic.
 L'audit distingue le périmètre annoncé par un fournisseur du contenu réellement
 extractible : une page blanche ou un test non pris en charge n'est pas un négatif.
+
+Le catalogue brut GWAS est une annexe fermée, jamais une série de cartes par
+domaine remplies de lignes non interprétables. Les cartes de première lecture
+comptent les positions distinctes de l'ADN réellement utilisées, pas les études
+ni les sites inconnus. Chaque profil ciblé n'est présenté qu'une fois.
 
 L'enrichissement GWAS sépare associations, rsID, publications, mesures étudiées
 et appels explicites. Il ne transforme pas des milliers d'associations en

@@ -11,9 +11,20 @@
 .jex-sigma span { margin-inline-start: .15rem; font-size: 26px; }
 .jex-rank { margin: .7rem 0 1.5rem; font-size: 17px; line-height: 1.4; }
 .jex-gauge { margin-block: 1.4rem; }
-.jex-gauge-track { position: relative; height: 7px; margin-inline: .8rem; border-radius: 7px; background: #e7e3da; }
-.jex-center-zone { position: absolute; top: 0; bottom: 0; left: 33.333333%; width: 33.333333%; background: #c7c6bf; }
-.jex-marker { position: absolute; top: -4px; width: 3px; height: 15px; border-radius: 2px; background: var(--ink, #162737); transform: translateX(-50%); }
+.jex-gauge-track { position: relative; height: 16px; margin-inline: .8rem; border-radius: 7px; background: linear-gradient(90deg,#a8bec6,#dfded7 50%,#b9a6c6); }
+.jex-center-zone { position: absolute; top: 0; bottom: 0; left: 33.333333%; width: 33.333333%; border-inline:1px solid #fff; background: #ffffff45; }
+.jex-marker { position: absolute; top: -7px; width: 3px; height: 30px; border-radius: 2px; background: var(--ink, #162737); transform: translateX(-50%); }
+.jex-marker::before { content:"";position:absolute;top:-7px;left:-5px;border-inline:6px solid transparent;border-block-start:7px solid var(--ink,#162737); }
+.jex-result {display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;align-items:start;margin-block:1.5rem}
+.jex-percentile {margin:.6rem 0;font:400 44px/1.1 Georgia,serif;color:var(--ink,#162737)}
+.jex-percentile span {font:400 17px/1.4 system-ui,sans-serif;margin-inline-start:.3rem;color:var(--muted,#596878)}
+.jex-result .jex-rank {font-size:14px;margin:.7rem 0}
+.jex-scale-labels {display:flex;justify-content:space-between;gap:.5rem;font-size:13px;color:var(--muted,#596878);margin-block-start:.6rem}
+.jex-definition,.jex-card>p,.jex-card li {font-size:15px;line-height:1.65}
+.jex-card h4 {font-size:16px;line-height:1.4;margin-block:1.5rem .55rem}
+.jex-card ul {padding-inline-start:1.25rem}.jex-card li {margin-block:.6rem}
+.jex-action-scope {font-size:13px!important;color:var(--muted,#596878)}
+.result-footnote {margin-inline-start:.3rem;font:500 14px/1 system-ui,sans-serif}
 .jex-ticks { display: flex; justify-content: space-between; margin-block-start: .55rem; font-size: 13px; color: var(--muted, #596878); }
 .jex-ticks span { width: 1.6rem; text-align: center; }
 .jex-support, .jex-publication, .jex-clamped { font-size: 14px; line-height: 1.55; color: var(--muted, #596878); overflow-wrap: anywhere; }

@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import re
 from collections import defaultdict
 from html import escape
 from urllib.parse import urlsplit
@@ -36,24 +37,24 @@ VARIANT_COLUMNS = {
 KIND_ALIASES = {
     **dict.fromkeys(("genetic", "clinical", "trait", "pgx", "nutrition", "coherence", "ancestry", "monogenic"), "genetic"),
     "technical": "technical", "quality": "technical", "score": "score", "polygenic": "score",
-    "prs": "score", "external": "external",
+    "prs": "score", "external": "external", "audit_only": "audit_only", "technical_only": "technical_only",
 }
 KIND_LABELS = {
-    "genetic": "Résultats génétiques ciblés", "technical": "Observation technique",
-    "score": "Score qualifié",
+    "genetic": "Information ciblée", "technical": "Signal à vérifier",
+    "score": "Score qualifié", "audit_only": "Données de l'annexe", "technical_only": "Contrôle détaillé",
 }
 STATUS_LABELS = {
-    "called": "Appel explicite", "observed": "Observé", "provisional": "À confirmer",
+    "called": "Génotype disponible", "observed": "Observé", "provisional": "À confirmer",
     "called_needs_validation": "À confirmer", "validated": "Validation déclarée dans la source",
     "qualified": "Qualification déclarée dans la source", "available": "Résultat fourni",
     "unavailable": "Indisponible", "unknown": "Indéterminé", "absent_unknown": "Site non documenté",
-    "research_only": "Recherche uniquement", "not_evaluated": "Non évalué",
+    "research_only": "Information éducative", "not_evaluated": "Non évalué",
     "discordant": "Discordant", "rejected": "Non retenu", "technical": "À revoir techniquement",
 }
 
 
-def render_panel_dashboard(panels: list[dict]) -> str:
-    """Présenter des panels par catégorie, avec tableaux et exports CSV complets.
+def render_panel_dashboard(panels: list[dict], *, view: str = "main") -> str:
+    """Séparer les cartes utiles de l'annexe GWAS, sans modifier leurs données.
 
     Parameters
     ----------
@@ -62,85 +63,132 @@ def render_panel_dashboard(panels: list[dict]) -> str:
         ``status``, ``summary`` et ``interpretation_fr``. ``variants`` contient
         les lignes source et ``sources`` des dictionnaires ``title/url``.
         Les champs des variants sont facultatifs : voir ``VARIANT_COLUMNS``.
-        ``kind`` distingue genetic, technical et score (des alias documentés
-        dans ``KIND_ALIASES`` sont acceptés). Les panels external sont exclus,
+        ``kind`` distingue genetic, technical, score et les annexes audit_only /
+        technical_only. Les panels external sont exclus,
         y compris de leurs JSON/CSV embarqués. Un score exige ``qualified=True``,
         un statut validated/qualified/available et ``qualification_evidence``
         admis par ``reportable_polygenic_results`` ; autrement il reste hors
         rapport. ``provenance_fr`` est un texte facultatif de traçabilité.
+        ``observed_used=True`` sur une ligne atteste qu'un génotype admis sert
+        cette carte. Sans ce champ ou sans génotype, elle ne contribue pas au
+        compteur de marqueurs et ne produit aucun graphique de copies.
+    view : str
+        ``main`` (défaut) ne présente que les cartes utiles. ``audit`` réserve
+        les catalogues GWAS et contrôles détaillés à une annexe fermée. Les
+        anciens panels ``gwas-*`` restent dans cette annexe, même si leur kind
+        était genetic ; un statut éducatif seul n'écarte pas un profil ciblé.
 
     Returns
     -------
     str
         Fragment HTML sans runtime externe. Les vingt premières lignes sont
-        rendues ; les autres restent embarquées pour l'affichage et le CSV.
+        rendues dans les preuves dépliables ; toutes restent exportables.
         CSS/JS locaux ajoutent filtres, chargement progressif et export UTF-8.
 
     Notes
     -----
-    Les statistiques comptent les coordonnées distinctes (chromosome/position),
-    pas les maladies, gènes, sujets ou génotypes négatifs. Une position absente
-    n'est pas comptée comme un site connu. Ni dosage, ni poids, ni contribution
-    ne sont calculés ici. Les entrées ne sont jamais modifiées.
+    Les marqueurs comptent les positions distinctes avec un appel admis utilisé,
+    pas les études, les lignes GWAS ni les sites ciblés inconnus. Deux ALT au
+    même locus ne font qu'un marqueur. Ni dosage, ni risque, ni contribution
+    ne sont calculés ici. Le mode change l'affichage, jamais les appels source.
     """
 
+    if view not in {"main", "audit"}:
+        raise ValueError("La vue doit être main ou audit.")
     prepared = []
     for panel in panels:
         kind = KIND_ALIASES.get(str(panel.get("kind", "")).lower())
         if kind == "external":
             continue  # Ni contenu caché, ni données exportables du fournisseur.
+        audit_only = (kind in {"audit_only", "technical_only"}
+                      or panel.get("result_scope") == "gwas_catalogue_associations"
+                      or str(panel.get("id", "")).startswith("gwas-"))
+        if audit_only != (view == "audit"):
+            continue
         if kind == "score" and not (panel.get("qualified") is True
                 and panel.get("status") in {"validated", "qualified", "available"}
                 and reportable_polygenic_results({"scores": [panel.get("qualification_evidence", {})]})):
             continue  # Les audits de scores sont consultés séparément.
-        prepared.append(_prepare_panel(panel))
+        prepared_panel = _prepare_panel(panel)
+        if audit_only and prepared_panel["kind"] == "genetic":
+            prepared_panel["kind"] = "audit_only"  # Ancien panel GWAS, copie d'affichage uniquement.
+        prepared.append(prepared_panel)
     if len({panel["id"] for panel in prepared}) != len(prepared):
         raise ValueError("Chaque panel doit avoir un id unique dans ce tableau.")
+    if not prepared:
+        return ""
     grouped = defaultdict(list)
     sites = set()
     for panel in prepared:
         grouped[panel["category"]].append(panel)
         for row in panel["variants"]:
-            if row.get("chrom") not in (None, "") and row.get("pos") not in (None, ""):
-                chromosome = str(row["chrom"]).removeprefix("chr").upper()
-                chromosome = "MT" if chromosome in {"M", "NC_012920.1"} else chromosome
-                sites.add((chromosome, int(row["pos"])))
+            site = _observed_site(row)
+            if site is not None:
+                sites.add(site)
     rows = sum(len(panel["variants"]) for panel in prepared)
-    fragments = ['<section id="genetic-panels" class="jp-dashboard" data-panel-dashboard>',
-                 '<header class="jp-dashboard-heading"><p class="jp-eyebrow">Explorer vos résultats</p>',
-                 '<h2>Votre génome,<br><span>panel par panel.</span></h2>',
-                 '<p class="jp-intro">Une vue claire des observations disponibles, de leurs preuves '
-                 'et de ce qui reste à vérifier.</p></header>',
-                 '<div class="jp-overview" aria-label="Périmètre de ce tableau complet">',
-                 f'<div><strong>{len(prepared)}</strong><span>panels documentés</span></div>',
-                 f'<div><strong>{len(sites):,}</strong><span>sites ciblés dans cette vue</span></div>',
-                 f'<div><strong>{rows:,}</strong><span>lignes source exportables</span></div></div>',
-                 '<p class="jp-scope-note">Ces comptes décrivent les données présentées, pas un nombre '
-                 'de maladies détectées ni un test négatif des sites absents.</p>']
-    if not prepared:
-        fragments.append('<p class="jp-empty">Aucun panel n’a été transmis pour cette vue.</p></section>')
-        return "\n".join(fragments)
+    section_id = "genetic-panels" if view == "main" else "genetic-panel-audit"
+    fragments = [f'<section id="{section_id}" class="jp-dashboard jp-dashboard--{view}" '
+                 f'data-panel-dashboard data-panel-view="{view}">']
+    if view == "audit":
+        fragments.extend(['<details class="audit-details" data-document-only>',
+                          '<summary>Consulter le catalogue des associations et les contrôles détaillés</summary>',
+                          '<h2>Catalogue technique des associations</h2>',
+                          '<p>Ces tables sont des données de recherche, pas des résultats de santé personnels. '
+                          'Une étude et un marqueur sont deux unités différentes ; les lignes ne sont pas additionnées.</p>'])
+    else:
+        fragments.extend(['<header class="jp-dashboard-heading"><p class="jp-eyebrow">Comprendre vos résultats</p>',
+                          '<h2>Les informations utiles<br><span>de votre ADN.</span></h2>',
+                          '<p class="jp-intro">Un sujet par carte : votre résultat, ce qu’il signifie '
+                          'et la suite concrète.</p></header>'])
+    fragments.extend([f'<div class="jp-overview jp-overview--{view}" aria-label="Périmètre des données présentées">',
+                      f'<div><strong>{len(prepared)}</strong><span>{"tables détaillées" if view == "audit" else "sujets documentés"}</span></div>',
+                      f'<div><strong>{len(sites):,}</strong><span>{"marqueurs avec un appel admis" if view == "audit" else "marqueurs de votre ADN utilisés"}</span></div>'])
+    if view == "audit":
+        fragments.append(f'<div><strong>{rows:,}</strong><span>lignes source exportables</span></div>')
+    fragments.append('</div>')
+    fragments.append('<p class="jp-scope-note">Un marqueur correspond à une position distincte avec '
+                     'un génotype admis. Ces nombres ne comptent pas des maladies et ne prouvent pas '
+                     'un résultat négatif pour les sites absents.</p>' if view == "audit" else
+                     '<p class="jp-scope-note">Marqueurs = positions de votre ADN utilisées dans ces cartes. '
+                     '<a href="#comprendre-les-resultats" aria-label="Comprendre les résultats et leurs limites">¹</a></p>')
     fragments.extend(['<div class="jp-controls" data-panel-controls>',
                       '<div class="jp-categories" role="group" aria-label="Filtrer les catégories">',
-                      '<button type="button" class="jp-category-button" data-panel-category="all" aria-pressed="true">Tout explorer</button>'])
+                      '<button type="button" class="jp-category-button" data-panel-category="all" aria-pressed="true">Tout voir</button>'])
     for category, items in grouped.items():
         fragments.append(f'<button type="button" class="jp-category-button" data-panel-category="{escape(category, quote=True)}" '
                          f'aria-pressed="false">{escape(category)} <span>{len(items)}</span></button>')
-    fragments.extend(['</div><label class="jp-search">Rechercher un panel ou un marqueur'
+    fragments.extend(['</div><label class="jp-search">Rechercher un sujet ou un marqueur'
                       '<input type="search" data-panel-search-input placeholder="Gène, sujet, rsID…" autocomplete="off"></label>',
-                      f'<p class="jp-filter-count" data-panel-count aria-live="polite">{len(prepared)} panels affichés</p></div>',
+                      f'<p class="jp-filter-count" data-panel-count aria-live="polite">{len(prepared)} {"tables" if view == "audit" else "sujets"} affichés</p></div>',
                       '<p class="jp-empty" data-panel-no-results hidden>Aucun panel ne correspond à ces filtres.</p>',
                       '<div class="jp-category-groups">'])
     for category, items in grouped.items():
         fragments.append(f'<div class="jp-category-group" data-panel-category-group="{escape(category, quote=True)}">'
-                         f'<h3 class="jp-category-heading">{escape(category)}<span>{len(items)} panel(s)</span></h3>'
+                         f'<h3 class="jp-category-heading">{escape(category)}<span>{len(items)} {"table(s)" if view == "audit" else "sujet(s)"}</span></h3>'
                          '<div class="jp-panel-grid">')
-        fragments.extend(_render_panel(panel) for panel in items)
+        fragments.extend(_render_panel(panel, view=view) for panel in items)
         fragments.append('</div></div>')
-    fragments.extend(['</div><p class="jp-footer-note">Les valeurs affichées et exportées sont celles des lignes source. '
-                      'Une contribution partielle n’est pas un score complet ; aucun percentile, risque absolu '
-                      'ou diagnostic n’est calculé par cette interface.</p></section>'])
+    fragments.append('</div>')
+    if view == "audit":
+        fragments.extend(['<p class="jp-footer-note">Les valeurs affichées et exportées sont celles des lignes source. '
+                          'Une contribution partielle n’est pas un score complet ; aucun percentile, risque absolu '
+                          'ou diagnostic n’est calculé par cette interface.</p>', '</details>'])
+    fragments.append('</section>')
     return "\n".join(fragments)
+
+
+def _observed_site(row: dict) -> tuple[str, int] | None:
+    """Compter uniquement les positions dont un appel admis est réellement utilisé."""
+
+    gt = row.get("genotype")
+    if (row.get("observed_used") is not True or not isinstance(gt, str) or not gt
+            or not re.fullmatch(r"(?:[0-9]+(?:[/|][0-9]+)?|[ACGT]+(?:[/|][ACGT]+)?)", gt)
+            or row.get("status") in {"unknown", "absent_unknown", "unknown_or_not_retained", "mapping_unresolved", "rejected"}
+            or row.get("chrom") in (None, "") or row.get("pos") in (None, "")):
+        return None
+    chromosome = str(row["chrom"]).removeprefix("chr").upper()
+    chromosome = "MT" if chromosome in {"M", "NC_012920.1"} else chromosome
+    return chromosome, int(row["pos"])
 
 
 def _prepare_panel(panel: dict) -> dict:
@@ -164,6 +212,10 @@ def _prepare_panel(panel: dict) -> dict:
             value = row.get(key)
             if isinstance(value, bool) or isinstance(value, (int, float)) and not math.isfinite(value):
                 raise ValueError(f"Valeur numérique non finie ou booléenne : {key}")
+        if row.get("dosage") is not None and (type(row["dosage"]) is not int or row["dosage"] not in (0, 1, 2)):
+            raise ValueError("Un dosage fourni doit être un entier 0, 1 ou 2.")
+        if "observed_used" in row and type(row["observed_used"]) is not bool:
+            raise ValueError("observed_used doit être un booléen explicite.")
     if not isinstance(sources, list):
         raise ValueError("sources doit être une liste de dictionnaires title/url.")
     for source in sources:
@@ -183,26 +235,29 @@ def _prepare_panel(panel: dict) -> dict:
         else row.get(key) not in (None, "", []) for row in variants)]
     if variants and not columns:
         columns = ["gene", "rsid", "genotype", "status"]
+    if kind in {"audit_only", "technical_only"} or panel.get("result_scope") == "gwas_catalogue_associations" or panel["id"].startswith("gwas-"):
+        # Les textes complets restent dans le CSV/JSON, pas dans 100 cellules
+        # répétées. Ce tableau expose les identités et valeurs source exactes.
+        compact = ("rsid", "chrom", "pos", "genotype", "effect_allele", "dosage",
+                   "phenotype", "p_value", "reported_effect_value", "pmid", "status")
+        columns = [key for key in compact if key in columns]
     qualified = kind == "score" and bool(reportable_polygenic_results({"scores": [panel.get("qualification_evidence", {})]}))
     return {**panel, "kind": kind, "variants": variants, "sources": sources,
             "qualified": qualified, "columns": columns, "payload": payload,
             "html_id": "jp-panel-" + hashlib.sha256(panel["id"].encode()).hexdigest()[:16]}
 
 
-def _render_panel(panel: dict) -> str:
+def _render_panel(panel: dict, *, view: str) -> str:
     """Rendre le résumé et les lignes initiales d'un panel, toutes données embarquées."""
 
     kind = panel["kind"]
     label = "Score reproduit et qualifié" if panel["qualified"] else KIND_LABELS[kind]
-    if kind == "genetic" and panel["status"] == "research_only":
-        label = "Association publiée — exploratoire"
     status_label = STATUS_LABELS.get(panel["status"], panel["status"])
     summary = panel["summary"]
     search = " ".join([panel["title"], panel["category"], panel["summary"],
                        *[str(row.get(key) or "") for row in panel["variants"] for key in ("gene", "rsid")]])
     fragments = [f'<details id="{panel["html_id"]}" class="jp-panel jp-panel--{kind}" '
                  f'data-panel-card data-panel-kind="{kind}" data-qualified="{str(panel["qualified"]).lower()}" '
-                 f'data-panel-audit-only="{str((kind == "score" and not panel["qualified"]) or panel["status"] == "not_evaluated").lower()}" '
                  f'data-panel-category-value="{escape(panel["category"], quote=True)}" '
                  f'data-panel-search="{escape(search, quote=True)}" data-panel-id="{escape(panel["id"], quote=True)}" '
                  f'data-panel-export="{escape(panel["payload"], quote=True)}" '
@@ -211,20 +266,29 @@ def _render_panel(panel: dict) -> str:
                  f'<span class="jp-panel-kicker">{escape(label)}</span><h4>{escape(panel["title"])}</h4>'
                  f'<span class="jp-panel-status">{escape(status_label)}</span>'
                  f'<span class="jp-panel-preview">{escape(summary)}</span>'
-                 '<span class="jp-panel-open">Explorer ce panel <span aria-hidden="true">↗</span></span></summary>',
+                 '<span class="jp-panel-open">Comprendre ce résultat <span aria-hidden="true">↗</span></span></summary>',
                  '<div class="jp-panel-content">']
+    if view == "main" and kind == "genetic":
+        copies = [row for row in panel["variants"] if _observed_site(row) is not None
+                  and type(row.get("dosage")) is int and row["dosage"] in (0, 1, 2)
+                  and re.fullmatch(r"(?:[0-9]+[/|][0-9]+|[ACGT]+[/|][ACGT]+)", row["genotype"])
+                  and isinstance(row.get("effect_allele"), str) and row["effect_allele"]]
+        if copies:
+            fragments.append('<figure class="jp-marker-copies"><figcaption>Copies de cet allèle dans votre ADN</figcaption>')
+            for index, row in enumerate(copies):
+                meter_id = panel["html_id"] + f"-copies-{index}"
+                marker_label = f"{row.get('rsid') or row.get('gene') or 'Marqueur'} · allèle {row['effect_allele']}"
+                fragments.append(f'<p><label for="{meter_id}">{escape(marker_label)} : <strong>{row["dosage"]} sur 2</strong></label> '
+                                 f'<meter id="{meter_id}" min="0" max="2" value="{row["dosage"]}">{row["dosage"]} sur 2</meter> '
+                                 '<span aria-hidden="true">0 · 1 · 2 copies</span></p>')
+            fragments.append('<p class="jp-csv-note"><a href="#comprendre-les-resultats" '
+                             'aria-label="Lire la note commune sur les marqueurs"><sup>1</sup></a></p></figure>')
     if panel.get("explanation"):
         fragments.append(render_interpretation(panel["explanation"], include_proofs=False))
     else:
         fragments.append(f'<p class="jp-interpretation">{escape(panel["interpretation_fr"])}</p>')
-    if panel.get("association_explanations"):
-        fragments.append('<div class="jp-explanations"><h5>Comprendre les types d’associations de ce panel</h5>'
-                         '<p>Un exemple par type de mesure dans cet aperçu. Chaque ligne du tableau et du CSV '
-                         'dispose aussi de son explication ; les exemples ne sont pas des scores.</p>')
-        for example in panel["association_explanations"]:
-            fragments.append('<details class="explanation prose"><summary>' + escape(example["title"])
-                             + '</summary>' + render_interpretation(example) + '</details>')
-        fragments.append('</div>')
+    if view == "main":
+        fragments.append('<details class="jp-marker-proof"><summary>Voir les marqueurs, leur qualité et les sources</summary>')
     if panel.get("download_csv"):
         download_id = panel["html_id"] + "-csv"
         fragments.append(f'<p><a id="{download_id}" class="jp-full-csv" href="#{download_id}" '
@@ -268,6 +332,8 @@ def _render_panel(panel: dict) -> str:
         fragments.append('</ul>')
         if folded:
             fragments.append('</details>')
+    if view == "main":
+        fragments.append('</details>')
     fragments.append('</div></details>')
     return "\n".join(fragments)
 
