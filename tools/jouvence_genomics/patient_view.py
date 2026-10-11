@@ -12,6 +12,8 @@ import math
 from collections import defaultdict
 from html import escape
 
+from .trait_interpretation import interpret_trait_markers, render_interpretation
+
 
 
 
@@ -114,32 +116,18 @@ def render_patient_sections(signals: dict, catalog: dict, references: dict) -> s
             provisional = any(not item["quality_pass"] for item in items)
             label = "Observation provisoire : confirmation requise" if provisional else "Marqueur observé : interprétation ciblée"
             title_text = profile.get("titre_fr", genes)
-            readings = []
-            for item in items:
-                specific = item.get("genotype_findings_fr", {}).get(str(item["effect_allele_copies"]), {})
-                observed = specific.get("result_fr") or (
-                    f"{item['genotype']} ; {item['effect_allele_copies']} copie(s) de l’allèle ciblé {item['effect_allele']}"
-                )
-                readings.append(f'<li><strong>{escape(item["gene"])} · {escape(item["rsid"])}</strong> : '
-                                f'{escape(observed)}</li>')
-                if specific.get("meaning_fr"):
-                    readings.append(f'<li class="meaning-line">{escape(specific["meaning_fr"])}</li>')
-            actions = list(dict.fromkeys(item.get("genotype_findings_fr", {}).get(str(item["effect_allele_copies"]), {}).get("action_fr")
-                                        or item["next_steps_fr"] for item in items))
+            explanation = interpret_trait_markers(items)
             cards.append('<article class="finding-card" data-patient-finding="trait">'
                          f'<p class="finding-domain">{escape(profile.get("domaine_fr", genes))}</p><h3>{escape(title_text)}</h3>'
                          f'<p class="status">{label}</p>'
                          + (f'<p class="evidence-note">{escape(profile["evidence_fr"])}</p>' if profile.get("evidence_fr") else "")
-                         + '<dl class="plain-result"><dt>Votre résultat</dt><dd><ul class="observed-markers">'
-                         + "".join(readings) + '</ul></dd><dt>Ce que cela signifie</dt>'
-                         f'<dd>{escape(profile["explanation_fr"])}</dd><dt>Ce que vous pouvez faire</dt><dd>'
-                         + " ".join(escape(action) for action in actions) + '</dd></dl>'
-                         '<details class="explanation prose"><summary>Génotypes, limites et qualité</summary><ul>'
+                         + render_interpretation(explanation)
+                         + '<details class="explanation prose"><summary>Génotypes, limites et qualité</summary><ul>'
                          + "".join(f'<li>{escape(item["rsid"])} : {escape(item["genotype"])} ; DP {item.get("dp")}, GQ {item.get("gq")}, '
-                                   f'FILTER {escape(str(item.get("filter")))}. {escape(item.get("marker_caveat_fr", ""))}</li>' for item in items)
+                                   f'FILTER {escape(str(item.get("filter")))} ; FT {escape(str(item.get("raw_sample_filter") or "non documenté"))}. '
+                                   f'{escape(item.get("marker_caveat_fr", ""))}</li>' for item in items)
                          + '</ul><p>Ce panel est ciblé. Il ne reconstitue pas tous les allèles du gène ni un diplotype complet.</p></details>'
-                         + _sources([{"url": url, "label": "Source du marqueur"} for url in profile["sources"]
-                                     if "/refsnp/" not in url and "/snp/rs" not in url], references)
+                         + _sources(explanation["sources"], references)
                          + '</article>')
         sections.append(f'<section id="{section_id}"><h2>{title}</h2><p class="takeaway">'
                         f'{len(groups)} sujet(s) avec une observation pertinente.</p><div class="finding-grid">'

@@ -17,6 +17,89 @@ from tools.jouvence_genomics.catalogs import review_stars
 
 
 class HtmlReportTests(unittest.TestCase):
+    def gwas_export_fixture(self, root):
+        """Créer un vrai export GWAS courant et des entrées VCF synthétiques."""
+        from tools.jouvence_genomics.association_catalog import export_association_audit
+
+        analyses, inputs = [], []
+        for name in ("First", "Second"):
+            vcf = root / (name + ".vcf")
+            vcf.write_text("##fileformat=VCFv4.2\n##reference=GRCh37\n"
+                "##contig=<ID=1,length=249250621>\n"
+                "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t" + name + "\n"
+                "1\t100\trs1\tC\tT\t99\tPASS\t.\tGT:AD:DP:GQ\t0/1:15,15:30:99\n", encoding="utf-8")
+            inputs.append({"path": str(vcf), "sha256": hashlib.sha256(vcf.read_bytes()).hexdigest()})
+            result = {"sample_name": name, "all_reviewed_clinvar_matches": [],
+                "novel_variant_analysis": {}, "qc": [],
+                "provenance": {"inputs": [inputs[-1]], "run_utc": "2026-10-10T00:00:00Z"}}
+            path = root / (name + ".json")
+            path.write_text(json.dumps(result), encoding="utf-8")
+            analyses.append(path)
+        couple = root / "couple.json"
+        couple.write_text(json.dumps({"first_name": "First", "second_name": "Second",
+            "shared_recessive_genes": []}), encoding="utf-8")
+        mapping = {"chrom": "1", "pos": 100}
+        marker = {"rsid": "rs1", "mapping": mapping, "genotype": "C/T", "alleles": ["C", "T"],
+            "dp": 30, "gq": 99, "ad": [15, 15], "filter": "PASS", "quality_issues_fr": []}
+        row = {"catalogue_row": 1, "rsid": "rs1", "mapping": mapping, "genotype": "C/T",
+            "reported_trait": "Chronotype", "mapped_trait": "chronotype measurement",
+            "reported_effect_value": "0.01", "reported_effect_context": "per effect allele",
+            "reported_effect_allele": "T", "effect_allele_grch37": "T", "effect_allele_copies": 1,
+            "quality_pass": True, "marker_status": "called",
+            "effect_orientation_status": "exact_unambiguous_grch37_allele", "domains": ["sleep"],
+            "p_value": 1e-12, "p_value_reported": "1e-12", "pmid": "123", "study_accession": "GCST000001"}
+        report = {"sample_name": "First", "sample_id": "First", "input_files": [inputs[0]],
+            "markers": [marker], "associations": [row], "sources": [], "summary": {},
+            "catalogue_provenance": {"domains": {"sleep": {"label_fr": "Sommeil et chronotype"}},
+                "download": {"archive_sha256": "b" * 64}}}
+        export = export_association_audit(report, root / "gwas_export", "synthetic")
+        return analyses, couple, export
+
+    def test_old_gwas_interpretation_hash_fails_before_copy_or_render(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            analyses, couple, export = self.gwas_export_fixture(root)
+            source_csv = Path(export["domain_exports"]["sleep"]["csv_path"])
+            original_sha = hashlib.sha256(source_csv.read_bytes()).hexdigest()
+            for index, old_hash in enumerate((None, "f" * 64)):
+                with self.subTest(old_hash=old_hash):
+                    old_export = deepcopy(export)
+                    if old_hash is None:
+                        old_export.pop("interpretation_method_code_sha256")
+                    else:
+                        old_export["interpretation_method_code_sha256"] = old_hash
+                    audit = root / ("old_associations_" + str(index) + ".json")
+                    audit.write_text(json.dumps(old_export), encoding="utf-8")
+                    destination = root / ("reports_" + str(index))
+                    with patch("tools.jouvence_genomics.html_reporting.write_french_html") as renderer:
+                        with self.assertRaisesRegex(ValueError, "réexporter l'audit complet"):
+                            build_genomic_reports(*analyses, couple, destination, skill_scripts=root / "unused",
+                                supplementary_results={"First": {"associations": audit}})
+                        renderer.assert_not_called()
+                    self.assertFalse((destination / "personne_1" / "GWAS-sleep.csv").exists())
+                    self.assertEqual(hashlib.sha256(source_csv.read_bytes()).hexdigest(), original_sha)
+
+    def test_current_gwas_export_is_accepted_with_real_interpretation_fingerprint(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            analyses, couple, export = self.gwas_export_fixture(root)
+            code = Path(__file__).parents[1] / "tools/jouvence_genomics/association_interpretation.py"
+            self.assertEqual(export["interpretation_method_code_sha256"], hashlib.sha256(code.read_bytes()).hexdigest())
+            audit = root / "associations.json"
+            audit.write_text(json.dumps(export), encoding="utf-8")
+            source_csv = Path(export["domain_exports"]["sleep"]["csv_path"])
+            # Seul le rendu final est substitué : constructeur, décodeur du
+            # panel, export GWAS et calcul des empreintes sont réellement exécutés.
+            with patch("tools.jouvence_genomics.html_reporting.write_french_html",
+                       side_effect=lambda source, output, *args, **kwargs: output) as renderer:
+                outputs = build_genomic_reports(*analyses, couple, root / "reports", skill_scripts=root / "unused",
+                    supplementary_results={"First": {"associations": audit}})
+            self.assertEqual(renderer.call_count, 3)
+            copied = outputs["personne_1"].parent / "GWAS-sleep.csv"
+            self.assertEqual(copied.read_bytes(), source_csv.read_bytes())
+            self.assertIn("magnitude_fr", copied.read_text(encoding="utf-8").splitlines()[0])
+            self.assertIn("OR ou coefficient β indéterminé", copied.read_text(encoding="utf-8"))
+
     def test_unqualified_scores_are_not_an_html_audit_section(self):
         html = _population_audit({"polygenic": {"scores": [{"status": "raw_complete_uncalibrated",
             "trait_fr": "PRIVATE_INCOMPLETE_SCORE", "pgs_id": "PGS000001", "n_variants": 10}]}}, {})

@@ -54,8 +54,11 @@ class PharmacogenomicReproductionTests(unittest.TestCase):
                 failed = ft not in {None, ".", "PASS"}
                 self.assertEqual(result["eligible_for_matcher"], not failed)
                 self.assertEqual(result["sample_filter_status"], "failed" if failed else "pass" if ft == "PASS" else "not_evaluated")
+                for reasons in (result["quality_issues_fr"], result["research_exclusion_reasons"]):
+                    self.assertEqual(reasons.count("filtre individuel FORMAT/FT échoué"), 1 if failed else 0)
                 if failed:
                     self.assertEqual(result["target_genotype"], "./.")
+                    self.assertFalse(result["quality_pass"])
 
     def test_missing_and_failed_quality_annotations_are_rejected(self):
         for info in ("QD=10", "QD=10;FS=0;SOR=3.2;MQ=60;MQRankSum=0;ReadPosRankSum=0"):

@@ -459,6 +459,10 @@ def export_association_audit(
     texte publié, jamais un calcul de risque. Les previews montrent seulement
     des GT explicitement présents; leurs tailles ne remplacent pas les totaux.
     ``name`` choisit le nom local des fichiers (par ex. jeremie ou juliette).
+    Des colonnes pédagogiques expliquent le trait, l'ampleur source, le
+    comparateur et les suites. Elles ne remplacent pas les valeurs brutes et
+    n'identifient jamais OR/β par devinette. Une réexportation de l'audit figé
+    suffit pour actualiser ces textes, sans relire les génomes.
     """
     if (not re.fullmatch(r"[A-Za-z0-9_-]+", name) or type(preview_per_domain) is not int
             or preview_per_domain < 0 or report.get("preview_scope")):
@@ -482,11 +486,14 @@ def export_association_audit(
     inputs = report["input_files"]
     input_sha = ";".join(item["sha256"] for item in inputs)
     catalogue_sha = report["catalogue_provenance"]["download"]["archive_sha256"]
+    from .association_interpretation import explain_gwas_association
+    explanation_fields = ["outcome_type", "meaning_fr", "magnitude_fr", "comparison_fr", "action_fr", "limitation_fr"]
     fieldnames = ["scope", "sample_id", "input_files_sha256", "catalogue_archive_sha256", "catalogue_row",
                   "rsid", "chrom_grch37", "pos_grch37", "genotype", "marker_status", "quality_pass",
                   "DP", "GQ", "AD", "FILTER", "quality_issues_fr", "domain", "reported_trait",
                   "p_value_reported", "reported_effect_allele", "effect_orientation_status",
-                  "effect_allele_copies", "reported_effect_value", "reported_effect_context", "pmid", "study_accession"]
+                  "effect_allele_copies", "reported_effect_value", "reported_effect_context", "pmid", "study_accession",
+                  *explanation_fields]
 
     def safe_cell(value):
         if isinstance(value, str) and value.lstrip().startswith(("=", "+", "-", "@")):
@@ -513,7 +520,7 @@ def export_association_audit(
                           "chrom_grch37": row["mapping"].get("chrom"), "pos_grch37": row["mapping"].get("pos"),
                           "DP": marker.get("dp"), "GQ": marker.get("gq"), "AD": json.dumps(marker.get("ad")),
                           "FILTER": marker.get("filter"), "quality_issues_fr": "; ".join(marker.get("quality_issues_fr", [])),
-                          "domain": domain}
+                          "domain": domain, **explain_gwas_association(row)}
                 writer.writerow({key: safe_cell(value) for key, value in record.items()})
         explicit_sites = len({(row["mapping"]["chrom"], row["mapping"]["pos"]) for row in observed})
         exports[domain] = {"csv_path": str(csv_path.resolve()), "sha256": _sha256(csv_path),
@@ -536,5 +543,6 @@ def export_association_audit(
                           "total_explicit_observed_associations": sum(row["genotype"] is not None for row in rows),
                           "preview_associations": len(shown), "preview_markers": len(shown_rsids)},
               "export_method_code_sha256": _sha256(Path(__file__))}
+    output["interpretation_method_code_sha256"] = _sha256(Path(__file__).with_name("association_interpretation.py"))
     (destination / f"{name}.json").write_text(json.dumps(output, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     return output

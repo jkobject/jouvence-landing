@@ -10,6 +10,8 @@ intéressante doit mener à une fiche explicative : maladie associée, manifesta
 transmission, niveau de preuve, qualité de l'appel, limites et suites possibles.
 Le français est la langue de lecture ; les symboles de gènes et noms internationaux
 des variants restent inchangés pour pouvoir retrouver les sources.
+Les associations de traits ou de biomarqueurs suivent le même contrat : résultat
+observé, physiologie, ampleur publiée, action justifiée et limite personnelle.
 
 La première page répond à quatre questions : quels résultats sont suffisamment
 documentés pour être discutés en génétique clinique ; quels signaux demandent une
@@ -263,6 +265,44 @@ de glycémie, sont étiquetées comme telles et ne justifient pas de supplément
 
 </section>
 
+<section id="associations-utiles" markdown="1">
+
+## Associations utiles : un effet compréhensible, pas une liste de valeurs P
+
+Chaque association retenue pour la lecture personnelle doit répondre aux cinq
+questions ci-dessous. Si l'effet n'est pas quantifié dans la source consultée,
+écrire « ampleur non renseignée » plutôt que fabriquer un pourcentage.
+
+| Question | Contenu attendu |
+|---|---|
+| Quel est mon résultat ? | Génotype explicitement observé, allèle d'effet et dosage si vérifiés, qualité de l'appel et statut de validation |
+| Que mesure cette association ? | Phénotype exact, organe ou fonction concernés ; distinguer association statistique, mécanisme plausible et causalité démontrée |
+| Quelle est l'ampleur publiée ? | OR, HR ou β avec intervalle de confiance lorsqu'il est publié ; unité, transformation, effet par allèle ou par groupe, population étudiée, comparateur et horizon temporel pertinent |
+| Que puis-je faire ? | Action raisonnable appuyée par les recommandations et le contexte clinique ; sinon « aucune action spécifique justifiée par ce marqueur seul » |
+| Quelle est ma limite personnelle ? | Portabilité à la personne, effets de l'environnement, données manquantes et impossibilité éventuelle d'estimer un effet individuel |
+
+L'OR décrit des rapports de cotes, le HR des rapports de taux instantanés et β
+une variation dans l'échelle étudiée : ils ne sont pas interchangeables avec
+une probabilité absolue ou une durée personnelle. Une valeur P, même très petite,
+ne donne ni l'ampleur de l'effet ni son utilité clinique. Des lignes partageant
+un locus ou des variants corrélés ne sont pas des preuves indépendantes à additionner.
+Une liste GWAS, même étendue, ne produit ni score personnel ni percentile.
+
+Un pQTL associe un variant à une mesure de protéine dans un tissu ou un liquide
+précis ; il ne révèle pas la concentration réelle chez la personne, ni son
+chronotype. Le chronotype concerne la préférence pour des horaires de sommeil
+précoces ou tardifs ; il ne se confond pas avec durée ou qualité du sommeil.
+Un même gène peut avoir des associations distinctes avec ces mesures : garder
+le phénotype et la publication propres à chaque ligne, pas une étiquette déduite
+du nom du gène. <a data-cite="sun-pqtl"></a> <a data-cite="jones-chronotype"></a>
+
+Chaque chiffre d'effet renvoie à la publication primaire et au tableau ou passage
+qui le justifie, avec un court extrait de vérification et le niveau de lecture
+réel : résumé, méthodes, résultats et/ou supplément. Un extrait du résumé ne
+remplace pas la lecture d'un tableau nécessaire à l'unité ou au comparateur.
+
+</section>
+
 <section id="qualite" data-document-only markdown="1">
 
 ## Qualité et concordance : des contrôles indépendants, pas des garanties
@@ -327,9 +367,37 @@ population. Les allèles, le brin, la référence génomique et la ploïdie sont
 harmonisés. Les génotypes inconnus produisent des bornes, pas des dosages nuls.
 <a data-cite="pgs-catalog"></a> <a data-cite="1000g"></a>
 
+<details class="explanation prose" markdown="1"><summary>Du dosage au classement : calcul et hypothèses</summary>
+
+Pour un modèle additif publié, le score brut est `S = Σᵢ wᵢ Gᵢ`, où `Gᵢ`
+est le dosage vérifié de l'allèle d'effet et `wᵢ` son poids. Ce poids peut être
+un coefficient ajusté aux corrélations entre variants : sélectionner simplement
+les plus petites valeurs P n'est pas une méthode de construction équivalente.
+Des méthodes telles que PRS-CS utilisent une référence LD et une régularisation
+des effets. <a data-cite="ge-prscs"></a>
+
+Pour des loci bialléliques diploïdes, sous Hardy–Weinberg, et avec une fréquence
+`pᵢ` de l'allèle d'effet dans la référence, la moyenne théorique est
+`μ = Σᵢ 2pᵢwᵢ`. Sous indépendance des loci, la variance théorique est
+`σ² = Σᵢ 2pᵢ(1−pᵢ)wᵢ²`. La variance réelle comprend aussi le terme
+`2Σᵢ<ⱼ wᵢwⱼ Cov(Gᵢ,Gⱼ)` : omettre ces covariances LD peut changer la dispersion,
+sans biais de même direction dans tous les modèles. Ce sont des hypothèses
+de référence, pas une validation clinique du score.
+
+Le z-score est `(S−μ)/σ`. Le convertir en percentile par une loi normale exige
+de justifier cette approximation ; peu de marqueurs ou des effets dominants
+peuvent rendre les queues peu fiables. Une comparaison empirique confronte le
+score à ceux d'individus de référence, avec mêmes allèles, sites et traitement
+des données manquantes. Fréquences alléliques et LD varient selon l'ascendance :
+décrire la population, sa représentativité et les contrôles de sensibilité.
+Ajuster moyenne et variance selon l'ascendance ne garantit pas la performance
+prédictive ou la calibration clinique dans chaque groupe. <a data-cite="pgsc-ancestry"></a>
+
+</details>
+
 Le filtre éditorial est **strictement au-delà de ±1 sigma** : `abs(z) > 1`,
 ou un intervalle entièrement au-dessus de +1 ou au-dessous de −1. Il ne suffit
-pas à rendre un score valide. Un sous-score dont les sommes ont été vérifiées
+pas à rendre un score valide et n'est pas un seuil diagnostique. Un sous-score dont les sommes ont été vérifiées
 contre un logiciel indépendant n'est pas automatiquement un substitut validé
 du PGS publié. Ces résultats de recherche restent dans un audit privé séparé,
 hors du rapport personnel, tant que leur reproduction et leur qualification
@@ -338,7 +406,8 @@ prédictive ne sont pas validées.
 Un percentile signifie « position du score dans la population de référence ».
 Ce n'est ni une probabilité de développer une maladie ni un risque à vie.
 L'âge, le contexte clinique et les autres facteurs exigent un modèle de risque
-absolu distinct, calibré et validé. Les captures d'un autre rapport ne sont
+absolu distinct, avec risque de base, horizon temporel et calibration indépendante.
+<a data-cite="nhgri-pgs"></a> Les captures d'un autre rapport ne sont
 jamais une source de poids, de génotypes ou de résultats personnels.
 
 </section>

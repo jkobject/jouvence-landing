@@ -117,6 +117,23 @@ panel ciblé PGx/nutrition/traits et génère trois HTML autonomes. Les appels
 inconnus restent inconnus ; aucun diplotype, posologie, groupe ABO définitif
 ou ascendance n'est fabriqué. Le filtre de navigation ne change aucun calcul.
 
+Le rendu v5 utilise `interpret_trait_markers()` et `render_interpretation()`
+pour partager les mêmes réponses entre cartes et panels : résultat,
+physiologie, ampleur publiée, comparateur, actions et limites. Les effets
+versionnés de `trait_effect_evidence.json` concernent trois marqueurs revus ;
+ils ne représentent pas une calibration de risque individuel. Un OR est un
+rapport d'odds, pas un risque relatif ou un pourcentage de maladie. Les autres
+profils conservent leurs explications et actions sourcées ; aucun chiffre
+personnel n'est inventé en l'absence de modèle validé.
+
+`explain_gwas_association()` distingue notamment protéine/ARN, chronotype,
+durée du sommeil et insomnie. Les CSV complets de `export_association_audit()`
+ajoutent les explications françaises à chaque ligne, sans supprimer les
+valeurs originales ni les inconnus. La colonne « OR or BETA » reste ambiguë
+sans type explicite : ni le libellé du trait ni la valeur ne permettent de
+choisir la mesure. Réexporter l'audit complet figé suffit pour une révision
+de ces textes ; un aperçu n'est pas un audit complet.
+
 ```python
 from pathlib import Path
 from tools.jouvence_genomics.html_reporting import build_genomic_reports
@@ -143,7 +160,10 @@ contiennent les sources et doivent être revues lorsqu'une recommandation ou
 classification évolue. Les cartes décrivent une maladie et sa prise en charge
 conditionnelle ; elles n'attribuent pas ce diagnostic à un porteur ou un VUS.
 
-Le panel de traits vérifie DP/GQ, AD, compatibilité de référence et FILTER.
+Le panel de traits vérifie DP/GQ, AD, compatibilité de référence, FILTER et
+FT lorsqu'il est fourni ; un autosome exige deux allèles. FT absent reste
+non documenté, un FT explicitement rejeté exclut le marqueur. X/Y ne donnent
+pas lieu à une inférence de sexe et MT conserve son périmètre provisoire.
 Les homozygotes doivent être cohérents avec les lectures. CYP3A5 *3 et un
 allèle ABO O courant correspondent ici à la référence : un site absent ne
 permet donc aucune conclusion à leur sujet. Les gènes PGx complexes, les allèles

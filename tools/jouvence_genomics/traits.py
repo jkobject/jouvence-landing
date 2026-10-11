@@ -45,7 +45,14 @@ def load_trait_markers(path: Path | None = None) -> dict:
 
 
 def _decode_call(fields: list[str], site: dict, path: Path, mt_verified: bool) -> dict:
-    """Décoder un appel explicite, ses allèles et ses limites de qualité."""
+    """Décoder un appel explicite, ses allèles et ses limites de qualité.
+
+    Un échec FORMAT/FT reste éliminatoire même avec FILTER=PASS. FT absent ou
+    « . » reste non évalué, jamais assimilé à PASS. Les autosomes nécessitent
+    deux allèles explicites : une autre ploïdie ne donne pas un dosage diploïde.
+    Aucun sexe ni nombre de chromosomes X/Y n'est inféré depuis leur GT ; MT
+    conserve sa référence obligatoire et sa limite d'hétéroplasmie.
+    """
     call = parse_sample(fields[8], fields[9])
     gt = call.get("GT", "./.")
     indexes = gt.replace("|", "/").split("/")
@@ -77,8 +84,18 @@ def _decode_call(fields: list[str], site: dict, path: Path, mt_verified: bool) -
         issues.append("référence mitochondriale NC_012920.1 non attestée")
     if any(value is None for value in alleles):
         issues.append("génotype absent, partiel ou invalide")
+    chrom = str(site["chrom"]).removeprefix("chr").upper()
+    autosome = chrom.isdigit() and 1 <= int(chrom) <= 22
+    diploid_autosome = not autosome or len(alleles) == 2
+    if not diploid_autosome:
+        issues.append("ploïdie autosomique non diploïde : génotype non interprétable")
     if fields[6] != "PASS":
         issues.append("filtre non évalué" if fields[6] == "." else "filtre échoué")
+    raw_sample_filter = call.get("FT")
+    sample_filter_status = ("not_evaluated" if raw_sample_filter in {None, "."}
+                            else "pass" if raw_sample_filter == "PASS" else "failed")
+    if sample_filter_status == "failed":
+        issues.append("filtre individuel FORMAT/FT échoué")
     if metrics["dp"] is None or metrics["dp"] < 10:
         issues.append("profondeur absente ou inférieure à 10")
     if metrics["gq"] is None or metrics["gq"] < 20:
@@ -149,8 +166,9 @@ def _decode_call(fields: list[str], site: dict, path: Path, mt_verified: bool) -
             status = "called_needs_validation"
     return {
         "path": str(path.resolve()), "raw_gt": gt, "genotype": "/".join(a or "?" for a in alleles),
-        "alleles": alleles, "effect_allele_copies": copies if None not in alleles else None,
+        "alleles": alleles, "effect_allele_copies": copies if None not in alleles and diploid_autosome else None,
         **metrics, "ad": ad, "qual": fields[5], "filter": fields[6],
+        "raw_sample_filter": raw_sample_filter, "sample_filter_status": sample_filter_status,
         "other_alts": other_alts, "allele_balance": allele_balance,
         "phased_gt": phase["phased"], "phase_block": phase["phase_block"],
         "effect_allele_haplotypes": phase["alt_haplotypes"],
@@ -185,6 +203,10 @@ def audit_traits(vcf_paths: Sequence[Path | str], markers_path: Path | None = No
     Le panel ciblé n'est pas un test complet des pharmacogènes. Les indels
     sont recherchés dans la représentation exacte documentée, sans alignement
     de référence: une représentation différente reste une limite explicite.
+    Les autosomes exigent un GT diploïde. Les GT X/Y ne déterminent ni sexe
+    chromosomique ni diplotype ; les appels mitochondriaux restent provisoires.
+    Un FORMAT/FT échoué est rejeté même si FILTER=PASS ; FT absent ou « . »
+    reste non évalué et ne crée pas une preuve de filtrage individuel réussi.
     """
     paths = [Path(path) for path in vcf_paths]
     if not paths:
@@ -258,7 +280,8 @@ def audit_traits(vcf_paths: Sequence[Path | str], markers_path: Path | None = No
         "limitations_fr": [
             "Un site absent d'un VCF de variants reste indéterminé, y compris pour un allèle cible de référence.",
             "Un marqueur observé n'est pas une maladie ni un score de risque; les effets et la validité varient selon le contexte.",
-            "Seuls les appels PASS avec DP ≥ 10 et GQ ≥ 20 sans incohérence détectée sont descriptivement utilisables; ces seuils ne remplacent pas une validation analytique.",
+            "Seuls les appels PASS avec DP ≥ 10 et GQ ≥ 20 sans incohérence détectée sont descriptivement utilisables; un FORMAT/FT échoué reste éliminatoire. Ces seuils ne remplacent pas une validation analytique.",
+            "Les autosomes exigent un GT diploïde explicite. Les GT X/Y ne déterminent ni sexe chromosomique ni nombre de chromosomes ; MT conserve sa limite d'hétéroplasmie.",
             "AD doit être valide; pour un homozygote/haploïde, l'allèle appelé doit porter au moins 80 % des lectures comptées. Ce contrôle descriptif ne démontre pas la causalité.",
             "Les indels sont recherchés dans leur représentation exacte: un autre alignement nécessite une normalisation avec séquence de référence.",
             "Aucune prescription, dose, restriction alimentaire ou supplément n'est déterminé automatiquement.",

@@ -11,6 +11,8 @@ import re
 from collections import defaultdict
 
 from .patient_view import select_patient_signals
+from .trait_interpretation import interpret_trait_markers
+from .association_interpretation import explain_gwas_association
 
 
 def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
@@ -66,15 +68,17 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
         grouped[marker["profile"]].append(marker)
     for profile, markers in grouped.items():
         first = markers[0]
+        explanation = interpret_trait_markers(markers)
         panels.append({"id": "trait-" + profile, "title": first.get("titre_fr", first["gene"]),
             "category": categories[first["category"]], "kind": "genetic",
             "status": "called" if all(m["quality_pass"] for m in markers) else "provisional",
-            "summary": f"{len(markers)} marqueur(s) observé(s), sans diplotype ni diagnostic automatique.",
-            "interpretation_fr": first["explanation_fr"] + " " + first["next_steps_fr"],
-            "sources": [{"url": url} for url in first["sources"] if "/refsnp/" not in url],
+            "summary": explanation["result_fr"],
+            "interpretation_fr": explanation["meaning_fr"], "explanation": explanation,
+            "sources": explanation["sources"],
             "variants": [{"gene": m["gene"], "rsid": m["rsid"], "chrom": m["chrom"], "pos": m["pos"],
                 "ref": m["ref"], "alt": m["alt"], "genotype": m["genotype"],
                 "effect_allele": m["effect_allele"], "dosage": m["effect_allele_copies"],
+                "sample_filter": m.get("raw_sample_filter"), "sample_filter_status": m.get("sample_filter_status"),
                 "dp": m["dp"], "gq": m["gq"], "ad": m["ad"], "status": m["status"],
                 "quality_issues": m["quality_issues_fr"]} for m in markers]})
     # Le calcul et sa qualification précèdent le rendu. Un audit incomplet
@@ -115,16 +119,24 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
         markers = {row["rsid"]: row for row in associations["markers"]}
         for domain, rows in grouped_associations.items():
             variants = []
+            examples = {}
             for row in rows:
                 marker = markers[row["rsid"]]
                 mapping = marker["mapping"]
+                explanation = explain_gwas_association(row)
+                examples.setdefault(explanation["outcome_type"], {"title": row["reported_trait"],
+                    "result_fr": f"{row['rsid']} · {row['genotype']} : {explanation['meaning_fr']}",
+                    "meaning_fr": explanation["meaning_fr"], "magnitude_fr": [explanation["magnitude_fr"]],
+                    "comparison_fr": explanation["comparison_fr"], "actions_fr": [explanation["action_fr"]],
+                    "limitations_fr": [explanation["limitation_fr"]], "sources": []})
                 variants.append({"rsid": row["rsid"], "chrom": mapping.get("chrom"), "pos": mapping.get("pos"),
                     "genotype": row["genotype"], "effect_allele": row["effect_allele_grch37"],
+                    "dosage": row.get("effect_allele_copies"),
                     "phenotype": row["reported_trait"], "p_value": row["p_value"], "pmid": row["pmid"],
                     "source_study": row["study_accession"], "status": row["marker_status"],
                     "reported_effect_value": row.get("reported_effect_value"),
                     "reported_effect_context": row.get("reported_effect_context"),
-                    "quality_issues": marker.get("quality_issues_fr", [])})
+                    "quality_issues": marker.get("quality_issues_fr", []), **explanation})
             export = associations.get("domain_exports", {}).get(domain)
             panels.append({"id": "gwas-" + domain, "title": TRAIT_DOMAINS[domain]["label_fr"],
                 "category": "Associations publiées : exploration, pas un diagnostic", "kind": "genetic", "status": "research_only",
@@ -133,8 +145,11 @@ def build_report_panels(records: list[dict], traits: dict, catalog: dict, *,
                             if export else f"{len(rows)} associations publiées croisées avec {len({r['rsid'] for r in rows})} marqueurs explicitement appelés."),
                 **({"download_csv": "GWAS-" + domain + ".csv", "download_label": "Exporter toutes les associations de ce domaine (CSV) ↓"} if export else {}),
                 "interpretation_fr": "Chaque ligne décrit une association statistique dans une étude, pas une maladie détectée chez vous. "
-                    "Une même variante peut apparaître dans plusieurs études ou mesures. Aucun effet n’est additionné : "
-                    "ni score, ni percentile, ni prédisposition personnelle ne sont déduits de cette liste. Les phénotypes source restent dans leur langue originale.",
+                    "Les explications distinguent une mesure moléculaire (protéine, ARN) d'un trait comme le chronotype. "
+                    "La valeur P mesure la preuve statistique dans l'étude, pas l'importance de l'effet chez vous. "
+                    "Une même variante peut apparaître dans plusieurs études ; ces lignes ne sont pas indépendantes. "
+                    "Leur somme ne constitue pas un score polygénique : aucun pourcentage personnel n'en est déduit.",
+                "association_explanations": list(examples.values()),
                 "provenance_fr": ("Aperçu limité aux génotypes explicitement observés, classé par valeur P dans chaque domaine. "
                                   "Ces lignes ne sont pas des résultats indépendants ; le périmètre technique reste dans l’audit JSON."
                                   if associations.get("preview_scope") else "Toutes les observations retenues de ce domaine sont présentées."),

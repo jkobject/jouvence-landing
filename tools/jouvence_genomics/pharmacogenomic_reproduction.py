@@ -171,7 +171,7 @@ def _audit_snp(fields: list[str], site: dict, path: Path) -> dict:
     # PharmCAT ne doit jamais tronquer un GT triploïde ou compléter un haploïde.
     if len(call["alleles"]) != 2:
         extra_issues.append("ploïdie non diploïde ou ambiguë : hors contrat de cet essai")
-    if ft_status == "failed":
+    if ft_status == "failed" and "filtre individuel FORMAT/FT échoué" not in call["quality_issues_fr"]:
         extra_issues.append("filtre individuel FORMAT/FT échoué")
     issues = [issue for issue in call["quality_issues_fr"] if issue != "filtre non évalué"]
     issues.extend(extra_issues)

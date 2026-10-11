@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-11",
+  "description_fr": "Effets publiés de trois marqueurs : susceptibilité commune au diabète de type 2 et statut sécréteur FUT2. Catalogue éducatif générique, indépendant de tout génotype personnel. Les odds ratios et hazard ratios ne sont pas des probabilités absolues ; aucun effet n'est additionné entre gènes.",
+  "markers": {
+    "rs7903146": {
+      "gene": "TCF7L2",
+      "effect_allele": "T",
+      "meaning_fr": "TCF7L2 participe à la régulation des cellules du pancréas qui sécrètent l'insuline. L'allèle T de ce marqueur commun est associé à des odds plus élevées de diabète de type 2 ; il ne désactive pas à lui seul le gène et ne diagnostique ni diabète ni prédiabète. Cette association ne démontre pas un effet cardiaque propre au marqueur.",
+      "confidence_fr": "Association au diabète de type 2 reproduite dans plusieurs populations. L'estimation ci-dessous est celle d'une étude finlandaise précise, pas une mesure individuelle ni une valeur universelle.",
+      "reading_depth": "full_text",
+      "effects": [
+        {
+          "kind": "odds_ratio",
+          "value": 1.33,
+          "ci95": [1.14, 1.56],
+          "unit": "odds_ratio",
+          "population_fr": "Finlande : effectifs recrutés de 1 151 personnes avec diabète de type 2 et 953 témoins à tolérance glucidique normale, issus de FUSION et de Finrisk 2002. Les analyses d'association excluent 34 personnes sans lieu de naissance renseigné ; l'effectif exactement génotypé à ce SNP n'est pas assimilé à l'effectif recruté.",
+          "n": 2104,
+          "n_definition": "recruited_not_effect_specific_analyzed_n",
+          "comparison_fr": "Par allèle T supplémentaire à rs7903146, comparé à l'allèle C ; modèle sur le nombre d'allèles T, et non comparaison directe publiée de TT versus CC.",
+          "model": "log_additive",
+          "source": {
+            "title": "Scott et al. (2006) — Association of transcription factor 7-like 2 (TCF7L2) variants with type 2 diabetes in a Finnish sample",
+            "url": "https://fusion.sph.umich.edu/Pubs/papers/TCF7L2_scott.pdf"
+          },
+          "scope_fr": "Association cas-témoins au diabète de type 2. Un OR de 1,33 signifie des odds multipliées par 1,33 dans ce modèle ; il ne signifie pas une hausse de 33 points de probabilité, ni un risque absolu, ni une prédiction de glycémie. Les IC95 % concernent l'effet de population."
+        }
+      ],
+      "actions_fr": [
+        "Pour décider d'un dépistage, faire le point avec le médecin sur l'âge, le poids/IMC, les antécédents familiaux, un éventuel diabète gestationnel, les traitements et les résultats biologiques antérieurs ; le marqueur seul ne fixe pas une fréquence de contrôle.",
+        "Suivre le protocole du pays de soins. En France, le guide HAS de juin 2025 recommande une glycémie veineuse après 10 à 12 heures de jeûne chez les personnes repérées à risque ; un prédiabète biologique conduit à un contrôle annuel. Le rythme peut être de 1 à 3 ans selon le risque lorsqu'il n'y a pas de prédiabète.",
+        "Ne pas confondre les seuils : le guide français retient une glycémie à jeun de 1,10 à 1,25 g/L pour le prédiabète ; l'ADA 2026 retient notamment 1,00 à 1,25 g/L ou une HbA1c de 5,7 à 6,4 %. L'HbA1c est admise par l'ADA mais n'est pas recommandée comme test de dépistage du diabète de type 2 en France dans ce guide HAS.",
+        "Une alimentation équilibrée et une activité physique régulière sont des mesures générales de prévention. Si un prédiabète ou un risque clinique élevé est confirmé, discuter d'un accompagnement adapté ; aucune prise de médicament ou de complément n'est déduite de ce SNP."
+      ],
+      "limitations_fr": [
+        "Les odds sont le rapport p/(1-p), pas la probabilité p. Aucun risque à vie, à dix ans ou pourcentage personnel n'est calculable à partir de cet OR seul.",
+        "Le modèle log-additif s'applique aux copies de cet allèle dans cette étude ; il n'autorise pas à additionner ou multiplier arbitrairement les effets de TCF7L2 et d'autres gènes.",
+        "Une association commune n'est pas une mutation mendélienne causale ni une indication de PGT, de traitement ou de surveillance cardiaque spécifique.",
+        "Les valeurs de risque relatif 1,45 et 2,41 de l'abstract de Grant et al. (2006) portent sur les allèles à risque du microsatellite DG10S478 ; ne pas les recopier comme estimations CT/TT de rs7903146.",
+        "Le guide HAS 2025 indique que les principes de dépistage doivent être actualisés. La publication HAS de janvier 2026 consultée est une note de cadrage, pas une nouvelle recommandation achevée."
+      ],
+      "sources": [
+        {
+          "title": "Scott et al. (2006) — Association of transcription factor 7-like 2 (TCF7L2) variants with type 2 diabetes in a Finnish sample",
+          "url": "https://fusion.sph.umich.edu/Pubs/papers/TCF7L2_scott.pdf",
+          "reading_depth": "full_text",
+          "supporting_quote": "rs7903146 (1.33 [1.14–1.56], P = 0.00042)",
+          "confidence_fr": "Étude primaire ; effectif, allèle T et modèle additif vérifiés dans le texte et le tableau 2."
+        },
+        {
+          "title": "Grant et al. (2006) — Variant of transcription factor 7-like 2 (TCF7L2) gene confers risk of type 2 diabetes",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16415884/",
+          "reading_depth": "abstract",
+          "supporting_quote": "A microsatellite, DG10S478, within intron 3",
+          "confidence_fr": "Source de la réserve sur la confusion entre le microsatellite et rs7903146 ; pas d'effet numérique repris de cet abstract."
+        },
+        {
+          "title": "HAS (juin 2025) — Parcours de soins du patient adulte vivant avec un diabète de type 2, pages 9–13",
+          "url": "https://www.has-sante.fr/upload/docs/application/pdf/2025-07/parcours_de_soins_du_patient_adulte_vivant_avec_un_diabete_de_type_2_-_guide_2025-07-15_16-42-8_797.pdf",
+          "reading_depth": "full_text_relevant_sections",
+          "supporting_quote": "Le test recommandé est la glycémie veineuse",
+          "confidence_fr": "Recommandation officielle française ; test, seuils, fréquence et limites de l'HbA1c lus dans les sections 1 et 2."
+        },
+        {
+          "title": "ADA (2026) — Diagnosis and Classification of Diabetes: Standards of Care in Diabetes",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12690183/",
+          "reading_depth": "published_recommendation_sections",
+          "supporting_quote": "screening should begin at age 35 years",
+          "confidence_fr": "Recommandation professionnelle américaine ; critères non interchangeables avec le protocole français."
+        },
+        {
+          "title": "HAS (janvier 2026) — Dépistage du diabète de type 2 : actualisation des critères d'entrée dans le dépistage, note de cadrage",
+          "url": "https://www.has-sante.fr/jcms/p_3826415/fr/depistage-du-diabete-de-type-2-actualisation-des-criteres-d-entree-dans-le-depistage",
+          "reading_depth": "official_source_page",
+          "supporting_quote": "pour actualiser la recommandation de santé publique",
+          "confidence_fr": "Preuve d'un travail d'actualisation annoncé ; aucune nouvelle règle de dépistage déduite de cette note."
+        }
+      ]
+    },
+    "rs10830963": {
+      "gene": "MTNR1B",
+      "effect_allele": "G",
+      "meaning_fr": "MTNR1B code un récepteur de la mélatonine présent notamment dans les cellules du pancréas. La mélatonine peut freiner la libération d'insuline ; l'allèle G de ce marqueur commun est associé à une glycémie à jeun légèrement plus élevée et à des odds modestement plus élevées de diabète de type 2. Ce n'est ni un diagnostic ni une preuve d'effet cardiaque propre au marqueur.",
+      "confidence_fr": "Association à la glycémie à jeun reproduite dans plusieurs cohortes européennes ; effet moyen faible. L'essai sur l'horaire du dîner soutient un mécanisme aigu, pas une prévention à long terme démontrée ni un régime personnalisé validé.",
+      "reading_depth": "full_text",
+      "effects": [
+        {
+          "kind": "mean_difference",
+          "value": 0.07,
+          "ci95": [0.06, 0.08],
+          "unit": "mmol/L",
+          "population_fr": "Dix études d'association pangénomique réunissant 36 610 personnes d'ascendance européenne, après exclusion des personnes ayant un diabète connu pour l'analyse de glycémie.",
+          "n": 36610,
+          "comparison_fr": "Différence moyenne de glycémie à jeun par allèle G supplémentaire à rs10830963, comparé à l'allèle C.",
+          "model": "additive",
+          "source": {
+            "title": "Prokopenko et al. (2009) — Variants in the melatonin receptor 1B gene (MTNR1B) influence fasting glucose levels",
+            "url": "https://www.genome.gov/Pages/Research/DIR/VariantsMTNR1BFasting.pdf"
+          },
+          "scope_fr": "Différence moyenne de population en mmol/L, pas une valeur attendue ou mesurée chez une personne. L'effet ne suffit pas à atteindre ou exclure un seuil de prédiabète."
+        },
+        {
+          "kind": "odds_ratio",
+          "value": 1.09,
+          "ci95": [1.05, 1.12],
+          "unit": "odds_ratio",
+          "population_fr": "Treize études cas-témoins de diabète de type 2 : 18 236 cas et 64 453 témoins, principalement de populations européennes.",
+          "n": 82689,
+          "comparison_fr": "Par allèle G supplémentaire à rs10830963, comparé à l'allèle C ; modèle multiplicatif sur les odds.",
+          "model": "log_additive",
+          "source": {
+            "title": "Prokopenko et al. (2009) — Variants in the melatonin receptor 1B gene (MTNR1B) influence fasting glucose levels",
+            "url": "https://www.genome.gov/Pages/Research/DIR/VariantsMTNR1BFasting.pdf"
+          },
+          "scope_fr": "Association au diabète de type 2, non risque relatif ni probabilité personnelle. Ne pas transformer 1,09 en 9 points de risque ou le multiplier par l'effet d'un autre gène."
+        }
+      ],
+      "context_fr": "Garaulet et al. (2022) ont mené un essai randomisé croisé chez 845 adultes espagnols d'ascendance européenne, sans diabète : une charge orale de 75 g de glucose après huit heures de jeûne était administrée soit quatre heures, soit une heure avant le coucher habituel. Dans la condition tardive versus précoce, l'aire sous la courbe de glucose augmentait de 8,3 % et celle de l'insuline diminuait de 6,7 % dans l'ensemble du groupe ; l'effet sur le glucose était plus fort chez les porteurs de G (interaction p = 0,009). Ce sont des réponses aiguës à une charge de glucose simulant l'horaire d'un dîner, pas une mesure de repas ordinaire, une incidence de diabète ou une preuve que dîner plus tôt prévient la maladie à long terme. Aucun IC95 % de ces deux pourcentages n'est fourni dans l'abstract.",
+      "context_source": {
+        "title": "Garaulet et al. (2022) — Interplay of Dinner Timing and MTNR1B Type 2 Diabetes Risk Variant on Glucose Tolerance and Insulin Secretion: A Randomized Crossover Trial",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8918262/"
+      },
+      "actions_fr": [
+        "Pour décider d'un dépistage, examiner avec le médecin les facteurs de risque cliniques et les résultats biologiques ; l'allèle G seul ne définit ni prédiabète, ni fréquence de contrôle, ni traitement.",
+        "En France, suivre la glycémie veineuse à jeun et la fréquence de contrôle du protocole HAS, adaptés aux facteurs de risque. Ne pas appliquer automatiquement les seuils américains d'HbA1c ou de glycémie au protocole français.",
+        "Si cela est compatible avec les habitudes de vie, éviter de concentrer une grosse charge glucidique immédiatement avant le coucher. C'est une prudence cohérente avec l'essai aigu, pas une prescription horaire ou un bénéfice de prévention garanti pour un génotype.",
+        "En cas d'utilisation ou de projet d'utilisation de mélatonine, discuter de son indication et de son horaire par rapport aux repas avec le médecin ou le pharmacien. Aucun dosage, arrêt de traitement ou complément n'est recommandé à partir de ce SNP.",
+        "Privilégier les mesures générales de prévention : alimentation équilibrée, activité physique régulière et accompagnement du prédiabète s'il est confirmé biologiquement. Une recommandation de perte de poids exige de connaître le contexte pondéral."
+      ],
+      "limitations_fr": [
+        "Les effets de glycémie et de diabète ont des dénominateurs et des unités différents : ne pas les fusionner en une probabilité ou un score.",
+        "Le modèle par allèle décrit une association moyenne dans les populations étudiées, pas une mesure de sécrétion d'insuline chez un porteur particulier. Le rôle des autres variants et des facteurs de vie n'est pas résumé par ce locus.",
+        "Les effets d'une mélatonine physiologique, d'une dose pharmacologique, d'un horaire de repas et d'un horaire de sommeil ne sont pas interchangeables. Des essais à fortes doses et avec d'autres protocoles ne retrouvent pas tous le même effet glycémique ou la même interaction génotypique.",
+        "L'essai de dîner ne teste pas l'apparition de diabète à long terme et ne justifie pas une supplémentation, un régime strict ou un traitement selon le génotype.",
+        "Aucun risque cardiaque personnel ou maladie mendélienne ne peut être déduit de ces observations. Aucun effet n'est additionné à celui de TCF7L2."
+      ],
+      "sources": [
+        {
+          "title": "Prokopenko et al. (2009) — Variants in the melatonin receptor 1B gene (MTNR1B) influence fasting glucose levels",
+          "url": "https://www.genome.gov/Pages/Research/DIR/VariantsMTNR1BFasting.pdf",
+          "reading_depth": "full_text",
+          "supporting_quote": "increase of 0.07 (95% CI = 0.06–0.08) mmol/l",
+          "confidence_fr": "Étude primaire avec méta-analyse de cohortes ; allèle G, IC95 %, effectifs et analyse T2D vérifiés dans le texte."
+        },
+        {
+          "title": "Garaulet et al. (2022) — Interplay of Dinner Timing and MTNR1B Type 2 Diabetes Risk Variant on Glucose Tolerance and Insulin Secretion: A Randomized Crossover Trial",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8918262/",
+          "reading_depth": "full_text_methods_results_and_mechanistic_context",
+          "supporting_quote": "6.7% lower insulin AUC and 8.3% higher glucose AUC",
+          "confidence_fr": "Essai randomisé croisé humain ; comparateur, charge orale, effectif et interaction vérifiés. Pertinence pour la réponse aiguë, pas prévention clinique à long terme."
+        },
+        {
+          "title": "Kampmann et al. (2021, publication en ligne 2020) — Acute metabolic effects of melatonin: A randomized crossover study in healthy young men",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33220095/",
+          "reading_depth": "abstract",
+          "supporting_quote": "Glucose during the IVGTT was unaffected",
+          "confidence_fr": "Essai primaire chez 20 hommes, quatre doses de 10 mg ; résultat discordant sur le glucose, avec un protocole non équivalent à l'essai de dîner."
+        },
+        {
+          "title": "HAS (juin 2025) — Parcours de soins du patient adulte vivant avec un diabète de type 2, pages 9–13",
+          "url": "https://www.has-sante.fr/upload/docs/application/pdf/2025-07/parcours_de_soins_du_patient_adulte_vivant_avec_un_diabete_de_type_2_-_guide_2025-07-15_16-42-8_797.pdf",
+          "reading_depth": "full_text_relevant_sections",
+          "supporting_quote": "activité physique et alimentation équilibrée",
+          "confidence_fr": "Recommandation officielle pour la prévention et le suivi du prédiabète ; ne décide pas d'un traitement selon ce SNP."
+        }
+      ]
+    },
+    "rs601338": {
+      "gene": "FUT2",
+      "effect_allele": "A",
+      "meaning_fr": "FUT2 code une enzyme qui ajoute du fucose à certains sucres présents à la surface des muqueuses et dans les sécrétions. Un profil sécréteur permet notamment la présence d'antigènes solubles H, A ou B dans la salive selon le groupe ABO ; un profil non-sécréteur en réduit ou en supprime la présence. Cela ne signifie pas une absence de salive ou de mucus. Le statut sécréteur est un trait physiologique courant, pas un diagnostic de maladie, et ne détermine pas le groupe ABO des globules rouges.",
+      "confidence_fr": "L'allèle A de rs601338 est un variant stop de FUT2, décrit comme p.Trp143Ter ou p.Trp154Ter selon le transcrit. Deux copies sont compatibles avec un profil non-sécréteur ; une copie conserve généralement un profil sécréteur. Les associations aux infections et aux concentrations de B12 dépendent du phénotype, de la population et de l'étude ; elles ne constituent pas un pronostic individuel.",
+      "reading_depth": "full_text_relevant_sections",
+      "genotype_findings_fr": {
+        "0": {
+          "meaning_fr": "Pour un génotype G/G explicitement appelé et de qualité suffisante, aucun allèle A non-sécréteur ciblé n'est détecté. Cela est compatible avec un profil sécréteur à ce marqueur, sans exclure d'autres variants de FUT2. Aucune concentration personnelle de B12 n'est déduite de ce résultat.",
+          "actions_fr": [
+            "Aucune action médicale spécifique sur ce seul marqueur. Un groupe sanguin destiné aux soins doit être déterminé par un typage approprié."
+          ]
+        },
+        "1": {
+          "meaning_fr": "Pour un génotype G/A explicitement appelé et de qualité suffisante, une copie de l'allèle stop est présente, mais l'autre copie conserve généralement la fonction sécrétrice à ce site : ce n'est pas un statut « à moitié non-sécréteur ». Les comparaisons non-sécréteurs versus sécréteurs ou A/A versus G/G ne permettent pas d'appliquer un demi-effet à G/A, ni de lui attribuer la concentration moyenne de G/G.",
+          "actions_fr": [
+            "Aucun traitement ou régime spécifique n'est justifié par cette hétérozygotie. Garder les mesures habituelles d'hygiène et décider d'un bilan B12 d'après le contexte clinique, pas le génotype seul."
+          ]
+        },
+        "2": {
+          "meaning_fr": "Pour un génotype A/A explicitement appelé et de qualité suffisante, les deux copies portent le variant stop, compatible avec un statut non-sécréteur. Ce trait n'est ni une maladie, ni une protection universelle contre les infections, ni une preuve de bonne absorption ou de suffisance en vitamine B12.",
+          "actions_fr": [
+            "Pas de traitement, de supplément ou de dépistage spécifique sur ce seul résultat. Les symptômes et facteurs de risque restent les critères pour discuter d'un bilan médical."
+          ]
+        }
+      },
+      "effects": [
+        {
+          "kind": "hazard_ratio",
+          "value": 0.5,
+          "ci95": [0.3, 0.9],
+          "unit": "hazard_ratio",
+          "population_fr": "Cohorte de naissance au Nicaragua : 443 enfants suivis jusqu'à trois ans, avec visites hebdomadaires entre 2017 et 2020, recherche de norovirus dans les selles et statut sécréteur déterminé par les antigènes de la salive et du sang.",
+          "n": 443,
+          "comparison_fr": "Phénotype non-sécréteur versus sécréteur : délai jusqu'au premier épisode de gastroentérite symptomatique à norovirus. Ce n'est pas une comparaison directement génotypée de rs601338 A/A versus G/G.",
+          "model": "secretor_phenotype_comparison",
+          "applicable_effect_copies": [2],
+          "source": {
+            "title": "Reyes et al. (2022, en ligne 2021) — Secretor Status Strongly Influences the Incidence of Symptomatic Norovirus Infection in a Genotype-Dependent Manner in a Nicaraguan Birth Cohort",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8730499/"
+          },
+          "scope_fr": "Estimation de population chez de jeunes enfants, fournie seulement comme contexte du phénotype compatible avec A/A. Un HR de 0,5 compare des taux instantanés d'événement ; il ne donne ni probabilité personnelle ni protection de 50 % contre tout norovirus. L'association dépend du génotype viral ; elle n'est pas appliquée à G/A et ne s'extrapole pas automatiquement aux adultes."
+        },
+        {
+          "kind": "geometric_mean_concentration",
+          "value": 496.6,
+          "ci95": [477.89, 516.04],
+          "unit": "pg/mL",
+          "population_fr": "Nurses' Health Study, États-Unis : analyse GWAS de 1 658 femmes d'ascendance européenne déclarée, âgées en moyenne de 59 ans. rs601338 était imputé dans cette analyse, et non directement mesuré chez toutes les participantes.",
+          "n": 1658,
+          "comparison_fr": "B12 plasmatique : moyenne géométrique publiée pour A/A de 496,60 pg/mL (IC95 % 477,89–516,04), comparée à 418,32 pg/mL (IC95 % 403,36–433,84) pour G/G. Ces valeurs ne sont pas des différences moyennes ni des risques de carence.",
+          "model": "genotype_group_geometric_mean",
+          "applicable_effect_copies": [2],
+          "source": {
+            "title": "Hazra et al. (2008) — Common variants of FUT2 are associated with plasma vitamin B12 levels",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2673801/"
+          },
+          "scope_fr": "Deux moyennes de groupes issues du tableau 1, pas une B12 attendue chez une personne. La valeur et l'IC structurés décrivent le groupe A/A, pas l'incertitude d'un effet causal. La comparaison A/A versus G/G ne s'applique pas à G/A ; aucun modèle proportionnel au nombre d'allèles n'est utilisé. La réplication de l'étude utilisait le marqueur proxy rs492602 ; ses effectifs ne sont pas fusionnés ici avec ceux de rs601338."
+        }
+      ],
+      "context_fr": "Une étude mécanistique et de réplication irlandaise distingue la B12 totale de ses transporteurs : l'association de FUT2 à la B12 totale concernait surtout la fraction liée à l'haptocorrine. Dans la cohorte âgée, l'association à la fraction liée à la transcobalamine, utilisée comme marqueur de B12 active, n'était pas significative (p = 0,46). Une concentration totale plus élevée associée au génotype ne démontre donc pas une meilleure absorption, une meilleure disponibilité cellulaire ou l'absence de carence ; ce mécanisme ne justifie pas de supplémentation génétique.",
+      "context_source": {
+        "title": "Velkova et al. (2017) — The FUT2 secretor variant p.Trp154Ter influences serum vitamin B12 concentration via holo-haptocorrin, but not holo-transcobalamin, and is associated with haptocorrin glycosylation",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5886113/"
+      },
+      "actions_fr": [
+        "Si aucun symptôme ou facteur de risque clinique n'est présent, ce marqueur seul ne demande ni traitement, ni examen supplémentaire, ni régime particulier.",
+        "Continuer les mesures habituelles contre les gastroentérites : lavage des mains au savon et à l'eau ; un statut non-sécréteur ne dispense pas des précautions, et le gel hydroalcoolique ne remplace pas ce lavage contre le norovirus.",
+        "En cas de symptômes ou de risque de carence en B12, discuter avec un professionnel du dosage et de son interprétation ; une mesure complémentaire, telle que l'acide méthylmalonique, peut être utile selon le contexte. Ne pas modifier une supplémentation ou ignorer une suspicion de carence à partir de FUT2 seul.",
+        "Si une confirmation du statut sécréteur a une utilité clinique précise, discuter d'un typage des antigènes salivaires ou d'une analyse plus complète de FUT2. Pour une transfusion ou des soins, utiliser un typage sanguin indépendant.",
+        "Aucun probiotique, prébiotique, antibiotique, régime spécifique ou indication de PGT n'est proposé sur ce seul marqueur."
+      ],
+      "limitations_fr": [
+        "Une absence de ligne dans un VCF de variants, un génotype incomplet ou un appel rejeté au contrôle qualité ne signifie pas zéro copie de A : le résultat est indéterminé. Les interprétations 0/1/2 exigent un génotype diploïde explicite, des allèles correctement orientés et un assemblage vérifié.",
+        "Un seul marqueur ne recherche pas tous les allèles de fonction réduite ou nulle de FUT2. Le nom du changement protéique dépend du transcrit ; p.Trp143Ter et p.Trp154Ter ne doivent pas être comptés comme deux variants indépendants de ce marqueur.",
+        "Les effets chiffrés sont limités au contexte A/A compatible avec le phénotype non-sécréteur ; G/A est généralement sécréteur et ne reçoit pas un demi-HR ni la comparaison B12 A/A versus G/G.",
+        "La moindre susceptibilité à certaines souches de norovirus n'est pas une protection universelle. Des infections symptomatiques GII.2 ont été documentées chez des non-sécréteurs.",
+        "La B12 totale varie avec les apports, les maladies, les traitements et ses protéines de transport. Les IC95 % de moyennes de groupes ne constituent ni un intervalle de concentration personnelle ni un test de suffisance fonctionnelle.",
+        "Ce marqueur ne permet ni de diagnostiquer une maladie de Crohn, ni de calculer un risque absolu de maladie, ni de déterminer ABO/Rh. Aucun odds ratio de Crohn ni score combinant indépendamment ces associations n'est calculé."
+      ],
+      "sources": [
+        {
+          "title": "Dean (2005), NCBI Bookshelf — Blood Groups and Red Cell Antigens, The Hh blood group",
+          "url": "https://www.ncbi.nlm.nih.gov/sites/books/NBK2268/",
+          "reading_depth": "full_text_relevant_sections",
+          "supporting_quote": "H antigen is present on RBCs.",
+          "confidence_fr": "Référence physiologique officielle : distinction FUT1/FUT2, antigènes des globules rouges et antigènes solubles des sécrétions."
+        },
+        {
+          "title": "Reyes et al. (2022, en ligne 2021) — Secretor Status Strongly Influences the Incidence of Symptomatic Norovirus Infection in a Genotype-Dependent Manner in a Nicaraguan Birth Cohort",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8730499/",
+          "reading_depth": "full_text_methods_results_and_tables",
+          "supporting_quote": "HR, 0.5 [95% CI, .3–.9]",
+          "confidence_fr": "Étude primaire : effectif, phénotypage du statut sécréteur, suivi et comparateur du HR vérifiés. Association locale dépendante du génotype viral, non modèle de risque individuel."
+        },
+        {
+          "title": "Lindesmith et al. (2020) — Virus–Host Interactions Between Nonsecretors and Human Norovirus",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7301201/",
+          "reading_depth": "full_text_results",
+          "supporting_quote": "all 4 nonsecretors were infected with GII.2 CH",
+          "confidence_fr": "Observation primaire d'infections chez des non-sécréteurs, utile pour exclure une interprétation de protection universelle ; aucun taux de risque déduit de ces quatre personnes."
+        },
+        {
+          "title": "Hazra et al. (2008) — Common variants of FUT2 are associated with plasma vitamin B12 levels",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2673801/",
+          "reading_depth": "full_text_table_1_and_methods",
+          "supporting_quote": "Geometric Mean (95% CI), pg/ml",
+          "confidence_fr": "Étude primaire : unités, moyennes géométriques, IC95 %, effectif de découverte et imputation de rs601338 vérifiés. La réplication par proxy est distinguée."
+        },
+        {
+          "title": "Velkova et al. (2017) — The FUT2 secretor variant p.Trp154Ter influences serum vitamin B12 concentration via holo-haptocorrin, but not holo-transcobalamin, and is associated with haptocorrin glycosylation",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5886113/",
+          "reading_depth": "full_text_methods_results_and_discussion",
+          "supporting_quote": "but not holoTC (P = 0.46)",
+          "confidence_fr": "Étude primaire : qualification mécanistique et résultat de la cohorte âgée, sans conclure à une absorption améliorée ni à une absence de carence."
+        },
+        {
+          "title": "CDC — How to Prevent Norovirus",
+          "url": "https://www.cdc.gov/norovirus/prevention/",
+          "reading_depth": "official_source_page",
+          "supporting_quote": "Wash hands well with soap and water",
+          "confidence_fr": "Conseil officiel d'hygiène applicable indépendamment du statut sécréteur ; pas une intervention spécifique au génotype."
+        },
+        {
+          "title": "MedlinePlus — Methylmalonic Acid (MMA) Test",
+          "url": "https://medlineplus.gov/lab-tests/methylmalonic-acid-mma-test/",
+          "reading_depth": "official_source_page",
+          "supporting_quote": "You may need this test if you have symptoms",
+          "confidence_fr": "Référence officielle sur l'exploration d'une suspicion de carence en B12. N'établit pas un dépistage systématique fondé sur FUT2."
+        }
+      ]
+    }
+  }
+}

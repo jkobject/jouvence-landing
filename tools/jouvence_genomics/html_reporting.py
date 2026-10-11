@@ -62,6 +62,11 @@ GENERAL_SOURCES = {
     "pgs-catalog": {"label": "PGS Catalog : poids et métadonnées publics des scores", "url": "https://www.pgscatalog.org/downloads/"},
     "1000g": {"label": "1000 Genomes : populations et variations de référence", "url": "https://www.internationalgenome.org/data-portal/population"},
     "clinvar-review": {"label": "ClinVar : niveaux de revue et critères des assertions", "url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/review_status/"},
+    "pgsc-ancestry": {"label": "PGS Catalog Calculator : comparaison et ajustement selon l'ascendance", "url": "https://pgsc-calc.readthedocs.io/en/latest/explanation/geneticancestry.html"},
+    "nhgri-pgs": {"label": "NHGRI : scores polygéniques et risque absolu (fiche 2020)", "url": "https://www.genome.gov/Health/Genomics-and-Medicine/Polygenic-risk-scores"},
+    "jones-chronotype": {"label": "Jones et al. (2019) : chronotype et validation par activité mesurée", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6351539/"},
+    "ge-prscs": {"label": "Ge et al. (2019) : estimation de scores avec corrélations LD", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6467998/"},
+    "sun-pqtl": {"label": "Sun et al. (2018) : variants et niveaux de protéines plasmatiques", "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6697541/"},
 }
 
 
@@ -376,6 +381,7 @@ def build_genomic_reports(
     skill_scripts: Path,
     refresh_traits: bool = True,
     report_date: str | None = None,
+    report_version: str = "v5.0 · effets contextualisés",
     ancestry_results: dict[str, Path] | None = None,
     polygenic_results: dict[str, Path] | None = None,
     ancestry_reference_projection: Path | None = None,
@@ -396,6 +402,9 @@ def build_genomic_reports(
         seulement si les empreintes des entrées, du panel et du décodeur sont identiques.
     report_date : str | None
         Date de revue au format ISO ; par défaut, date courante en UTC.
+    report_version : str
+        Révision de présentation, distincte de la date du run génomique. Les
+        empreintes des interprétations et des entrées sont consignées séparément.
     ancestry_results, polygenic_results : dict[str, Path] | None
         JSON validés par personne, indexés par ``sample_name``. Les données
         d'ascendance et de scores sont calculées séparément du rendu ; aucun
@@ -532,7 +541,12 @@ def build_genomic_reports(
                 if len(pgs_id) != 9 or not pgs_id.startswith("PGS") or not pgs_id[3:].isdigit():
                     raise ValueError("Identifiant PGS invalide pour l'export")
                 shutil.copyfile(source_csv, folder / (pgs_id + ".csv"))
-        for domain, export in extras.get("associations", {}).get("domain_exports", {}).items():
+        association_export = extras.get("associations", {})
+        if association_export.get("domain_exports"):
+            expected = hashlib.sha256((HERE / "association_interpretation.py").read_bytes()).hexdigest()
+            if association_export.get("interpretation_method_code_sha256") != expected:
+                raise ValueError("CSV d'associations produit par une autre interprétation : réexporter l'audit complet")
+        for domain, export in association_export.get("domain_exports", {}).items():
             from .association_catalog import TRAIT_DOMAINS
             if domain not in TRAIT_DOMAINS:
                 raise ValueError("Domaine GWAS inconnu pour l'export")
@@ -571,12 +585,16 @@ def build_genomic_reports(
         (folder / "report.md").write_text(md, encoding="utf-8")
         _save_variant_table(records, folder / "variants.csv")
         metadata = {"title": f"Vos résultats — {name}", "subtitle": "Ce qui compte pour vous, puis les détails pour comprendre et vérifier.",
-                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4.2 · résultats locaux vérifiables",
+                    "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": report_version,
                     "references": references, "analysis_input_sha256": frozen_hashes,
                     "clinical_cards_sha256": hashlib.sha256(json.dumps(catalog, sort_keys=True).encode()).hexdigest(),
                     "counts": counts, "patient_signals": {"clinical": len(signals["clinical"]), "validation": len(signals["validation"]), "profiles": signals["profiles"]},
                     "additional_results_sha256": {key: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest() for key, value in extras.items()},
                     "clinical_history": "non renseignée",
+                    "interpretation_definition_sha256": hashlib.sha256(
+                        (HERE / "trait_effect_evidence.json").read_bytes() +
+                        (HERE / "trait_interpretation.py").read_bytes() +
+                        (HERE / "association_interpretation.py").read_bytes()).hexdigest(),
                     "report_scope": "Résultats locaux et scores reproduits/qualifiés uniquement ; imports et audits non qualifiés séparés."}
         structural_data = json.dumps(result.get("structural_candidates", []), ensure_ascii=False, indent=2).encode()
         for key, value in extras.items():
@@ -619,7 +637,7 @@ def build_genomic_reports(
     outputs["couple"] = write_french_html(folder, folder / "rapport.html", {
         "title": f"Rapport de couple — {couple['first_name']} et {couple['second_name']}",
         "subtitle": "Une comparaison par maladie et niveau de preuve, avec les limites de phase explicites.",
-        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": "v4.2 · résultats locaux vérifiables",
+        "author": "Jouvence · analyse exploratoire et revue documentaire", "date": report_date, "version": report_version,
         "references": references, "analysis_input_sha256": frozen_hashes,
     }, skill_scripts)
     return outputs

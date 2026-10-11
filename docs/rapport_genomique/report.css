@@ -77,6 +77,10 @@
 .jp-panel[open] .jp-panel-open>span{transform:rotate(90deg)}
 .jp-panel-content{border-top:1px solid var(--jp-line);padding:25px 27px 28px;min-width:0}
 .jp-interpretation{font-size:15px;line-height:1.75;max-width:90ch;margin:0 0 24px;overflow-wrap:anywhere}
+.quantified-result{display:grid;grid-template-columns:1fr;gap:9px;margin:0 0 24px;max-width:95ch}
+.quantified-result dt{font-size:12px;letter-spacing:.03em;font-weight:750;color:#6251aa;margin-top:15px}
+.quantified-result dd{margin:0;font-size:15px;line-height:1.75;overflow-wrap:anywhere}
+.quantified-result dd ul{padding-left:20px;margin:0}.quantified-result dd li{margin-bottom:9px}
 .jp-attribution,.jp-evidence-note{border-left:3px solid #b9a6c6;background:#f8f5f9;padding:13px 16px;font-size:13px;line-height:1.65;color:#625369;margin:0 0 20px;border-radius:0 7px 7px 0}
 .jp-evidence-note{border-color:#d0b07c;background:#fbf7ef;color:#79603e}
 .jp-provenance{font-size:11px;line-height:1.6;color:var(--jp-muted);overflow-wrap:anywhere;margin:0 0 24px}

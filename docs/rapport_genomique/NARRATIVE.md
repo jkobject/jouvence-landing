@@ -7,8 +7,9 @@ Question : que montrent réellement les données, quelles maladies sont pertinen
 pour chaque résultat et que faut-il vérifier avant d'agir ?
 
 Message central : un rapport utile relie chaque variant à ses preuves, au mode de
-transmission et à une suite concrète ; il ne confond pas observation, prédiction,
-portage et diagnostic.
+transmission et à une suite concrète. Chaque association utile explique le résultat,
+la physiologie, l'ampleur publiée, l'action possible et la limite personnelle ;
+le rapport ne confond pas observation, prédiction, portage et diagnostic.
 
 Les rapports personnels et les données du couple restent privés. Ce guide et
 les fonctions de génération sont génériques. L'HTML est autonome, en français,
@@ -16,7 +17,7 @@ lisible hors ligne, avec détails dépliables et filtres qui ne modifient pas le
 conclusions. La présentation privilégie la synthèse ; les tableaux exhaustifs
 restent dans la vue document.
 
-Le changement de format réutilise l'analyse figée du 9 octobre 2026. Les nouvelles
+Un changement de format réutilise les analyses figées du run concerné. Les nouvelles
 extractions pharmacogénomiques et de traits sont identifiées séparément. Les
 corrections d'interprétation clinique sont tracées, sans modifier les VCF source.
 
@@ -25,7 +26,11 @@ corrections d'interprétation clinique sont tracées, sans modifier les VCF sour
 La première vue ne montre que les résultats utiles : observations P/LP à
 confirmer, candidats pLoF stricts explicitement séparés et marqueurs ciblés
 avec génotype et qualité exploitables. Chaque carte répond à trois questions :
-votre résultat, sa signification et la prochaine étape. Les VUS, appels rejetés,
+votre résultat, sa signification et la prochaine étape. La signification précise
+le phénotype réellement étudié et l'ampleur publiée : OR/HR/β, intervalle de
+confiance disponible, unité, population et comparateur. L'action peut être
+« aucune action spécifique justifiée » ; un chiffre non documenté reste absent.
+Les VUS, appels rejetés,
 sites absents et contrôles exhaustifs restent dans une annexe fermée par défaut.
 Les limites qui changent l'interprétation restent visibles sur la carte.
 
@@ -35,11 +40,14 @@ illustre une proximité de références, pas des proportions ancestrales ou une
 nationalité. Les images d'exemple ne sont jamais une source de génotypes.
 
 Les scores polygéniques requièrent poids, harmonisation et référence de
-calibration documentés. Seuls des résultats qualifiés au-delà de ±1 sigma,
+calibration documentés. Le guide explique la somme poids × dosage, les moments
+théoriques sous Hardy–Weinberg, les covariances LD omises sous indépendance et
+la comparaison empirique selon l'ascendance. Normalisation et calibration d'un
+risque absolu restent deux étapes distinctes. Seuls des résultats qualifiés au-delà de ±1 sigma,
 y compris une borne intégralement hors de cet intervalle, peuvent entrer dans
 la synthèse. Un percentile classe un score ; il ne mesure pas une probabilité
 de maladie. Les scores incomplets ou non qualifiés restent dans l'audit, sans
-classement inventé. La validation arithmétique d'un sous-score ne démontre pas
+classement inventé. Ce seuil éditorial n'est pas diagnostique. La validation arithmétique d'un sous-score ne démontre pas
 sa performance prédictive clinique.
 
 ## Panels et audit séparé des rapports du fournisseur
@@ -57,7 +65,13 @@ extractible : une page blanche ou un test non pris en charge n'est pas un négat
 
 L'enrichissement GWAS sépare associations, rsID, publications, mesures étudiées
 et appels explicites. Il ne transforme pas des milliers d'associations en
-milliers de maladies détectées. Seuls les scores dont la reproduction et la
+milliers de maladies détectées. Un pQTL concerne une mesure de protéine ; le
+chronotype une préférence d'horaires de sommeil. Le nom du gène ne permet pas
+de passer de l'un à l'autre. Les plus petites valeurs P ne définissent pas
+l'utilité clinique ; les lignes corrélées ne s'additionnent pas pour créer un
+risque ou un percentile. Chaque effet cité garde son passage primaire justificatif
+et le niveau de lecture réel, notamment méthodes/suppléments pour les unités.
+Seuls les scores dont la reproduction et la
 qualification ont été vérifiées peuvent figurer dans le rapport personnel,
 avec le seuil de première lecture fixé à ±1 sigma. Les calculs incomplets et
 leurs blocages restent dans l'audit séparé. Les gros modèles disposent d'une table limitée et

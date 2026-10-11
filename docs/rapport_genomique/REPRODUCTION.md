@@ -79,6 +79,21 @@ reports = build_genomic_reports(
 
 `refresh_traits=False` ne réutilise un cache que si les empreintes des entrées, du panel et du décodeur concordent ; sans cache, le panel est calculé. Les résultats facultatifs `ancestry_results`, `polygenic_results` et `supplementary_results` sont indexés par le `sample_name` exact et leurs SHA doivent correspondre. Ne pas attribuer un fichier par son seul nom ou voisinage dans un dossier.
 
+Le texte d'interprétation a sa propre empreinte (`interpretation_definition_sha256`)
+et une révision `report_version`, distinctes du run génomique. Modifier ces
+textes n'invalide pas les génotypes du panel. En revanche, corriger le décodeur
+(par exemple FT ou ploïdie) exige une réextraction du panel ciblé avec
+`refresh_traits=True` ; ne pas présenter l'ancien cache comme vérifié par la
+nouvelle règle. Ce n'est pas une relance ClinVar/pLoF/PGS.
+
+Pour chaque association utile, utiliser la structure commune « résultat /
+signification / ampleur publiée et comparateur / action / limite ». Les
+coefficients du GWAS Catalog ne sont pas automatiquement des OR. Les pQTL
+de protéines ne prédisent pas un chronotype ; une liste de SNP associés
+n'est pas une somme de risques. Réexporter les audits complets avec
+`export_association_audit()` pour ajouter ces explications aux CSV, en
+conservant leur identité, tous les génotypes inconnus et les valeurs source.
+
 ### Ce qui est affiché et ce qui reste dans l'audit
 
 - Une observation peut être intéressante sans constituer un diagnostic. Les fiches de maladie et suites possibles restent conditionnelles ; aucun traitement ou PGT décidé à partir d'un VUS ou d'une prédiction seule.

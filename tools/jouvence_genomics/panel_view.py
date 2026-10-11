@@ -15,6 +15,7 @@ from html import escape
 from urllib.parse import urlsplit
 
 from .report_panels import reportable_polygenic_results
+from .trait_interpretation import render_interpretation
 
 
 VARIANT_COLUMNS = {
@@ -26,7 +27,11 @@ VARIANT_COLUMNS = {
     "p_value": "P de l’étude", "phenotype": "Phénotype étudié", "pmid": "PMID",
     "source_study": "Étude source", "dp": "DP", "gq": "GQ", "ad": "AD",
     "reported_effect_value": "Effet rapporté", "reported_effect_context": "Contexte de l’effet",
+    "meaning_fr": "Ce que cela signifie", "magnitude_fr": "Ampleur publiée",
+    "comparison_fr": "Comparateur de l’étude", "action_fr": "Suite utile",
+    "limitation_fr": "Limite de l’interprétation",
     "status": "Statut de la ligne", "quality_issues": "Limites de qualité",
+    "sample_filter": "FT échantillon", "sample_filter_status": "Évaluation FT",
 }
 KIND_ALIASES = {
     **dict.fromkeys(("genetic", "clinical", "trait", "pgx", "nutrition", "coherence", "ancestry", "monogenic"), "genetic"),
@@ -208,7 +213,18 @@ def _render_panel(panel: dict) -> str:
                  f'<span class="jp-panel-preview">{escape(summary)}</span>'
                  '<span class="jp-panel-open">Explorer ce panel <span aria-hidden="true">↗</span></span></summary>',
                  '<div class="jp-panel-content">']
-    fragments.append(f'<p class="jp-interpretation">{escape(panel["interpretation_fr"])}</p>')
+    if panel.get("explanation"):
+        fragments.append(render_interpretation(panel["explanation"], include_proofs=False))
+    else:
+        fragments.append(f'<p class="jp-interpretation">{escape(panel["interpretation_fr"])}</p>')
+    if panel.get("association_explanations"):
+        fragments.append('<div class="jp-explanations"><h5>Comprendre les types d’associations de ce panel</h5>'
+                         '<p>Un exemple par type de mesure dans cet aperçu. Chaque ligne du tableau et du CSV '
+                         'dispose aussi de son explication ; les exemples ne sont pas des scores.</p>')
+        for example in panel["association_explanations"]:
+            fragments.append('<details class="explanation prose"><summary>' + escape(example["title"])
+                             + '</summary>' + render_interpretation(example) + '</details>')
+        fragments.append('</div>')
     if panel.get("download_csv"):
         download_id = panel["html_id"] + "-csv"
         fragments.append(f'<p><a id="{download_id}" class="jp-full-csv" href="#{download_id}" '
