@@ -12,8 +12,8 @@ from pathlib import Path
 from unittest.mock import patch
 
 from tools.jouvence_genomics.pgs_inventory import (
-    PUBLIC_ROOT, _public_cache, prepare_pgs_inventory, prepare_bounded_pgs_weights,
-    audit_pgs_inventory,
+    PUBLIC_ROOT, _license_decision, _public_cache, prepare_pgs_inventory, prepare_bounded_pgs_weights,
+    additional_pgs_selection, audit_pgs_inventory,
 )
 
 
@@ -185,6 +185,7 @@ class PgsInventoryTests(unittest.TestCase):
                     "hm_chr\thm_pos\teffect_allele\tother_allele\teffect_weight\n1\t100\tA\tG\t0.5\n").encode()))
                 selected = {"scoring_paths": [str(weight)], "summary": {"weights_prepared": 1, "models_inventoried": 1},
                             "models": [{"status": "weights_prepared_not_audited", "scoring_path": str(weight),
+                                        "license": "CC0", "weight_file_license": "",
                                         "source": {"sha256": hashlib.sha256(weight.read_bytes()).hexdigest()}}]}
                 if contig_length == 248956422:
                     with patch("tools.jouvence_genomics.pgs_inventory.audit_pgs_reproduction") as run:
@@ -198,6 +199,145 @@ class PgsInventoryTests(unittest.TestCase):
                     score = json.loads((directory / "audit/personne_1/PGS000001.json").read_text())
                     self.assertEqual(score["raw_score"], .5)
                     self.assertEqual(score["usable_genotypes"], 1)
+
+    def test_personal_profile_allows_standard_nc_nd_not_reusable_default(self):
+        standard_terms = ("CC BY-NC 4.0", "CC BY-ND 4.0", "CC BY-NC-ND 4.0", "CC-BY-NC-ND 4.0",
+            "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0). © 2020 Ambry Genetics.")
+        for terms in standard_terms:
+            with self.subTest(terms=terms):
+                strict = _license_decision(terms, "jouvence_reusable")
+                personal = _license_decision(terms, "personal_noncommercial")
+                self.assertFalse(strict["allowed"])
+                self.assertTrue(personal["allowed"])
+                self.assertEqual(personal["license_text"], terms)
+                if "ND" in terms or "NoDerivatives" in terms:
+                    self.assertIn("adapted_material_may_be_created_privately_but_not_shared", personal["restrictions"])
+
+    def test_personal_profile_keeps_custom_ambiguous_terms_in_review_before_fetch(self):
+        custom = ("Academic research only", "Research purposes only", "Contact the author for permission",
+            "Custom terms apply", "CC BY-NC-ND 3.0",
+            "CC BY-NC-ND 4.0. Contact the publisher for any use.",
+            "CC BY-NC-ND 4.0. © 2020 Owner. Reproduction prohibited.",
+            "CC BY-NC 4.0. © 2020 Owner. Prior registration necessary.",
+            "CC BY-NC 4.0. © 2020 Owner. Private personal applications excluded.",
+            "CC BY-NC 4.0. © 2020 Ambry Genetics. Prior registration necessary.",
+            "CC BY-NC 4.0. © 2020 Unverified Holder")
+        models = [{"pgs_id":f"PGS{i:06}","trait_reported":"Fixture","n_variants":1,"n_interactions":0,
+                   "license":terms,"weights_grch37_url":PUBLIC_ROOT+"unused"} for i,terms in enumerate(custom,1)]
+        with tempfile.TemporaryDirectory() as directory, patch("tools.jouvence_genomics.pgs_inventory._public_cache") as fetch:
+            selected = prepare_bounded_pgs_weights({"models":models},directory,max_variants_per_model=10,
+                max_total_variants=100,max_download_bytes=1000,license_profile="personal_noncommercial")
+            fetch.assert_not_called()
+            self.assertEqual(selected["summary"]["weights_prepared"],0)
+            self.assertTrue(all(x["license_decisions"]["metadata"]["reason"] == "custom_or_ambiguous_terms_require_review" for x in selected["models"]))
+        self.assertTrue(_license_decision("Personal non-commercial research use is permitted.","personal_noncommercial")["allowed"])
+        self.assertFalse(_license_decision("Personal non-commercial research use is permitted, subject to registration.","personal_noncommercial")["allowed"])
+
+    def test_personal_header_cannot_be_overridden_by_unrestricted_metadata(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory=Path(temporary);name="PGS000001_hmPOS_GRCh37.txt.gz"
+            url=PUBLIC_ROOT+"scores/PGS000001/ScoringFiles/Harmonized/"+name
+            body=gzip.compress(("#pgs_id=PGS000001\n#trait_reported=Fixture\n#variants_number=1\n"
+                "#license=Academic research only\n#HmPOS_build=GRCh37\n"
+                "hm_chr\thm_pos\teffect_allele\tother_allele\teffect_weight\n1\t100\tA\tG\t0.5\n").encode())
+            self.public_fixture(directory,name,body,url)
+            model={"pgs_id":"PGS000001","trait_reported":"Fixture","n_variants":1,"n_interactions":0,
+                   "license":"CC0","weights_grch37_url":url}
+            selected=prepare_bounded_pgs_weights({"models":[model]},directory,max_variants_per_model=10,
+                max_total_variants=10,max_download_bytes=10000,license_profile="personal_noncommercial")
+            self.assertEqual(selected["models"][0]["reason"],"weight_file_license_requires_review")
+            self.assertEqual(selected["models"][0]["license_decisions"]["weight_file"]["license_text"],"Academic research only")
+            self.assertEqual(selected["summary"]["weights_prepared"],0)
+
+    def test_personal_selection_reuses_cache_and_never_relabels_old_selection(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);cache=root/"weights";strict=root/"strict";personal=root/"personal"
+            name="PGS000001_hmPOS_GRCh37.txt.gz";url=PUBLIC_ROOT+"scores/PGS000001/ScoringFiles/Harmonized/"+name
+            body=gzip.compress(("#pgs_id=PGS000001\n#trait_reported=Fixture\n#variants_number=1\n#HmPOS_build=GRCh37\n"
+                "hm_chr\thm_pos\teffect_allele\tother_allele\teffect_weight\n1\t100\tA\tG\t0.5\n").encode())
+            self.public_fixture(cache,name,body,url)
+            model={"pgs_id":"PGS000001","trait_reported":"Fixture","n_variants":1,"n_interactions":0,
+                   "license":"CC BY-NC-ND 4.0","weights_grch37_url":url}
+            strict_selection=prepare_bounded_pgs_weights({"models":[model]},strict,cache_directory=cache,
+                max_variants_per_model=10,max_total_variants=10,max_download_bytes=10000)
+            old=(strict/"selection.json").read_bytes()
+            with patch("urllib.request.urlopen",side_effect=AssertionError("Cache public seulement")):
+                selected=prepare_bounded_pgs_weights({"models":[model]},personal,cache_directory=cache,
+                    max_variants_per_model=10,max_total_variants=10,max_download_bytes=10000,license_profile="personal_noncommercial")
+            self.assertEqual(strict_selection["summary"]["weights_prepared"],0)
+            self.assertEqual(selected["summary"]["weights_prepared"],1)
+            self.assertEqual((strict/"selection.json").read_bytes(),old)
+            self.assertEqual(Path(selected["scoring_paths"][0]),(cache/name).resolve())
+            delta=additional_pgs_selection(strict_selection,selected)
+            self.assertEqual(delta["added_prepared_ids"],["PGS000001"])
+            self.assertEqual(delta["summary"]["models_inventoried"],1)
+            self.assertEqual(delta["source_inventory_models"],1)
+            self.assertEqual(delta["unchanged_prepared_models_not_reaudited"],0)
+            self.assertEqual(delta["license_profile"],"personal_noncommercial")
+            with self.assertRaisesRegex(ValueError,"mêmes budgets"):
+                additional_pgs_selection(strict_selection,{**selected,"limits":{**selected["limits"],"max_total_variants":100}})
+            with self.assertRaisesRegex(ValueError,"autre profil"):
+                prepare_bounded_pgs_weights({"models":[model]},strict,cache_directory=cache,
+                    max_variants_per_model=10,max_total_variants=10,max_download_bytes=10000,license_profile="personal_noncommercial")
+
+    def test_unknown_profile_and_missing_both_licenses_are_not_permissions(self):
+        with tempfile.TemporaryDirectory() as directory, patch("tools.jouvence_genomics.pgs_inventory._public_cache") as fetch:
+            with self.assertRaisesRegex(ValueError,"Profil"):
+                prepare_bounded_pgs_weights({"models":[]},directory,max_variants_per_model=10,
+                    max_total_variants=10,max_download_bytes=1000,license_profile="free_everything")
+            fetch.assert_not_called()
+        self.assertIsNone(_license_decision("", "personal_noncommercial")["allowed"])
+
+    def test_personal_audit_retains_profile_and_never_calibrates_partial_score(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory=Path(temporary);name="PGS000001_hmPOS_GRCh37.txt.gz"
+            url=PUBLIC_ROOT+"scores/PGS000001/ScoringFiles/Harmonized/"+name
+            body=gzip.compress(("#pgs_id=PGS000001\n#trait_reported=Fixture\n#variants_number=2\n#HmPOS_build=GRCh37\n"
+                "hm_chr\thm_pos\teffect_allele\tother_allele\teffect_weight\n1\t100\tA\tG\t0.5\n1\t200\tA\tG\t0.2\n").encode())
+            self.public_fixture(directory,name,body,url)
+            model={"pgs_id":"PGS000001","trait_reported":"Fixture","n_variants":2,"n_interactions":0,
+                   "license":"CC BY-NC-ND 4.0","weights_grch37_url":url}
+            selected=prepare_bounded_pgs_weights({"models":[model]},directory,max_variants_per_model=10,
+                max_total_variants=10,max_download_bytes=10000,license_profile="personal_noncommercial")
+            vcf=directory/"fixture.vcf";vcf.write_text("##fileformat=VCFv4.2\n##contig=<ID=1,length=249250621>\n"
+                "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSAMPLE\n"
+                "1\t100\t.\tG\tA\t99\tPASS\t.\tGT:DP:GQ:AD\t0/1:30:99:15,15\n")
+            frozen=directory/"frozen.json";frozen.write_text(json.dumps({"sample_name":"Fixture", "provenance":{"inputs":[
+                {"path":str(vcf),"sha256":hashlib.sha256(vcf.read_bytes()).hexdigest(),"sample":"SAMPLE"}]}}))
+            audit=audit_pgs_inventory([frozen],selected,directory/"audit")
+            self.assertEqual(audit["license_profile"],"personal_noncommercial")
+            self.assertEqual(audit["personal_percentiles_produced"],0)
+            self.assertFalse(audit["license_policy"]["external_agreement_accepted_by_tool"])
+            score=json.loads((directory/"audit/personne_1/PGS000001.json").read_text())
+            self.assertIsNone(score["raw_score"])
+            self.assertEqual(score["usable_genotypes"],1)
+
+    def test_audit_refuses_falsely_relabelled_weight_header_before_private_data(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory=Path(temporary);path=directory/"weight.gz"
+            path.write_bytes(gzip.compress(("#pgs_id=PGS000001\n#trait_reported=Fixture\n#variants_number=1\n"
+                "#license=Academic research only\n#HmPOS_build=GRCh37\n"
+                "hm_chr\thm_pos\teffect_allele\tother_allele\teffect_weight\n1\t100\tA\tG\t0.5\n").encode()))
+            selected={"license_profile":"personal_noncommercial","scoring_paths":[str(path)],
+                "summary":{"weights_prepared":1},"models":[{"status":"weights_prepared_not_audited",
+                    "scoring_path":str(path),"license":"CC0","weight_file_license":"CC0",
+                    "source":{"sha256":hashlib.sha256(path.read_bytes()).hexdigest()}}]}
+            with self.assertRaisesRegex(ValueError,"Licence réelle"):
+                audit_pgs_inventory([directory/"private_must_not_be_read.json"],selected,directory/"out")
+
+    def test_added_copyright_clause_is_not_admitted_to_audit_before_private_data(self):
+        terms="CC BY-NC 4.0. © 2020 Owner. Private personal applications excluded."
+        with tempfile.TemporaryDirectory() as temporary:
+            directory=Path(temporary);path=directory/"weight.gz"
+            path.write_bytes(gzip.compress(("#pgs_id=PGS000001\n#trait_reported=Fixture\n#variants_number=1\n"
+                f"#license={terms}\n#HmPOS_build=GRCh37\n"
+                "hm_chr\thm_pos\teffect_allele\tother_allele\teffect_weight\n1\t100\tA\tG\t0.5\n").encode()))
+            selected={"license_profile":"personal_noncommercial","scoring_paths":[str(path)],
+                "summary":{"weights_prepared":1},"models":[{"status":"weights_prepared_not_audited",
+                    "scoring_path":str(path),"license":"CC0","weight_file_license":terms,
+                    "source":{"sha256":hashlib.sha256(path.read_bytes()).hexdigest()}}]}
+            with self.assertRaisesRegex(ValueError,"termes du modèle"):
+                audit_pgs_inventory([directory/"private_must_not_be_read.json"],selected,directory/"out")
 
 
 if __name__ == "__main__":

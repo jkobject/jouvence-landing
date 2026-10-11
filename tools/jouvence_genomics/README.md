@@ -398,9 +398,11 @@ la liste officielle complète. Le téléchargement des poids est borné par troi
 paramètres obligatoires, sur tous les thèmes, par taille puis ID et jamais
 d'après un résultat personnel. Licences restrictives/inconnues, interactions,
 formats non pris en charge et discordances sont différés avec leur raison.
-Une licence restrictive dans les métadonnées **ou** le fichier de poids est
+Par défaut, une licence restrictive dans les métadonnées **ou** le fichier de poids est
 éliminatoire ; un ancien header sans licence peut utiliser les termes explicites
 des métadonnées. Ce filtre prudent ne remplace pas une revue juridique.
+Le profil personnel optionnel ci-dessous change uniquement l'admission des
+licences reconnues, pas la sélection des traits, les génotypes ou la qualité.
 
 ```python
 from pathlib import Path
@@ -439,8 +441,10 @@ n'autorise pas automatiquement toutes ses données.
 
 Les six annotateurs de cette première politique sont ClinVar, GWAS Catalog,
 PharmGKB, HPO, ClinGen et CGD. Les autres annotateurs restent inventoriés, pas
-prétendument installés ou exécutés. CADD/REVEL/SpliceAI et les termes contradictoires
-des fichiers AlphaMissense demandent une décision de licence distincte. Une
+prétendument installés ou exécutés. Le volet personnel décrit ci-dessous ajoute
+des jointures séparées AlphaMissense/REVEL/CADD ; il n'élargit pas implicitement
+les modules de ce runtime. SpliceAI et les autres termes non établis demandent
+toujours une revue distincte. Une
 erreur de module arrête le run, même si OpenCRAVAT retourne un succès global.
 
 `coding_variant_positions()` définit l'union de tous les CDS/start/stop
@@ -500,6 +504,104 @@ faire l'objet de `engine_exclusions` privées à l'appel `annotate_vcf_positions
 avec TSV/log/SHA/version. Le même job, l'UID et le tuple normalisé doivent
 correspondre exactement à INPUT/ERROR : l'allèle reste explicitement non annotable,
 jamais « normal ». Un nouvel échec inattendu interrompt toujours l'analyse.
+
+#### Volet personnel privé, non commercial
+
+Ce volet est **explicite** et séparé du profil réutilisable de Jouvence.
+L'absence de vente ne suffit pas à rendre une utilisation non commerciale :
+la recherche destinée à un produit commercial n'est pas couverte par cette
+option. Le [registre des conditions](resource_use_review.json) distingue code,
+modèles, tables de scores, droits non établis et accords d'accès. Les notices
+exactes et preuves téléchargées sont également conservées dans chaque cache.
+Aucun accord externe ni inscription n'est accepté automatiquement.
+
+`personal_predictors.py` prépare les tables officielles AlphaMissense/REVEL,
+puis les joint **hors réseau** aux appels déjà audités. Tous les transcrits
+appariés restent distincts ; aucun score maximal n'est promu en classification
+ACMG. Le conflit AlphaMissense entre README CC BY et en-tête CC BY-NC-SA, ainsi
+que les mentions différentes REVEL/Zenodo, restent visibles. L'usage retenu est
+privé et non commercial, sans conclusion sur les droits commerciaux.
+
+`cadd_predictions.py` ajoute les indels gnomAD pré-scorés CADD v1.7 GRCh37,
+avec taille, MD5 publié, SHA local et contrôle gzip. La correspondance utilise
+le tuple **assemblage + chromosome + position + REF + ALT** exact : une autre
+représentation n'est pas devinée. Ce fichier ne couvre pas tous les indels,
+ni tous les SNV du génome. Un site non couvert reste inconnu.
+Les lignes publiques CADD dupliquées restent traçables : seules des valeurs
+strictement identiques donnent un score unique ; des valeurs divergentes
+restent non résolues, sans moyenne ou sélection arbitraire.
+
+```python
+from pathlib import Path
+from tools.jouvence_genomics.personal_predictors import (
+    prepare_alphamissense_reference, prepare_revel_reference,
+    annotate_personal_predictions,
+)
+from tools.jouvence_genomics.cadd_predictions import (
+    prepare_cadd_indel_reference, annotate_cadd_indels,
+)
+
+profile = "personal_noncommercial"
+alpha = prepare_alphamissense_reference(
+    Path("data/reference/personal/alphamissense"), usage_profile=profile,
+)
+revel = prepare_revel_reference(
+    Path("data/reference/personal/revel"), usage_profile=profile,
+)
+cadd = prepare_cadd_indel_reference(
+    Path("data/reference/personal/cadd_indels"), usage_profile=profile,
+)
+panels = {"Sample": Path("analysis/sample/annotations_all/annotation_summary.json")}
+missense = annotate_personal_predictions(
+    panels, [alpha, revel], Path("analysis/sample/personal_missense"),
+    usage_profile=profile,
+)
+indels = annotate_cadd_indels(
+    panels, cadd, Path("analysis/sample/personal_indels"), usage_profile=profile,
+)
+```
+
+Utiliser `uv run` ; ces jointures utilisent la bibliothèque standard Python.
+La préparation réseau ne lit aucun génotype. Les jointures privées sont à
+exécuter dans un processus hors réseau (sur macOS : le profil sandbox déjà
+utilisé pour les annotations). Les empreintes des panels et exports sont
+recontrôlées ; les dossiers de sortie non vides sont refusés. JSON/JSONL et
+CSV restent privés. Les CSV AlphaMissense/REVEL contiennent seulement les SNV
+appariés, une ligne par score/transcrit/observation ; les JSONL conservent aussi
+les sites inconnus et non éligibles. Le CSV CADD contient tous les indels du
+panel, y compris les non-couverts et exclus. Ces nombres de lignes ne sont donc
+pas des nombres de variants uniques. Les scores prédictifs n'améliorent ni DP/GQ, ni la phase,
+ni un FILTER indéterminé ; ils ne créent pas de nouveau variant ou de diagnostic
+et ne sont pas ajoutés automatiquement aux rapports patients.
+
+Pour les PGS, `license_profile="personal_noncommercial"` admet les licences
+CC standard reconnues dans ce cadre privé. Les textes sur mesure, académique
+seulement ou ambigus restent différés. Les conditions ND permettent le calcul
+privé mais pas le partage d'adaptations ; ce profil ne redistribue pas les poids.
+Les métadonnées **et** le vrai header sont revérifiés avant toute lecture privée.
+
+```python
+from tools.jouvence_genomics.pgs_inventory import additional_pgs_selection
+
+personal_selection = prepare_bounded_pgs_weights(
+    inventory, Path("data/reference/pgs_inventory/personal_selection"),
+    cache_directory=Path("data/reference/pgs_inventory/weights"),
+    license_profile="personal_noncommercial",
+    max_variants_per_model=5_000, max_total_variants=2_000_000,
+    max_download_bytes=1_000_000_000,
+)
+delta = additional_pgs_selection(selection, personal_selection)
+# Les anciens poids sont vérifiés, pas recalculés ou réétiquetés.
+if delta["scoring_paths"]:
+    additional_audit = audit_pgs_inventory(
+        [Path("analysis/sample/results.json")], delta,
+        Path("analysis/sample/pgs_personal_delta"),
+    )
+```
+
+Le snapshot et les budgets doivent rester identiques pour isoler un delta de
+licence. Les scores sans génotypes complets ou calibration restent partiels :
+aucun nouveau percentile n'est produit par cette option.
 
 #### Référence d'ascendance AADR moderne, plus dense
 

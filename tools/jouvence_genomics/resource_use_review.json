@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-10",
+  "purpose": "Conditions des ressources additionnelles pour exploration personnelle privée non commerciale ; pas une autorisation générale pour Jouvence.",
+  "policy": {
+    "no_sales_does_not_establish_noncommercial_use": true,
+    "commercial_product_research_not_covered_by_personal_profile": true,
+    "new_access_agreements_not_accepted_automatically": true,
+    "no_patient_genotypes_uploaded": true,
+    "unknown_terms_require_review": true,
+    "resource_inventory_is_not_an_execution_log": true,
+    "clinical_classification_from_prediction_alone": false
+  },
+  "resources": [
+    {
+      "name": "AlphaMissense predictions",
+      "scope": "Prédictions pré-calculées des substitutions faux-sens ; GRCh38, transcrits/protéines explicitement conservés.",
+      "personal_profile": "eligible_private_noncommercial_conservative_terms",
+      "jouvence_reusable_profile": "deferred_conflicting_terms",
+      "terms": "Le README actuel indique CC BY 4.0 ; l'en-tête du TSV distribué indique CC BY-NC-SA 4.0. Conserver les deux preuves et appliquer les restrictions NC/SA dans le volet personnel, sans résoudre les droits commerciaux par inférence.",
+      "code_license_distinct": "Apache-2.0 pour le code ; les poids entraînés ne sont pas distribués.",
+      "obligations": ["Attribution et version", "Usage réellement non commercial", "Examiner le partage à l'identique avant redistribution", "Pas d'utilisation clinique validée"],
+      "sources": ["https://github.com/google-deepmind/alphamissense", "https://storage.googleapis.com/dm_alphamissense/AlphaMissense_hg38.tsv.gz"]
+    },
+    {
+      "name": "REVEL v1.3 predictions",
+      "scope": "Prédictions pré-calculées des substitutions faux-sens, coordonnées GRCh37 et GRCh38 ; positions GRCh38 inconnues explicitement possibles.",
+      "personal_profile": "eligible_private_noncommercial_conservative_terms",
+      "jouvence_reusable_profile": "deferred_author_noncommercial_terms",
+      "terms": "Les auteurs autorisent l'usage non commercial et demandent un contact pour les autres usages. Le dépôt Zenodo porte aussi une mention ODbL ; conserver cette différence sans en déduire une autorisation commerciale.",
+      "obligations": ["Attribution, version et provenance", "Usage réellement non commercial", "Vérifier les termes des prédicteurs composants avant redistribution"],
+      "sources": ["https://sites.google.com/site/revelgenomics/downloads", "https://zenodo.org/records/7072866", "https://zenodo.org/api/records/7072866"]
+    },
+    {
+      "name": "CADD scores",
+      "scope": "Scores pré-calculés SNV et certains indels ; couverture/version différentes selon le fichier. Les fichiers d'indels ne couvrent pas toutes les séquences possibles.",
+      "personal_profile": "eligible_private_noncommercial",
+      "jouvence_reusable_profile": "deferred_commercial_license_required",
+      "terms": "Les scores sont disponibles pour les applications non commerciales ; licence distincte pour une application commerciale. La disponibilité des scores n'autorise pas automatiquement tous les composants d'une installation complète.",
+      "obligations": ["Attribution et version", "Usage réellement non commercial", "Vérifier les composants et la redistribution séparément"],
+      "sources": ["https://cadd.kircherlab.bihealth.org/download", "https://cadd.kircherlab.bihealth.org/contact"]
+    },
+    {
+      "name": "PGS Catalog model weights",
+      "scope": "Termes vérifiés modèle par modèle dans les métadonnées et l'en-tête des poids.",
+      "personal_profile": "standard_cc_terms_only_automatic_custom_terms_review",
+      "jouvence_reusable_profile": "existing_conservative_policy_unchanged",
+      "terms": "La licence générale EMBL-EBI n'annule pas les restrictions propres aux modèles. CC BY-NC-ND 4.0 permet la production/reproduction privée d'adaptations non commerciales, mais pas leur partage. Academic-only, accords supplémentaires et termes ambigus demandent une revue séparée.",
+      "obligations": ["Licence de chaque modèle conservée", "Attribution au catalogue et aux études", "Aucune redistribution automatique des poids ou adaptations", "Pas de percentile sans calibration et génotypes suffisants"],
+      "sources": ["https://www.pgscatalog.org/docs/faq/", "https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.en"]
+    },
+    {
+      "name": "SpliceAI",
+      "scope": "Code, modèles entraînés et fichiers pré-calculés ont des conditions distinctes.",
+      "personal_profile": "model_inference_candidate_precomputed_terms_require_review",
+      "jouvence_reusable_profile": "deferred_commercial_license_required",
+      "terms": "Code PolyForm Strict 1.0.0 ; modèles CC BY-NC 4.0 pour usage académique/non commercial. Le README réserve explicitement les annotations pré-calculées gratuites aux usages académiques et sans but lucratif : ne pas assimiler automatiquement toute recherche personnelle à ces catégories.",
+      "obligations": ["Distinguer licence code/modèles/scores", "Aucun accord d'accès accepté automatiquement", "Conserver annotation de gène, distance et masquage utilisés"],
+      "sources": ["https://github.com/Illumina/SpliceAI", "https://github.com/Illumina/SpliceAI/blob/master/LICENSE"]
+    },
+    {
+      "name": "LOFTEE",
+      "scope": "Plugin VEP pour filtrer les pertes de fonction prédites, pas une nouvelle lecture du séquençage.",
+      "personal_profile": "eligible_code_reference_setup_required",
+      "jouvence_reusable_profile": "component_reference_terms_require_review",
+      "terms": "Code MIT ; branches et références auxiliaires diffèrent selon GRCh37/GRCh38. La licence du plugin ne couvre pas par elle-même toutes les références ni une installation VEP complète.",
+      "obligations": ["Conserver notice MIT", "Épingler branche, version VEP, transcrits et références", "Ne pas confondre LoF prédit et maladie démontrée"],
+      "sources": ["https://github.com/konradjk/loftee", "https://github.com/konradjk/loftee/blob/master/LICENSE"]
+    },
+    {
+      "name": "dbNSFP 5.4a",
+      "scope": "Base agrégée de prédictions et annotations avec licences propres aux composants.",
+      "personal_profile": "deferred_access_registration_and_component_review",
+      "jouvence_reusable_profile": "deferred_license_and_access_review",
+      "terms": "La version académique indique CC BY-NC-ND 4.0 avec obligations et exceptions des composants. L'accès au téléchargement demande une inscription utilisant un email institutionnel ; ce profil n'effectue pas cette inscription et n'accepte pas un accord pour l'utilisateur.",
+      "obligations": ["Examiner la version et chaque composant", "Inscription et éventuels accords à traiter explicitement", "Conserver les termes originaux et les restrictions ND"],
+      "sources": ["https://www.dbnsfp.org/license/", "https://www.dbnsfp.org/download/", "https://dist.genos.us/release/dbNSFP5.4a.readme.txt"]
+    },
+    {
+      "name": "PolyPhen-2 precomputed predictions",
+      "scope": "Table publique historique GRCh37 ; ne pas présenter ses annotations comme une version actuelle intégrale.",
+      "personal_profile": "deferred_table_permission_not_established",
+      "jouvence_reusable_profile": "deferred_table_permission_not_established",
+      "terms": "Les conditions du logiciel réservent l'usage gratuit à l'enseignement et à la recherche académiques. Le README de la table de scores historique ne fournit pas de licence explicite : ne pas attribuer automatiquement les conditions du logiciel aux données, ni inférer une permission personnelle de cette absence.",
+      "obligations": ["Clarifier les droits de la table avant usage, sans inférer une permission académique", "Version et assemblage conservés", "Ne pas confondre licence de code et table de scores"],
+      "sources": ["https://genetics.bwh.harvard.edu/wiki/!pph2/downloads", "https://genetics.bwh.harvard.edu/downloads/pph2/whess/"]
+    },
+    {
+      "name": "SIFT / SIFT4G",
+      "scope": "Code SIFT4G et tables SIFT historiques sont des ressources distinctes.",
+      "personal_profile": "deferred_score_terms_not_verified",
+      "jouvence_reusable_profile": "deferred_score_terms_not_verified",
+      "terms": "Code SIFT4G sous GPL-3.0 ; cela ne confère pas automatiquement une permission pour toutes les tables historiques distribuées par un annotateur. Les conditions actuelles des données doivent être vérifiées avant leur téléchargement automatique.",
+      "obligations": ["Séparer conditions du code et des scores", "Pas d'autorisation inférée d'un site indisponible", "Épingler les versions et sources"],
+      "sources": ["https://github.com/rvaser/sift4g", "https://github.com/rvaser/sift4g/blob/master/LICENSE"]
+    }
+  ]
+}
