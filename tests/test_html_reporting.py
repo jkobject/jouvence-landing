@@ -100,6 +100,55 @@ class HtmlReportTests(unittest.TestCase):
             self.assertIn("magnitude_fr", copied.read_text(encoding="utf-8").splitlines()[0])
             self.assertIn("OR ou coefficient β indéterminé", copied.read_text(encoding="utf-8"))
 
+    def test_exploratory_scores_are_opt_in_pinned_and_separate_from_clinical(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            analyses, couple, _ = self.gwas_export_fixture(root)
+            module = Path(__file__).parents[1] / "tools/jouvence_genomics"
+            csv_name = "PGS000001-authors.csv"
+            csv_path = root / csv_name
+            csv_path.write_text("chrom,pos,rsid,effect_allele,dosage,weight,contribution\n1,100,rs1,T,1,.2,.2\n1,200,rs2,G,1,.1,.1\n")
+            score = {"pgs_id": "PGS000001", "trait_fr": "Trait de recherche", "population_label": "Auteurs",
+                "status": "exploratory_conditional_model_only", "z_score": 1.2, "percentile": 85,
+                "observed_sites": 2, "n_variants": 3, "observed_variant_trace": [
+                    {"chrom": "1", "pos": 100, "rsid": "rs1", "effect_allele": "T", "dosage": 1, "weight": .2, "contribution": .2},
+                    {"chrom": "1", "pos": 200, "rsid": "rs2", "effect_allele": "G", "dosage": 1, "weight": .1, "contribution": .1}],
+                "publication": {"title": "Modèle", "url": "https://www.pgscatalog.org/score/PGS000001/"},
+                "contributions_csv": csv_name, "contributions_csv_sha256": hashlib.sha256(csv_path.read_bytes()).hexdigest(),
+                "show_in_summary": False, "clinical_validation": False, "predictive_validation": "not_established",
+                "quality_method_code_sha256": {name: hashlib.sha256((module / name).read_bytes()).hexdigest()
+                    for name in ("exploratory_scores.py", "polygenic.py", "reproduction.py")}}
+            report = {"schema_version": 1, "sample_name": "First",
+                "input_files": json.loads(analyses[0].read_text())["provenance"]["inputs"],
+                "scope": "exploratory_observed_subpanel_conditional_hwe_not_full_pgs", "scores": [score],
+                "method_code_sha256": {name: hashlib.sha256((module / name).read_bytes()).hexdigest()
+                    for name in ("exploratory_pipeline.py", "exploratory_scores.py")}}
+            path = root / "scores.json"
+            path.write_text(json.dumps(report))
+            with patch("tools.jouvence_genomics.html_reporting.write_french_html",
+                       side_effect=lambda source, output, *args, **kwargs: output):
+                outputs = build_genomic_reports(*analyses, couple, root / "reports", skill_scripts=root / "unused",
+                    exploratory_polygenic_results={"First": path})
+            first_md = (outputs["personne_1"].parent / "report.md").read_text()
+            self.assertIn('id="scores-exploratoires"', first_md)
+            self.assertIn("+1,2", first_md)
+            self.assertEqual((outputs["personne_1"].parent / csv_name).read_bytes(), csv_path.read_bytes())
+            self.assertNotIn('id="scores-exploratoires"', (outputs["personne_2"].parent / "report.md").read_text())
+            self.assertNotIn('id="scores-exploratoires"', (outputs["couple"].parent / "report.md").read_text())
+            for index, mutate in enumerate((
+                    lambda r: r.update(sample_name="Other"),
+                    lambda r: r["method_code_sha256"].update({"exploratory_pipeline.py": "old"}),
+                    lambda r: r["scores"][0].update(clinical_validation=True),
+                    lambda r: r["scores"][0].update(contributions_csv_sha256="changed"))):
+                changed = deepcopy(report)
+                mutate(changed)
+                path.write_text(json.dumps(changed))
+                with patch("tools.jouvence_genomics.html_reporting.write_french_html") as render:
+                    with self.assertRaises(ValueError):
+                        build_genomic_reports(*analyses, couple, root / f"bad_{index}", skill_scripts=root / "unused",
+                            exploratory_polygenic_results={"First": path})
+                    render.assert_not_called()
+
     def test_unqualified_scores_are_not_an_html_audit_section(self):
         html = _population_audit({"polygenic": {"scores": [{"status": "raw_complete_uncalibrated",
             "trait_fr": "PRIVATE_INCOMPLETE_SCORE", "pgs_id": "PGS000001", "n_variants": 10}]}}, {})

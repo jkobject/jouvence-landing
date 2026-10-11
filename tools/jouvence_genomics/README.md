@@ -204,9 +204,65 @@ Catalog GRCh37, métadonnées, licences et empreintes sont conservés. Tout dosa
 absent reste inconnu ; des bornes explicitent cette incertitude. Les loci liés
 à l'X exigent une convention de ploïdie validée. Une référence 1000 Genomes
 peut calibrer un sous-ensemble de recherche, sans le transformer en PGS clinique
-validé ou en risque absolu. Aucun percentile n'est affiché si la qualification
-échoue. La règle de synthèse est strictement `abs(z) > 1`, ou des bornes
+validé ou en risque absolu. Aucun percentile n'est affiché **dans le volet
+qualifié** si la qualification échoue. La règle de synthèse est strictement `abs(z) > 1`, ou des bornes
 entièrement au-delà de ±1 ; elle s'applique aux deux queues.
+
+#### Volet exploratoire conditionnel (activation explicite, sans BAM)
+
+`exploratory_scores.score_observed_subset(model, frequencies, *,
+simulations=20000, seed=20261011)` calcule une somme poids × dosages locaux
+revalidés, son écart en z et son percentile **théorique discret**. `model` est
+une trace complète `audit_pgs_reproduction`, pas un sous-ensemble sélectionné
+sur ses effets. Les AF sont indexées par `(chrom,pos,EA,OTHER)` avec source,
+population et REF/ALT publics, ou `ref=None, alt=None` pour les AF auteurs
+de EA dont seule la paire modèle/VCF peut être vérifiée. Elles ne sont jamais
+estimées sur la personne. Les inconnus ne sont ni remplacés par 0 ni imputés.
+
+Le sous-panel ne comprend que les sites avec génotype admissible et AF.
+Les GT non-REF sont comparés à HWE conditionné sur **ALT>0**, même lorsque
+l'allèle d'effet est REF ; conditionner EA>0 serait une erreur. Pour `q`
+fréquence ALT, `E[D|D>0]=2/(2−q)` et
+`Var[D|D>0]=2q(1−q)/(2−q)²`. Si EA=REF, utiliser `G=2−D`. Un GT 0/0
+explicitement présent suit HWE ordinaire, sous hypothèse de disponibilité
+indépendante du génotype. Moyenne et variance utilisent les mêmes sites que
+la somme ; le LD est omis. Le rang Monte-Carlo attribue la moitié des ex æquo.
+Sa borne d'erreur à 95 % (Hoeffding) concerne la simulation seulement, pas les
+incertitudes AF/poids/QC/LD. `normal_percentile` reste un diagnostic, pas le
+chiffre de la carte. Les bornes brutes complètes restent distinctes, sans faux IC.
+
+`exploratory_pipeline` fournit trois fonctions :
+
+- `load_effect_frequencies(scoring_path)` : colonnes EA-AF complètes des poids
+  PGS officiels ; une colonne sans population ne devient pas EUR/France.
+- `load_1000g_frequencies(manifest_path)` : cache public épinglé, dénominateurs
+  effectivement appelés ; EUR est un proxy européen et ALL un mélange
+  mondial synthétique, non une population empirique calibrée.
+- `build_exploratory_scores(matrix_paths, selection_paths, output_directory,
+  *, reference_manifest=None, simulations=20000, seed=20261011)` : vérifie
+  licences/SHA des poids, VCF, matrices et allèles/poids des traces ; réutilise
+  les audits et vérifie leurs GT/métriques par une lecture ciblée des VCF,
+  puis exporte `scores.json` et un CSV par
+  modèle/référence. La sélection retient les AF auteurs complètes et, si le
+  cache 1000G est fourni, l'intersection du panel historique `EXPLORATORY_SCORES`.
+  Aucun modèle n'est choisi depuis une positivité individuelle. Les poids
+  NR restent une arithmétique d'échelle non précisée ; les conventions complexes
+  non attestées sont exclues, sans log ni conversion automatique.
+
+Le dossier de sortie doit être vide : aucun ancien `scores.json` n'est écrasé.
+Les groupes du manifeste 1000G doivent reproduire le panel TSV épinglé ; les
+SHA des shards ne suffisent pas à attester une attribution EUR/ALL. Les chaînes
+CSV interprétables comme formules sont neutralisées, pas les nombres négatifs.
+
+Ces sorties portent `clinical_validation=False`, `show_in_summary=False`,
+`predictive_validation='not_established'`. Elles ne remplacent pas le PGS
+publié complet. Les afficher uniquement par l'argument séparé
+`exploratory_polygenic_results` du constructeur HTML, jamais par
+`polygenic_results`. La vue `exploratory_score_view` montre sigma, percentile,
+sites/total, référence, modèle source, méthodes repliées et CSV ; `abs(z)>1`
+est seulement un choix éditorial. Cette rubrique n'infère ni traitement,
+risque absolu, ni PGT. Les tests couvrent notamment sélection non-REF,
+EA=REF, poids négatifs, absences, FT, incohérences, bornes et null HWE simulé.
 
 Transmettre les JSON à `build_genomic_reports()` via `ancestry_results` et
 `polygenic_results`, indexés par le `sample_name` exact, et le nuage public via
@@ -268,7 +324,7 @@ document externe à une personne par la simple proximité de son nom de fichier.
 Le dashboard offre filtres de catégories, recherche, explications françaises,
 animations respectant `prefers-reduced-motion`, tableaux progressifs et CSV UTF-8.
 Les champs supplémentaires restent dans le CSV ; les cellules pouvant être des
-formules sont neutralisées. Les scores non qualifiés restent entièrement hors
+formules sont neutralisées. Les anciens scores non qualifiés et imports fournisseur restent hors
 rapport ; leurs audits se consultent séparément. Pour les gros modèles, un aperçu limité est séparé
 du CSV complet des observations explicites ; les sites inconnus restent dans
 l'audit du modèle. Aucun dosage manquant n'est complété.

@@ -1,0 +1,39 @@
+/* Sous-panels de recherche : thème clair autonome, sans ressources distantes. */
+.jex-section { margin-block: 2.5rem; }
+.jex-explanation { max-width: 76ch; line-height: 1.65; color: var(--muted, #596878); }
+.jex-coverage { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin-block: 1.5rem; font-size: 14px; color: var(--muted, #596878); }
+.jex-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.3rem; margin-block: 1.5rem; }
+.jex-card { min-width: 0; padding: 1.6rem; border: 1px solid #dfdcd3; border-radius: 14px; background: #fffdfa; animation: jex-reveal .3s ease-out; }
+.jex-card h3 { margin: .7rem 0 1rem; font: 400 25px/1.2 Georgia, serif; color: var(--ink, #162737); overflow-wrap: anywhere; }
+.jex-kicker { margin: 0; font-size: 12px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--muted, #596878); }
+.jex-outside { border-inline-start: 4px solid #ae663c; }
+.jex-sigma { margin: .6rem 0; font: 400 44px/1.1 Georgia, serif; color: var(--ink, #162737); }
+.jex-sigma span { margin-inline-start: .15rem; font-size: 26px; }
+.jex-rank { margin: .7rem 0 1.5rem; font-size: 17px; line-height: 1.4; }
+.jex-gauge { margin-block: 1.4rem; }
+.jex-gauge-track { position: relative; height: 7px; margin-inline: .8rem; border-radius: 7px; background: #e7e3da; }
+.jex-center-zone { position: absolute; top: 0; bottom: 0; left: 33.333333%; width: 33.333333%; background: #c7c6bf; }
+.jex-marker { position: absolute; top: -4px; width: 3px; height: 15px; border-radius: 2px; background: var(--ink, #162737); transform: translateX(-50%); }
+.jex-ticks { display: flex; justify-content: space-between; margin-block-start: .55rem; font-size: 13px; color: var(--muted, #596878); }
+.jex-ticks span { width: 1.6rem; text-align: center; }
+.jex-support, .jex-publication, .jex-clamped { font-size: 14px; line-height: 1.55; color: var(--muted, #596878); overflow-wrap: anywhere; }
+.jex-methods, .jex-audit { margin-block-start: 1.2rem; }
+.jex-methods > summary, .jex-audit > summary, .jex-all > summary { cursor: pointer; font-size: 14px; font-weight: 650; color: var(--ink, #162737); }
+.jex-methods > summary { border-block-start: 1px solid #dfdcd3; padding-block-start: 1rem; }
+.jex-methods dl { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem 1rem; margin-block: 1rem; font-size: 14px; }
+.jex-methods dt, .jex-methods dd { margin: 0; overflow-wrap: anywhere; }
+.jex-methods dd { text-align: end; font-variant-numeric: tabular-nums; }
+.jex-methods p, .jex-methods h4 { font-size: 14px; line-height: 1.6; }
+.jex-methods h4 { margin-block-start: 1.4rem; }
+.jex-methods pre { max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; }
+.jex-table-wrap { max-width: 100%; overflow-x: auto; }
+.jex-table-wrap table { width: 100%; min-width: 470px; border-collapse: collapse; font-size: 13px; }
+.jex-table-wrap th, .jex-table-wrap td { padding: .5rem; border-block-end: 1px solid #dfdcd3; text-align: start; vertical-align: top; }
+.jex-download { margin-block: 1.1rem 0; font-size: 14px; }
+.jex-section a:focus-visible, .jex-section summary:focus-visible { outline: 2px solid var(--ink, #162737); outline-offset: 4px; }
+.jex-all { margin-block: 1.5rem; }
+.jex-neutral { color: var(--muted, #596878); }
+@keyframes jex-reveal { from { opacity: .4; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 700px) { .jex-grid { grid-template-columns: minmax(0, 1fr); } .jex-card { padding: 1.25rem; } .jex-card h3 { font-size: 24px; } .jex-methods dl { grid-template-columns: minmax(0, 1fr); } .jex-methods dd { text-align: start; margin-block-end: .35rem; } }
+@media (prefers-reduced-motion: reduce) { .jex-card { animation: none; } }
+@media print { .jex-grid { grid-template-columns: minmax(0, 1fr); } .jex-card { break-inside: avoid; animation: none; background: white; } .jex-gauge-track { print-color-adjust: exact; } }

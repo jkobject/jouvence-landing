@@ -399,9 +399,9 @@ Le filtre éditorial est **strictement au-delà de ±1 sigma** : `abs(z) > 1`,
 ou un intervalle entièrement au-dessus de +1 ou au-dessous de −1. Il ne suffit
 pas à rendre un score valide et n'est pas un seuil diagnostique. Un sous-score dont les sommes ont été vérifiées
 contre un logiciel indépendant n'est pas automatiquement un substitut validé
-du PGS publié. Ces résultats de recherche restent dans un audit privé séparé,
-hors du rapport personnel, tant que leur reproduction et leur qualification
-prédictive ne sont pas validées.
+du PGS publié. Ces résultats restent hors du **volet qualifié** tant que leur
+qualification prédictive n'est pas validée. La rubrique exploratoire ci-dessous
+est une activation distincte ; elle ne modifie pas ces exigences.
 
 Un percentile signifie « position du score dans la population de référence ».
 Ce n'est ni une probabilité de développer une maladie ni un risque à vie.
@@ -409,6 +409,36 @@ L'âge, le contexte clinique et les autres facteurs exigent un modèle de risque
 absolu distinct, avec risque de base, horizon temporel et calibration indépendante.
 <a data-cite="nhgri-pgs"></a> Les captures d'un autre rapport ne sont
 jamais une source de poids, de génotypes ou de résultats personnels.
+
+### Une exploration calculée sur les sites observés
+
+Une demande explicite peut activer une rubrique distincte de **sous-scores
+exploratoires**, calculés par `score_observed_subset()` et préparés par
+`build_exploratory_scores()`. Elle montre écart en sigma, percentile théorique
+simulé, sites utilisables/total, population des AF, modèle source et CSV de
+contributions. Ce n'est ni le PGS complet, ni un classement clinique validé.
+Les autres scores calculés sont accessibles, même lorsqu'ils ne dépassent pas
+±1 sigma. Aucun traitement ou PGT ne découle de ce volet.
+
+Un VCF de variants ne donne pas un échantillon aléatoire de sites génotypés.
+Comparer sa sous-somme à une moyenne HWE non masquée peut donc être biaisé.
+Le modèle exploratoire conditionne les dosages ALT `D` des appels non-REF
+sur `D>0`. Avec fréquence ALT `q`, sa moyenne est `2/(2−q)` et sa variance
+`2q(1−q)/(2−q)²`. Si l'allèle d'effet est REF, son dosage est `2−D` : ne pas
+conditionner sur la présence de l'allèle d'effet. Un véritable 0/0 explicitement
+appelé utilise HWE ordinaire, sous hypothèse de disponibilité indépendante.
+Les moments et la somme portent sur les mêmes sites ; les absents restent inconnus.
+
+Le percentile est le rang médian de simulations indépendantes : moitié des
+ex æquo, pas conversion automatique de z par une loi normale. Une borne
+d'erreur Monte-Carlo à 95 % documente la précision numérique, pas les limites
+du LD, de la callabilité ou des fréquences. Les AF auteurs sans population
+restent non attribuées ; EUR est un proxy européen, pas français ; ALL est
+une référence mondiale synthétique, pas une cohorte homogène. Les conventions
+complexes de poids restent exclues ; `NR` conserve l'arithmétique publiée
+avec une échelle non précisée. Des bornes brutes complètes sont conservées
+séparément, jamais normalisées avec les moments du sous-panel ni appelées IC.
+<a data-cite="pgs-catalog"></a>
 
 </section>
 
@@ -442,8 +472,9 @@ possible pour valider les lectures, pas un prérequis du chemin VCF actuel.
 
 Les profils réutilisable et personnel privé non commercial restent séparés.
 Une nouvelle annotation prédictive ne change pas les filtres, la phase ou le
-diagnostic. Les résultats non qualifiés et comparaisons fournisseur/VCF restent
-dans leurs audits privés, pas dans les panels ou pièces jointes du rapport.
+diagnostic. Les comparaisons fournisseur/VCF et les audits bruts non qualifiés
+restent privés. Seule l'exploration locale conditionnelle explicitement activée
+peut entrer dans son volet séparé, sans changer la qualification clinique.
 
 Chaque export annonce son périmètre : allèles uniques, associations ou lignes
 score/transcrit/observation ne sont pas des compteurs interchangeables. Avant

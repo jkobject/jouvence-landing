@@ -29,6 +29,7 @@ from .patient_view import (select_patient_signals, render_patient_sections,
                           render_population_results, ancestry_plot_spec)
 from .report_panels import build_report_panels, reportable_polygenic_results
 from .panel_view import render_panel_dashboard
+from .exploratory_score_view import render_exploratory_scores
 
 
 HERE = Path(__file__).parent
@@ -386,6 +387,7 @@ def build_genomic_reports(
     polygenic_results: dict[str, Path] | None = None,
     ancestry_reference_projection: Path | None = None,
     supplementary_results: dict[str, dict[str, Path | list[Path]]] | None = None,
+    exploratory_polygenic_results: dict[str, Path] | None = None,
 ) -> dict[str, Path]:
     """Générer deux rapports individuels et un rapport de couple français.
 
@@ -419,6 +421,11 @@ def build_genomic_reports(
         Les documents externes sont conservés dans leurs JSON privés séparés,
         jamais affichés, liés ou joints à l'HTML. Les scores non qualifiés
         suivent le même périmètre d'audit hors rapport.
+    exploratory_polygenic_results : dict[str, Path] | None
+        Activation explicite d'un volet séparé de sous-scores conditionnels
+        HWE locaux (``build_exploratory_scores``). Les empreintes, la personne,
+        les CSV et le statut non clinique sont vérifiés. Ces sigmas/percentiles
+        ne franchissent jamais la qualification des scores cliniques.
 
     Returns
     -------
@@ -463,6 +470,54 @@ def build_genomic_reports(
         records = collect_variant_records(result)
         counts = {tier: sum(item["report_tier"] == tier for item in records) for tier in TIERS}
         extras = {}
+        exploratory = None
+        if exploratory_polygenic_results and name in exploratory_polygenic_results:
+            score_path = Path(exploratory_polygenic_results[name])
+            exploratory = json.loads(score_path.read_text())
+            if (exploratory.get("schema_version") != 1 or exploratory.get("sample_name") != name
+                    or [entry["sha256"] for entry in exploratory.get("input_files", [])] != identities
+                    or exploratory.get("scope") != "exploratory_observed_subpanel_conditional_hwe_not_full_pgs"):
+                raise ValueError("Résultat exploratoire incompatible avec la personne, les entrées ou le périmètre")
+            for filename in ("exploratory_pipeline.py", "exploratory_scores.py"):
+                current = hashlib.sha256((HERE / filename).read_bytes()).hexdigest()
+                if exploratory.get("method_code_sha256", {}).get(filename) != current:
+                    raise ValueError("Score exploratoire produit par une autre méthode : recalculer")
+            for score in exploratory.get("scores", []):
+                if score.get("status") != "exploratory_conditional_model_only":
+                    continue
+                if (score.get("show_in_summary") is not False or score.get("clinical_validation") is not False
+                        or score.get("predictive_validation") != "not_established"):
+                    raise ValueError("Un score exploratoire ne peut pas devenir un résultat clinique")
+                for filename in ("exploratory_scores.py", "polygenic.py", "reproduction.py"):
+                    current = hashlib.sha256((HERE / filename).read_bytes()).hexdigest()
+                    if score.get("quality_method_code_sha256", {}).get(filename) != current:
+                        raise ValueError("Méthode QC du score exploratoire périmée : recalculer")
+                csv_name = score.get("contributions_csv")
+                if (not isinstance(csv_name, str) or Path(csv_name).name != csv_name
+                        or not csv_name.startswith(score["pgs_id"] + "-") or not csv_name.endswith(".csv")):
+                    raise ValueError("Chemin CSV exploratoire non local ou invalide")
+                source_csv = score_path.parent / csv_name
+                with source_csv.open("rb") as handle:
+                    fingerprint = hashlib.file_digest(handle, "sha256").hexdigest()
+                if fingerprint != score.get("contributions_csv_sha256"):
+                    raise ValueError("CSV exploratoire modifié depuis son calcul")
+                trace = score.get("observed_variant_trace")
+                if not isinstance(trace, list) or len(trace) != score.get("observed_sites") or len(trace) < 2:
+                    raise ValueError("Nombre de contributions exploratoires incohérent")
+                with source_csv.open(encoding="utf-8-sig", newline="") as handle:
+                    rows = list(csv.DictReader(handle))
+                if len(rows) != len(trace):
+                    raise ValueError("Nombre de lignes CSV exploratoire incohérent")
+                for row, observation in zip(rows, trace, strict=True):
+                    if (row["chrom"] != observation["chrom"] or int(row["pos"]) != observation["pos"]
+                            or row["effect_allele"] != observation["effect_allele"]
+                            or int(row["dosage"]) != observation["dosage"]
+                            or float(row["weight"]) != observation["weight"]
+                            or float(row["contribution"]) != observation["contribution"]
+                            or observation["contribution"] != observation["dosage"] * observation["weight"]):
+                        raise ValueError("Contribution CSV différente de la trace exploratoire")
+                shutil.copyfile(source_csv, folder / csv_name)
+            extras["exploratory_polygenic"] = exploratory
         for key, paths in (("ancestry", ancestry_results), ("polygenic", polygenic_results)):
             if paths and name in paths:
                 path = Path(paths[name])
@@ -567,6 +622,7 @@ def build_genomic_reports(
                     render_panel_dashboard(build_report_panels(records, traits, catalog,
                         polygenic=qualified_scores, supplementary=report_extras)),
                     render_patient_sections(signals, catalog, references),
+                    render_exploratory_scores(exploratory) if exploratory is not None else "",
                     render_population_results(extras.get("ancestry"), qualified_scores, references),
                     _ancestry_sensitivity_section(extras.get("ancestry_sensitivity"))]
         sections.append('<section id="annexes" data-document-only><h2>Détails et transparence de l’analyse</h2>'
@@ -590,18 +646,21 @@ def build_genomic_reports(
                     "clinical_cards_sha256": hashlib.sha256(json.dumps(catalog, sort_keys=True).encode()).hexdigest(),
                     "counts": counts, "patient_signals": {"clinical": len(signals["clinical"]), "validation": len(signals["validation"]), "profiles": signals["profiles"]},
                     "additional_results_sha256": {key: hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest() for key, value in extras.items()},
+                    "exploratory_trait_labels_sha256": hashlib.sha256((HERE / "pgs_trait_labels_fr.json").read_bytes()).hexdigest() if exploratory else None,
                     "clinical_history": "non renseignée",
                     "interpretation_definition_sha256": hashlib.sha256(
                         (HERE / "trait_effect_evidence.json").read_bytes() +
                         (HERE / "trait_interpretation.py").read_bytes() +
                         (HERE / "association_interpretation.py").read_bytes()).hexdigest(),
-                    "report_scope": "Résultats locaux et scores reproduits/qualifiés uniquement ; imports et audits non qualifiés séparés."}
+                    "report_scope": "Résultats locaux ; scores qualifiés et volet exploratoire conditionnel explicitement séparés ; imports fournisseur hors rapport."}
         structural_data = json.dumps(result.get("structural_candidates", []), ensure_ascii=False, indent=2).encode()
         for key, value in extras.items():
             (folder / (key + ".json")).write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
         # Liste blanche, également pour les données cachées de l'HTML : les
         # imports fournisseur et les audits PGS bruts ne sont jamais joints.
         embedded_extras = {key: value for key, value in report_extras.items() if key in {"ancestry", "polygenic"}}
+        if exploratory is not None:
+            embedded_extras["exploratory_polygenic"] = exploratory
         if qualified_scores is not None:
             (folder / "polygenic.json").write_text(json.dumps(qualified_scores, ensure_ascii=False), encoding="utf-8")
             # La copie complète reste distincte si elle comporte des exclusions.
@@ -758,7 +817,8 @@ def write_french_html(source: Path, output: Path, metadata: dict, skill_scripts:
     from report_builder import render_report
     base = skill_scripts.parent / "assets"
     (source / "report.css").write_text((base / "report.css").read_text() + "\n" +
-        (HERE / "report_assets.css").read_text() + "\n" + (HERE / "panel_assets.css").read_text())
+        (HERE / "report_assets.css").read_text() + "\n" + (HERE / "panel_assets.css").read_text() +
+        "\n" + (HERE / "exploratory_score_assets.css").read_text())
     runtime = (base / "report.js").read_text().replace(
         "Full screen is blocked here. Open the file in its own browser tab and press F.",
         "Le plein écran est bloqué ici. Ouvrir le fichier dans un onglet dédié puis appuyer sur F.")

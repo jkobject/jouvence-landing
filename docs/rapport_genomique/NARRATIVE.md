@@ -46,8 +46,13 @@ la comparaison empirique selon l'ascendance. Normalisation et calibration d'un
 risque absolu restent deux étapes distinctes. Seuls des résultats qualifiés au-delà de ±1 sigma,
 y compris une borne intégralement hors de cet intervalle, peuvent entrer dans
 la synthèse. Un percentile classe un score ; il ne mesure pas une probabilité
-de maladie. Les scores incomplets ou non qualifiés restent dans l'audit, sans
-classement inventé. Ce seuil éditorial n'est pas diagnostique. La validation arithmétique d'un sous-score ne démontre pas
+de maladie. Les scores incomplets ou non qualifiés restent hors de cette
+synthèse clinique. Un volet exploratoire distinct peut être activé explicitement,
+avec un sous-panel observé, un modèle HWE conditionnel, un z-score et un rang
+discret Monte-Carlo calculés localement. Il ne copie aucun résultat fournisseur,
+n'impute aucun inconnu et ne revendique pas le PGS complet. La première lecture
+montre `abs(z)>1`, avec les autres calculs repliés et CSV par modèle/référence ;
+une méthode partagée évite de répéter les avertissements. Ce seuil éditorial n'est pas diagnostique. La validation arithmétique d'un sous-score ne démontre pas
 sa performance prédictive clinique.
 
 ## Panels et audit séparé des rapports du fournisseur
@@ -71,9 +76,10 @@ de passer de l'un à l'autre. Les plus petites valeurs P ne définissent pas
 l'utilité clinique ; les lignes corrélées ne s'additionnent pas pour créer un
 risque ou un percentile. Chaque effet cité garde son passage primaire justificatif
 et le niveau de lecture réel, notamment méthodes/suppléments pour les unités.
-Seuls les scores dont la reproduction et la
-qualification ont été vérifiées peuvent figurer dans le rapport personnel,
-avec le seuil de première lecture fixé à ±1 sigma. Les calculs incomplets et
-leurs blocages restent dans l'audit séparé. Les gros modèles disposent d'une table limitée et
+Seuls les scores dont la reproduction et la qualification ont été vérifiées
+peuvent figurer dans le volet qualifié. Le volet exploratoire séparé présente
+uniquement les indices locaux conditionnels explicitement calculés, pas les
+valeurs importées ni les anciens audits bruts. Les blocages restent dans
+l'audit séparé. Les gros modèles disposent d'une table limitée et
 d'un CSV complet des observations, sans alourdir l'HTML par des copies du
 catalogue entier.

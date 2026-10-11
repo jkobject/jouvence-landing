@@ -77,7 +77,7 @@ reports = build_genomic_reports(
 )
 ```
 
-`refresh_traits=False` ne réutilise un cache que si les empreintes des entrées, du panel et du décodeur concordent ; sans cache, le panel est calculé. Les résultats facultatifs `ancestry_results`, `polygenic_results` et `supplementary_results` sont indexés par le `sample_name` exact et leurs SHA doivent correspondre. Ne pas attribuer un fichier par son seul nom ou voisinage dans un dossier.
+`refresh_traits=False` ne réutilise un cache que si les empreintes des entrées, du panel et du décodeur concordent ; sans cache, le panel est calculé. Les résultats facultatifs `ancestry_results`, `polygenic_results`, `supplementary_results` et `exploratory_polygenic_results` sont indexés par le `sample_name` exact et leurs SHA doivent correspondre. Ne pas attribuer un fichier par son seul nom ou voisinage dans un dossier.
 
 Le texte d'interprétation a sa propre empreinte (`interpretation_definition_sha256`)
 et une révision `report_version`, distinctes du run génomique. Modifier ces
@@ -99,9 +99,44 @@ conservant leur identité, tous les génotypes inconnus et les valeurs source.
 - Une observation peut être intéressante sans constituer un diagnostic. Les fiches de maladie et suites possibles restent conditionnelles ; aucun traitement ou PGT décidé à partir d'un VUS ou d'une prédiction seule.
 - Les VUS et appels techniques peuvent être inspectés dans l'annexe, jamais comme des cartes de maladie ou des portages établis. Les inconnus ne deviennent pas « rien détecté ».
 - Les valeurs importées du fournisseur non reproduites/qualifiées et les comparaisons fournisseur/VCF restent hors HTML patient, panels, annexes, CSV et pièces jointes. Conserver leurs audits privés séparément, sans modifier les conclusions locales pour les faire correspondre.
-- Les PGS incomplets, sous-sommes, bornes non qualifiées et prédictions personnelles AlphaMissense/REVEL/CADD restent des audits de recherche séparés. Ils ne sont pas ajoutés automatiquement au rapport.
+- Les PGS incomplets, sous-sommes, bornes non qualifiées et prédictions personnelles AlphaMissense/REVEL/CADD ne sont jamais ajoutés automatiquement à la synthèse clinique. Le seul volet exploratoire explicitement activable est décrit ci-dessous ; les audits PGS bruts restent séparés.
 - La synthèse d'un PGS déjà qualifié applique `abs(z) > 1`, ou des bornes entièrement hors de ±1 sigma, dans les deux queues. Ce seuil ne qualifie pas le modèle ; un percentile n'est pas un risque absolu. Aucune extrapolation depuis quelques SNP ou une capture.
 - Les extensions exhaustives GWAS/OpenCRAVAT/PGS ne sont pas intégrées au rapport simplement parce qu'un nouveau JSON existe. Vérifier explicitement les types et critères que le renderer accepte.
+
+### Scores exploratoires sur les VCF de variants — activation explicite
+
+Sur demande, `build_exploratory_scores()` réutilise les matrices de
+`audit_pgs_reproduction()` et leurs traces vérifiables. Le choix des poids et
+des fréquences est public, antérieur aux dosages ; aucun modèle n'est choisi
+parce qu'une personne y obtient un résultat élevé. Aucun site absent n'est
+imputé. Une lecture ciblée des VCF compare les GT/métriques réels au cache,
+plutôt que de prendre les seuls champs déclarés du JSON pour une preuve.
+Les seuils DP/GQ/AD, FT et FILTER sont revérifiés sans les abaisser ;
+une expérience GATK existante garde son nom, distinct de l'analyse clinique.
+
+Pour le sous-panel ayant appels **et** fréquences, calculer somme dosage ×
+poids, moyenne/variance HWE conditionnées sur le statut ALT>0 des appels
+non-référence. Un vrai appel 0/0 explicite utilise HWE ordinaire avec une
+hypothèse de disponibilité indépendante du génotype. Le z-score et le rang
+médian Monte-Carlo décrivent ce sous-panel conditionnel, pas le PGS complet
+ou une probabilité de maladie. Au moins deux sites et une variance positive
+sont requis. L'indépendance ne modélise pas le LD ; une référence mondiale
+agrégée est **synthétique** et EUR n'est pas une référence française.
+
+Les AF génériques des auteurs restent « population non précisée ». `NR`
+signifie que l'échelle des `effect_weight` n'est pas renseignée : conserver
+leur somme arithmétique sans conversion en OR. Les conventions de poids
+complexes non attestées restent indisponibles. Les bornes brutes du modèle
+complet, avec dosages inconnus dans [0,2], ne sont pas des IC et ne sont pas
+normalisées avec la moyenne/variance du sous-panel.
+
+Passer les nouveaux `scores.json` par `exploratory_polygenic_results` à
+`build_genomic_reports()` : rubrique dédiée, première lecture `abs(z)>1`,
+autres résultats calculés repliés, méthode partagée et CSV des contributions
+par modèle/référence. Le constructeur vérifie personne, VCF, code QC/calcul
+et CSV ; les drapeaux cliniques restent faux. Conserver les audits complets,
+les exclusions, la graine et les empreintes hors Git. Ne pas injecter ces
+sorties dans `polygenic_results`, les portages du couple ou des indications de PGT.
 
 ### Panels et CSV : annoncer le bon dénominateur
 
